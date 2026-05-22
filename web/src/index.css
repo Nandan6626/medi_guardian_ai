@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-neon: #00f0ff;
+  --color-brand-purple: #7000ff;
+  --color-brand-dark: #05050f;
+  --color-brand-surface: rgba(20, 20, 35, 0.7);
+  
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  
+  body {
+    background-color: var(--color-brand-dark);
+    color: #ffffff;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: var(--color-brand-surface);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .glow-neon {
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+  }
+  
+  .glow-purple {
+    box-shadow: 0 0 20px rgba(112, 0, 255, 0.4);
+  }
+
+  /* NEW: Claymorphism / Light Theme for Auth */
+  .theme-light {
+    --color-clay-bg: #FAFAFC;
+    --color-clay-violet: #6C4AB6;
+    --color-clay-orange: #F9A826;
+    --color-clay-pink: #FFEBEC;
+    --color-clay-lavender: #E8DFFF;
+    --color-clay-surface: #FFFFFF;
+    color: #1A1A1A;
+  }
+
+  .clay-card {
+    background: var(--color-clay-surface);
+    border-radius: 32px;
+    box-shadow: 
+      20px 20px 60px rgba(108, 74, 182, 0.08),
+      -20px -20px 60px rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+
+  .clay-input {
+    background: #F4F5F7;
+    border-radius: 20px;
+    box-shadow: inset 4px 4px 10px rgba(108, 74, 182, 0.05), inset -4px -4px 10px rgba(255, 255, 255, 1);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+  }
+
+  .clay-input:focus {
+    border-color: var(--color-clay-violet);
+    box-shadow: 0 0 0 4px rgba(108, 74, 182, 0.1);
+    outline: none;
+  }
+
+  .clay-btn {
+    background: var(--color-clay-violet);
+    color: white;
+    border-radius: 24px;
+    box-shadow: 
+      8px 8px 16px rgba(108, 74, 182, 0.25),
+      -4px -4px 12px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .clay-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      12px 12px 20px rgba(108, 74, 182, 0.3),
+      -4px -4px 12px rgba(255, 255, 255, 0.4);
+  }
+
+  .clay-btn-outline {
+    background: transparent;
+    color: var(--color-clay-violet);
+    border: 2px solid var(--color-clay-violet);
+    border-radius: 24px;
+    transition: all 0.3s ease;
+  }
+  
+  .clay-btn-outline:hover {
+    background: var(--color-clay-lavender);
+  }
+}

@@ -1,0 +1,77 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Landing } from './pages/Landing'
+import { PatientDashboard } from './pages/PatientDashboard'
+import { DoctorDashboard } from './pages/DoctorDashboard'
+import { FamilyDashboard } from './pages/FamilyDashboard'
+
+// Auth Pages
+import { Login } from './pages/auth/Login'
+import { RoleSelection } from './pages/auth/RoleSelection'
+import { SignUp } from './pages/auth/SignUp'
+
+// Protected Routing & Layout
+import { ProtectedRoute } from './components/ProtectedRoute'
+import { DashboardLayout } from './components/DashboardLayout'
+
+const queryClient = new QueryClient()
+
+import { MedicationManagement } from './pages/doctor/MedicationManagement'
+
+// A simple placeholder component for unimplemented features
+function ComingSoon() {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <h1 className="text-3xl font-bold text-gray-400">Coming Soon</h1>
+      <p className="mt-2 text-gray-500">This feature is under development.</p>
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <div className="min-h-screen text-white bg-brand-dark selection:bg-brand-neon selection:text-black">
+          {/* Futuristic global background gradient */}
+          <div className="fixed inset-0 z-[-1] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-purple/20 via-brand-dark to-brand-dark"></div>
+          
+          <Routes>
+            {/* Redirect root to login page automatically */}
+            <Route path="/" element={<Navigate to="/auth/login" replace />} />
+            
+            {/* Auth Routes */}
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/auth/role" element={<RoleSelection />} />
+            <Route path="/auth/register" element={<SignUp />} />
+
+            {/* Protected Dashboard Routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/patient" element={<DashboardLayout><PatientDashboard /></DashboardLayout>} />
+              <Route path="/patient/medicines" element={<DashboardLayout><MyMedicines /></DashboardLayout>} />
+              <Route path="/patient/verify" element={<DashboardLayout><AIVerification /></DashboardLayout>} />
+              <Route path="/patient/timeline" element={<DashboardLayout><HealthTimeline /></DashboardLayout>} />
+              <Route path="/patient/appointments" element={<DashboardLayout><Appointments /></DashboardLayout>} />
+              <Route path="/patient/chat" element={<DashboardLayout><DoctorChat /></DashboardLayout>} />
+              <Route path="/patient/reports" element={<DashboardLayout><HealthReports /></DashboardLayout>} />
+              <Route path="/patient/emergency" element={<DashboardLayout><EmergencySOS /></DashboardLayout>} />
+              <Route path="/patient/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
+              
+              <Route path="/doctor" element={<DashboardLayout><DoctorDashboard /></DashboardLayout>} />
+              <Route path="/doctor/prescriptions" element={<DashboardLayout><MedicationManagement /></DashboardLayout>} />
+              <Route path="/doctor/*" element={<DashboardLayout><ComingSoon /></DashboardLayout>} />
+              
+              <Route path="/family" element={<DashboardLayout><FamilyDashboard /></DashboardLayout>} />
+              <Route path="/family/*" element={<DashboardLayout><ComingSoon /></DashboardLayout>} />
+            </Route>
+            
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </QueryClientProvider>
+  )
+}
+
+export default App
