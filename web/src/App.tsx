@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Landing } from './pages/Landing'
+
 import { PatientDashboard } from './pages/PatientDashboard'
 import { DoctorDashboard } from './pages/DoctorDashboard'
 import { FamilyDashboard } from './pages/FamilyDashboard'
@@ -36,9 +36,9 @@ import { Settings as DoctorSettings } from './pages/doctor/Settings'
 // A simple placeholder component for unimplemented features
 function ComingSoon() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-400">Coming Soon</h1>
-      <p className="mt-2 text-gray-500">This feature is under development.</p>
+    <div className="flex flex-col items-center justify-center min-h-screen text-text-primary">
+      <h1 className="text-3xl font-bold text-text-secondary">Coming Soon</h1>
+      <p className="mt-2 text-text-secondary">This feature is under development.</p>
     </div>
   )
 }
@@ -47,9 +47,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <div className="min-h-screen text-white bg-brand-dark selection:bg-brand-neon selection:text-black">
-          {/* Futuristic global background gradient */}
-          <div className="fixed inset-0 z-[-1] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-purple/20 via-brand-dark to-brand-dark"></div>
+        <div className="min-h-screen bg-bg-base text-text-primary selection:bg-brand-neon selection:text-black">
+          {/* Deep space radial gradient behind everything */}
+          <div className="fixed inset-0 z-[-1] bg-[radial-gradient(circle_at_top_right,rgba(112,0,255,0.08),transparent_40%),radial-gradient(circle_at_bottom_left,rgba(0,240,255,0.05),transparent_40%)]"></div>
           
           <Routes>
             {/* Redirect root to login page automatically */}

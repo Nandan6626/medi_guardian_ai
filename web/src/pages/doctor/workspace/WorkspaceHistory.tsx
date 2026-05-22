@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Pill, Activity, ShieldAlert, FileText, Filter } from 'lucide-react';
+import { Pill, Activity, ShieldAlert, FileText } from 'lucide-react';
 
-export function WorkspaceHistory({ patientId }: { patientId: string }) {
+export function WorkspaceHistory({ patientId: _patientId }: { patientId: string }) {
   const [activeFilter, setActiveFilter] = useState('All');
 
   const historyEvents = [

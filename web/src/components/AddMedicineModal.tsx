@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
-import api from '../lib/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '../lib/supabase';
+import { useAuthStore } from '../store/useAuthStore';
 
 interface AddMedicineModalProps {
   isOpen: boolean;
@@ -10,8 +11,9 @@ interface AddMedicineModalProps {
   isSelfReminder?: boolean;
 }
 
-export function AddMedicineModal({ isOpen, onClose, isSelfReminder = false }: AddMedicineModalProps) {
+export function AddMedicineModal({ isOpen, onClose }: AddMedicineModalProps) {
   const queryClient = useQueryClient();
+  const { user } = useAuthStore();
   const [formData, setFormData] = useState({
     name: '',
     dosage: '',
@@ -21,8 +23,20 @@ export function AddMedicineModal({ isOpen, onClose, isSelfReminder = false }: Ad
   });
 
   const mutation = useMutation({
-    mutationFn: (newMedicine: typeof formData) => {
-      return api.post('/medicines/', { ...newMedicine, is_self_reminder: isSelfReminder });
+    mutationFn: async (newMedicine: typeof formData) => {
+      if (!user) throw new Error("Authentication required");
+      
+      const { error } = await supabase.from('reminders').insert({
+        patient_id: user.id,
+        medicine_name: newMedicine.name,
+        dosage: newMedicine.dosage,
+        reminder_time: newMedicine.timing ? `${newMedicine.timing}:00` : null, // Ensure valid time format
+        frequency: newMedicine.duration,
+        reminder_type: 'self',
+        status: 'ACTIVE'
+      });
+      if (error) throw error;
+      return { success: true };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['medicines'] });
@@ -87,13 +101,12 @@ export function AddMedicineModal({ isOpen, onClose, isSelfReminder = false }: Ad
                 <div>
                   <label className="block mb-1 text-sm font-medium text-gray-300">Timing</label>
                   <input
-                    type="text"
+                    type="time"
                     name="timing"
                     required
                     value={formData.timing}
                     onChange={handleChange}
                     className="w-full px-4 py-3 text-white transition-colors bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-brand-neon"
-                    placeholder="e.g. 08:00 AM"
                   />
                 </div>
               </div>

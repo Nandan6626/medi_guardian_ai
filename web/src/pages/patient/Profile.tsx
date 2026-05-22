@@ -1,4 +1,4 @@
-import { User, Activity, Shield, ArrowRight } from 'lucide-react';
+import { User, Activity, Shield } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 
 export function Profile() {

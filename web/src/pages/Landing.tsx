@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Activity, Brain, ShieldAlert, ArrowRight, User, Stethoscope, HeartPulse } from 'lucide-react'
+import { Activity, Brain, ShieldAlert, User, Stethoscope, HeartPulse } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 export function Landing() {
@@ -11,7 +11,7 @@ export function Landing() {
         transition={{ duration: 0.8 }}
         className="max-w-4xl"
       >
-        <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full glass border-brand-neon/30 text-brand-neon">
+        <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full glass-panel border border-brand-neon/30 text-brand-neon bg-brand-neon/5">
           <Brain size={18} />
           <span className="text-sm font-semibold tracking-wide uppercase">Next-Gen AI Healthcare</span>
         </div>
@@ -20,7 +20,7 @@ export function Landing() {
           MediGuardian AI
         </h1>
         
-        <p className="max-w-2xl mx-auto mb-12 text-xl text-gray-400 md:text-2xl">
+        <p className="max-w-2xl mx-auto mb-12 text-xl text-text-secondary md:text-2xl">
           AI-Powered Smart Medication & Preventive Healthcare Ecosystem. Empowering doctors, protecting patients.
         </p>
 
@@ -40,7 +40,7 @@ export function Landing() {
             <motion.button 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center justify-center w-full gap-3 px-8 py-4 text-lg font-bold transition-all border rounded-xl glass text-brand-purple border-brand-purple glow-purple hover:bg-brand-purple hover:text-white"
+              className="flex items-center justify-center w-full gap-3 px-8 py-4 text-lg font-bold transition-all border rounded-xl glass-panel text-brand-purple border-brand-purple glow-purple hover:bg-brand-purple hover:text-white"
             >
               <Stethoscope size={24} />
               Doctor Portal
@@ -51,7 +51,7 @@ export function Landing() {
             <motion.button 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center justify-center w-full gap-3 px-8 py-4 text-lg font-bold text-white transition-all border rounded-xl glass border-white/20 hover:bg-white hover:text-black"
+              className="flex items-center justify-center w-full gap-3 px-8 py-4 text-lg font-bold text-white transition-all border rounded-xl glass-panel border-white/20 hover:bg-white hover:text-black"
             >
               <HeartPulse size={24} />
               Family Portal
@@ -72,11 +72,11 @@ export function Landing() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: i * 0.2 }}
-            className="p-8 text-left transition-colors rounded-3xl glass hover:border-brand-neon/50"
+            className="p-8 text-left transition-all rounded-3xl glass-panel border border-border-subtle hover:border-brand-neon/50"
           >
             <feature.icon className="mb-6 text-brand-neon" size={40} />
-            <h3 className="mb-3 text-2xl font-bold">{feature.title}</h3>
-            <p className="text-gray-400">{feature.desc}</p>
+            <h3 className="mb-3 text-2xl font-bold text-white">{feature.title}</h3>
+            <p className="text-text-secondary">{feature.desc}</p>
           </motion.div>
         ))}
       </div>

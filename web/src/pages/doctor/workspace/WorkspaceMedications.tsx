@@ -1,13 +1,14 @@
-import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import api from '../../../lib/api';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Camera, ShieldCheck, AlertCircle, Pill } from 'lucide-react';
 import { AnimatedMedicineStack } from '../../../components/AnimatedMedicineStack';
+import { supabase } from '../../../lib/supabase';
 
 export function WorkspaceMedications({ patientId }: { patientId: string }) {
-  const queryClient = useQueryClient();
   const [showAddForm, setShowAddForm] = useState(false);
+  const [medicines, setMedicines] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isPrescribing, setIsPrescribing] = useState(false);
 
   // Form State
   const [newMed, setNewMed] = useState({
@@ -16,30 +17,50 @@ export function WorkspaceMedications({ patientId }: { patientId: string }) {
   });
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-  // Fetch Patient Medicines
-  const { data: medicines = [], isLoading } = useQuery({
-    queryKey: ['patient_medicines', patientId],
-    queryFn: async () => {
-      // Assuming existing backend endpoint for patient medicines
-      const res = await api.get(`/medicines/`); 
-      // In production, backend should filter by patient_id based on route
-      return res.data;
-    }
-  });
+  const fetchMedicines = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('medicine_schedules')
+        .select('*')
+        .eq('patient_id', patientId)
+        .eq('is_self_reminder', false);
 
-  const prescribeMutation = useMutation({
-    mutationFn: async (payload: any) => {
-      const res = await api.post(`/doctor/patients/${patientId}/prescriptions`, payload);
-      return res.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['patient_medicines'] });
-      setNewMed({ name: '', dosage: '', frequency: 'Daily', timing: '', food_instruction: '', duration: '', color: '', shape: '', notes: ''});
-      setPreviewImage(null);
-      setShowAddForm(false);
-      alert('Prescription successfully added to patient timeline!');
+      if (error) throw error;
+      
+      const formatted = (data || []).map(r => ({
+        id: r.id,
+        name: r.medicine_name,
+        dosage: r.dosage,
+        timing: r.timing_slots ? JSON.stringify(r.timing_slots) : '',
+        duration: r.frequency,
+        food_instruction: r.instructions,
+      }));
+      setMedicines(formatted);
+    } catch (err) {
+      console.error('Error fetching patient medicines:', err);
+    } finally {
+      setIsLoading(false);
     }
-  });
+  };
+
+  useEffect(() => {
+    fetchMedicines();
+
+    const channel = supabase
+      .channel('doctor-schedules-channel')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'medicine_schedules', filter: `patient_id=eq.${patientId}` },
+        () => {
+          fetchMedicines();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [patientId]);
 
   const handleImageUpload = (e: any) => {
     const file = e.target.files[0];
@@ -50,13 +71,53 @@ export function WorkspaceMedications({ patientId }: { patientId: string }) {
     }
   };
 
-  const handlePrescribe = (e: React.FormEvent) => {
+  const handlePrescribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    prescribeMutation.mutate({ ...newMed, image_url: previewImage });
+    setIsPrescribing(true);
+    try {
+      // Map frequency to database enum
+      let mappedFreq = 'DAILY';
+      if (newMed.frequency === 'Weekly') mappedFreq = 'WEEKLY';
+      if (newMed.frequency === 'As Needed') mappedFreq = 'AS_NEEDED';
+
+      // Map instructions to database enum
+      let mappedInst = null;
+      if (newMed.food_instruction === 'Before Food') mappedInst = 'BEFORE_FOOD';
+      if (newMed.food_instruction === 'After Food') mappedInst = 'AFTER_FOOD';
+      if (newMed.food_instruction === 'With Food') mappedInst = 'WITH_FOOD';
+
+      // Format time correctly
+      const formattedTime = newMed.timing.includes(':') ? `${newMed.timing}:00` : `${newMed.timing}:00`;
+
+      const { error } = await supabase
+        .from('medicine_schedules')
+        .insert({
+          patient_id: patientId,
+          medicine_name: newMed.name,
+          dosage: newMed.dosage,
+          frequency: mappedFreq,
+          timing_slots: [formattedTime],
+          instructions: mappedInst,
+          is_self_reminder: false,
+          status: 'ACTIVE'
+        });
+
+      if (error) throw error;
+      
+      setNewMed({ name: '', dosage: '', frequency: 'Daily', timing: '', food_instruction: '', duration: '', color: '', shape: '', notes: ''});
+      setPreviewImage(null);
+      setShowAddForm(false);
+      alert('Prescription successfully added to patient timeline!');
+    } catch (err) {
+      console.error('Failed to prescribe', err);
+      alert('Failed to prescribe medicine.');
+    } finally {
+      setIsPrescribing(false);
+    }
   };
 
   // Split logic
-  const activeMeds = medicines.filter((m: any) => !m.is_self_reminder);
+  const activeMeds = medicines;
 
   return (
     <div className="space-y-8">
@@ -135,7 +196,16 @@ export function WorkspaceMedications({ patientId }: { patientId: string }) {
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Timing</label>
-                  <input type="text" required value={newMed.timing} onChange={e => setNewMed({...newMed, timing: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-purple outline-none" placeholder="e.g. 08:00 AM" />
+                  <input type="time" required value={newMed.timing} onChange={e => setNewMed({...newMed, timing: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-purple outline-none" />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Frequency</label>
+                  <select value={newMed.frequency} onChange={e => setNewMed({...newMed, frequency: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-purple outline-none">
+                    <option value="Daily">Daily</option>
+                    <option value="Weekly">Weekly</option>
+                    <option value="As Needed">As Needed</option>
+                  </select>
                 </div>
 
                 <div>
@@ -185,10 +255,10 @@ export function WorkspaceMedications({ patientId }: { patientId: string }) {
 
               <button 
                 type="submit" 
-                disabled={prescribeMutation.isPending}
+                disabled={isPrescribing}
                 className="w-full flex items-center justify-center gap-2 py-4 font-bold text-black bg-brand-neon hover:bg-brand-neon/80 rounded-xl transition-colors disabled:opacity-50"
               >
-                {prescribeMutation.isPending ? 'Processing...' : 'Prescribe Medicine'}
+                {isPrescribing ? 'Processing...' : 'Prescribe Medicine'}
               </button>
            </form>
         </motion.div>
@@ -203,7 +273,7 @@ export function WorkspaceMedications({ patientId }: { patientId: string }) {
              medicines={activeMeds} 
              isLoading={isLoading} 
              onTakeMedicine={() => {}} // Doctors don't take the medicine, they just view
-             isDoctorView={true}
+
            />
         )}
       </div>

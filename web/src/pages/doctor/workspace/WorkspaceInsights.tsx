@@ -1,7 +1,7 @@
-import { Brain, AlertTriangle, Lightbulb, TrendingDown } from 'lucide-react';
+import { Brain, AlertTriangle, Lightbulb, TrendingDown, ShieldAlert } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export function WorkspaceInsights({ patientId }: { patientId: string }) {
+export function WorkspaceInsights({ patientId: _patientId }: { patientId: string }) {
   return (
     <div className="space-y-8">
       <header>

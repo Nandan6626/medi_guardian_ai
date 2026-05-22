@@ -1,17 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, UserPlus } from 'lucide-react';
-import api from '../lib/api';
+import { X, UserPlus, Loader2 } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '../lib/supabase';
+import { useAuthStore } from '../store/useAuthStore';
 
 interface PrescribeMedicineModalProps {
   isOpen: boolean;
   onClose: () => void;
-  patientId: number;
+  patientId?: string;
 }
 
 export function PrescribeMedicineModal({ isOpen, onClose, patientId }: PrescribeMedicineModalProps) {
   const queryClient = useQueryClient();
+  const { user } = useAuthStore();
+  const [patients, setPatients] = useState<{ id: string; name: string }[]>([]);
+  const [selectedPatientId, setSelectedPatientId] = useState(patientId || '');
+  const [isLoadingPatients, setIsLoadingPatients] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     dosage: '',
@@ -20,15 +25,96 @@ export function PrescribeMedicineModal({ isOpen, onClose, patientId }: Prescribe
     notes: '',
   });
 
+  const isUuid = (val: any) => typeof val === 'string' && val.length === 36 && val.includes('-');
+
+  useEffect(() => {
+    if (isOpen) {
+      if (isUuid(patientId)) {
+        setSelectedPatientId(patientId || '');
+      } else {
+        fetchConnectedPatients();
+      }
+    }
+  }, [isOpen, patientId]);
+
+  const fetchConnectedPatients = async () => {
+    if (!user) return;
+    setIsLoadingPatients(true);
+    try {
+      // 1. Get doctor profile details to find their user_id
+      const { data: doctorProf } = await supabase
+        .from('doctor_profiles')
+        .select('user_id')
+        .eq('id', user.id)
+        .single();
+      
+      if (!doctorProf) return;
+
+      // 2. Fetch active patient connections for this doctor
+      const { data: connections } = await supabase
+        .from('patient_connections')
+        .select('patient_id')
+        .eq('connected_user_id', doctorProf.user_id);
+
+      if (!connections || connections.length === 0) return;
+      const patientIds = connections.map(c => c.patient_id).filter(Boolean);
+
+      // 3. Fetch patient profiles
+      const { data: profiles } = await supabase
+        .from('patient_profiles')
+        .select('id, first_name, last_name')
+        .in('id', patientIds);
+
+      if (profiles) {
+        const mapped = profiles.map(p => ({
+          id: p.id,
+          name: `${p.first_name || ''} ${p.last_name || ''}`.trim() || 'Unnamed Patient'
+        }));
+        setPatients(mapped);
+        if (mapped.length > 0 && !selectedPatientId) {
+          setSelectedPatientId(mapped[0].id);
+        }
+      }
+    } catch (err) {
+      console.error('Error fetching connected patients:', err);
+    } finally {
+      setIsLoadingPatients(false);
+    }
+  };
+
   const mutation = useMutation({
-    mutationFn: (newMedicine: typeof formData) => {
-      return api.post(`/doctor/patients/${patientId}/prescriptions`, newMedicine);
+    mutationFn: async (newMedicine: typeof formData) => {
+      const targetPatId = isUuid(patientId) ? patientId : selectedPatientId;
+      if (!targetPatId) {
+        throw new Error('Please select a patient first.');
+      }
+
+      const { error } = await supabase
+        .from('medicine_schedules')
+        .insert({
+          patient_id: targetPatId,
+          medicine_name: newMedicine.name,
+          dosage: newMedicine.dosage,
+          frequency: 'DAILY',
+          instructions: 'AFTER_FOOD', // default
+          start_date: new Date().toISOString().split('T')[0],
+          end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 days
+          status: 'ACTIVE',
+          is_self_reminder: false
+        });
+
+      if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['doctor', 'dashboard'] });
+      queryClient.invalidateQueries({ queryKey: ['patient_medications'] });
+      alert('Prescription successfully saved to database!');
       onClose();
       setFormData({ name: '', dosage: '', timing: '', duration: '', notes: '' });
     },
+    onError: (err: any) => {
+      alert('Failed to save prescription: ' + (err.message || 'unknown error'));
+    }
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -36,8 +122,12 @@ export function PrescribeMedicineModal({ isOpen, onClose, patientId }: Prescribe
     mutation.mutate(formData);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    if (e.target.name === 'selectedPatientId') {
+      setSelectedPatientId(e.target.value);
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
   };
 
   return (
@@ -60,6 +150,32 @@ export function PrescribeMedicineModal({ isOpen, onClose, patientId }: Prescribe
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {!isUuid(patientId) && (
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-300">Select Patient</label>
+                  {isLoadingPatients ? (
+                    <div className="flex items-center gap-2 py-3 text-text-secondary">
+                      <Loader2 size={16} className="animate-spin text-brand-neon" /> Loading patients...
+                    </div>
+                  ) : patients.length === 0 ? (
+                    <p className="text-status-error text-sm font-bold">No connected patients found. Please add a patient first.</p>
+                  ) : (
+                    <select
+                      name="selectedPatientId"
+                      value={selectedPatientId}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 text-white transition-colors bg-bg-surface border border-white/10 rounded-xl focus:outline-none focus:border-brand-purple"
+                    >
+                      {patients.map(p => (
+                        <option key={p.id} value={p.id} className="bg-bg-surface text-white">
+                          {p.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+              )}
+
               <div>
                 <label className="block mb-1 text-sm font-medium text-gray-300">Medicine Name</label>
                 <input
@@ -128,7 +244,7 @@ export function PrescribeMedicineModal({ isOpen, onClose, patientId }: Prescribe
               <div className="pt-4">
                 <button
                   type="submit"
-                  disabled={mutation.isPending}
+                  disabled={mutation.isPending || (!selectedPatientId && !isUuid(patientId))}
                   className="w-full py-4 font-bold text-white transition-all border border-brand-purple bg-brand-purple/20 rounded-xl glow-purple hover:bg-brand-purple disabled:opacity-50"
                 >
                   {mutation.isPending ? 'Sending Prescription...' : 'Issue Prescription'}

@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware';
 type Role = 'patient' | 'doctor' | 'family' | null;
 
 interface User {
-  id: number;
+  id: string;
   name: string;
   email: string;
   role: Role;

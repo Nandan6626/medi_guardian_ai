@@ -1,7 +1,7 @@
 import { Activity, HeartPulse, ShieldAlert, Droplet, Clock } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, Tooltip } from 'recharts';
 
-export function WorkspaceOverview({ patientId }: { patientId: string }) {
+export function WorkspaceOverview({ patientId: _patientId }: { patientId: string }) {
   const chartData = [
     { name: 'Mon', bp: 120, sugar: 95 },
     { name: 'Tue', bp: 118, sugar: 98 },
