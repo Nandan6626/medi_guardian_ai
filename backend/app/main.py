@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import asyncio
 from app.database import engine, Base
-from app.api.endpoints import medicines, family, doctor, emergency
+from app.api.endpoints import medicines, family, doctor, emergency, medicine_verify
 from app.notifications_worker import notifications_worker_loop
 
 from contextlib import asynccontextmanager
@@ -50,3 +50,4 @@ app.include_router(medicines.router, prefix="/api/medicines", tags=["Medicines"]
 app.include_router(family.router, prefix="/api/family", tags=["Family"])
 app.include_router(doctor.router, prefix="/api/doctor", tags=["Doctor"])
 app.include_router(emergency.router, prefix="/api/emergency", tags=["Emergency"])
+app.include_router(medicine_verify.router, prefix="/api/medicine-verify", tags=["Medicine AI Verify"])
