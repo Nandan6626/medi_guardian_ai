@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import time as time_module
 from datetime import datetime, time, timedelta
 import json
 from sqlalchemy import text
@@ -74,9 +75,11 @@ async def check_medication_schedules(session):
                 continue
 
             scheduled_dt = datetime.combine(today, parsed_time)
+            scheduled_ts = scheduled_dt.timestamp()
+            now_ts = time_module.time()
 
-            # Check for live alarm (due in current minute)
-            if scheduled_dt.hour == now.hour and scheduled_dt.minute == now.minute:
+            # Check for live alarm (due in the current reminder window)
+            if scheduled_ts <= now_ts < scheduled_ts + 120:
                 # Check if alarm already exists for today
                 body = f"⏰ It is time to take your {medicine_name} ({dosage})!"
                 alarm_exists_query = text("""
@@ -208,9 +211,11 @@ async def check_self_reminders(session):
             continue
 
         scheduled_dt = datetime.combine(today, parsed_time)
+        scheduled_ts = scheduled_dt.timestamp()
+        now_ts = time_module.time()
 
-        # Check for live alarm (due in current minute)
-        if scheduled_dt.hour == now.hour and scheduled_dt.minute == now.minute:
+        # Check for live alarm (due in the current reminder window)
+        if scheduled_ts <= now_ts < scheduled_ts + 120:
             body = f"⏰ It is time to take your {medicine_name} ({dosage})!"
             alarm_exists_query = text("""
                 SELECT id FROM notifications

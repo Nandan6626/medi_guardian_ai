@@ -1,13 +1,15 @@
+import os
+from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 from typing import List, Optional
 from googleplaces import GooglePlaces, types, lang
 
+load_dotenv()
 router = APIRouter()
 
-# API Key provided by user
-API_KEY = 'AIzaSyApglyJyZ3ldaK5hC_oGwPfmuGvsP5iOZo'
-google_places = GooglePlaces(API_KEY)
+API_KEY = os.getenv("GOOGLE_PLACES_API_KEY", "").strip()
+google_places = GooglePlaces(API_KEY) if API_KEY else None
 
 class Location(BaseModel):
     lat: float
@@ -20,6 +22,30 @@ class Hospital(BaseModel):
     rating: Optional[float] = None
     place_id: Optional[str] = None
 
+FALLBACK_HOSPITALS = [
+    {
+        "name": "City General Hospital",
+        "location": {"lat": 37.7749, "lng": -122.4194},
+        "vicinity": "123 Main St",
+        "rating": 4.5,
+        "place_id": "mock-1"
+    },
+    {
+        "name": "St. Jude Medical Center",
+        "location": {"lat": 37.7849, "lng": -122.4094},
+        "vicinity": "456 Oak Ave",
+        "rating": 4.8,
+        "place_id": "mock-2"
+    },
+    {
+        "name": "Mercy Emergency Clinic",
+        "location": {"lat": 37.7649, "lng": -122.4294},
+        "vicinity": "789 Pine Rd",
+        "rating": 4.2,
+        "place_id": "mock-3"
+    }
+]
+
 @router.get("/nearby-hospitals", response_model=List[Hospital])
 async def get_nearby_hospitals(
     lat: float = Query(..., description="Latitude of the location"),
@@ -29,6 +55,12 @@ async def get_nearby_hospitals(
     """
     Find nearby hospitals based on latitude and longitude using Google Places API.
     """
+    if google_places is None:
+        raise HTTPException(
+            status_code=500,
+            detail="Google Places API key is not configured. Set GOOGLE_PLACES_API_KEY in the backend environment to enable live nearby hospital search."
+        )
+
     try:
         query_result = google_places.nearby_search(
             lat_lng={'lat': lat, 'lng': lng},
@@ -55,4 +87,7 @@ async def get_nearby_hospitals(
             
         return hospitals
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(
+            status_code=500,
+            detail=f"Google Places lookup failed. {str(e)}"
+        )

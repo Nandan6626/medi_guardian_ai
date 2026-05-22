@@ -56,6 +56,12 @@ export function useReminders() {
       return;
     }
 
+    const { status } = await Notifications.getPermissionsAsync();
+    if (status !== 'granted') {
+      console.warn('Notifications permission not granted. Skipping scheduling reminders.');
+      return;
+    }
+
     // 1. Cancel all previously scheduled notifications
     await Notifications.cancelAllScheduledNotificationsAsync();
 
@@ -69,20 +75,25 @@ export function useReminders() {
 
       if (isNaN(hour) || isNaN(minute)) continue;
 
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: `Time for your ${medicine.name} 💊`,
-          body: `Please take your scheduled ${medicine.dosage} dose. ${medicine.instruction}`,
-          sound: true,
-          data: { medicineId: medicine.id },
-        },
-        trigger: {
-          hour,
-          minute,
-          repeats: true,
-          type: 'calendar'
-        } as Notifications.CalendarTriggerInput,
-      });
+      try {
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: `Time for your ${medicine.name} 💊`,
+            body: `Please take your scheduled ${medicine.dosage} dose. ${medicine.instruction}`,
+            sound: 'default',
+            data: { medicineId: medicine.id },
+            channelId: 'default',
+          },
+          trigger: {
+            hour,
+            minute,
+            repeats: true,
+            type: 'calendar',
+          } as Notifications.CalendarTriggerInput,
+        });
+      } catch (err) {
+        console.warn('Failed to schedule notification for', medicine.name, err);
+      }
     }
   };
 }

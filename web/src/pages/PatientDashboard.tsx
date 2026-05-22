@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuthStore } from '../store/useAuthStore';
-import { Activity, ShieldAlert, HeartPulse, ArrowRight, ShieldCheck, Heart, Pill, Clock, X } from 'lucide-react';
+import { Activity, ShieldAlert, HeartPulse, ArrowRight, ShieldCheck, Heart, Pill, Clock, X, PhoneCall } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
@@ -181,6 +181,18 @@ export function PatientDashboard() {
            <p className="text-text-secondary mb-8 font-medium">Check scheduled video consultations with your doctor.</p>
            <div className="flex items-center gap-2 text-brand-purple font-bold group-hover:translate-x-2 transition-transform">
                View Details <ArrowRight size={18} />
+           </div>
+        </Link>
+
+        {/* Caretaker Booking Quick Link */}
+        <Link to="/patient/caretakers" className="md:col-span-6 glass-panel p-8 rounded-3xl transition-all group hover:border-brand-neon/30 hover:bg-brand-neon/5">
+           <div className="w-14 h-14 rounded-2xl bg-brand-neon/10 text-brand-neon flex items-center justify-center mb-6 border border-brand-neon/20 shadow-inner">
+             <PhoneCall size={28} />
+           </div>
+           <h3 className="text-2xl font-bold text-white mb-3">Book Caretaker</h3>
+           <p className="text-text-secondary mb-8 font-medium">Call an emergency caretaker immediately when you need quick support.</p>
+           <div className="flex items-center gap-2 text-brand-neon font-bold group-hover:translate-x-2 transition-transform">
+               Connect Now <ArrowRight size={18} />
            </div>
         </Link>
       </div>

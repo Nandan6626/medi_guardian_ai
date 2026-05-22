@@ -4,7 +4,7 @@ import { Pill, CheckCircle } from 'lucide-react';
 
 interface AnimatedMedicineStackProps {
   medicines: any[];
-  onTakeMedicine: (id: number) => void;
+  onTakeMedicine: (id: string) => void;
   isLoading: boolean;
 }
 

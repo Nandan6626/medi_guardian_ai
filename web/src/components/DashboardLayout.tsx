@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuthStore } from '../store/useAuthStore';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   LogOut, LayoutDashboard, Calendar, FileText, Activity, 
-  Users, Video, Bell, Phone, HeartPulse, ShieldAlert, User, Settings, Check, X, Clock
+  Users, UserPlus, Video, Bell, Phone, HeartPulse, ShieldAlert, User, Settings, Check, X, Clock
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -55,6 +55,162 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   const [activeToasts, setActiveToasts] = useState<ToastNotification[]>([]);
   const [activeAlarm, setActiveAlarm] = useState<ToastNotification | null>(null);
   const [isLogging, setIsLogging] = useState(false);
+
+  // Client-side Alarm checking & Audio Play states
+  const alarmAudioRef = useRef<HTMLAudioElement | null>(null);
+  const triggeredAlarmsRef = useRef<Set<string>>(new Set());
+  const [medSchedules, setMedSchedules] = useState<any[]>([]);
+  const [selfReminders, setSelfReminders] = useState<any[]>([]);
+
+  // 1. Play/Stop the custom vintage alarm sound when an active alarm is shown/hidden
+  useEffect(() => {
+    if (activeAlarm) {
+      // Create and play audio loop
+      try {
+        const audio = new Audio('/mixkit-vintage-warning-alarm-990.wav');
+        audio.loop = true;
+        audio.volume = 0.5;
+        audio.play().catch(err => {
+          console.warn("Autoplay block: user must interact first. Fallback to click-triggered sound.", err);
+        });
+        alarmAudioRef.current = audio;
+      } catch (err) {
+        console.error("Failed to initialize alarm audio:", err);
+      }
+    } else {
+      // Stop and clean up audio
+      if (alarmAudioRef.current) {
+        alarmAudioRef.current.pause();
+        alarmAudioRef.current = null;
+      }
+    }
+    return () => {
+      if (alarmAudioRef.current) {
+        alarmAudioRef.current.pause();
+      }
+    };
+  }, [activeAlarm]);
+
+  // 2. Fetch active medicine schedules and self-reminders periodic loader
+  const fetchSchedulesAndReminders = async () => {
+    if (!user?.id || user.role !== 'patient') return;
+    try {
+      const { data: schedules } = await supabase
+        .from('medicine_schedules')
+        .select('*')
+        .eq('patient_id', user.id)
+        .eq('status', 'ACTIVE');
+      setMedSchedules(schedules || []);
+
+      const { data: reminders } = await supabase
+        .from('reminders')
+        .select('*')
+        .eq('patient_id', user.id);
+      setSelfReminders(reminders || []);
+    } catch (err) {
+      console.error("Error loading schedules/reminders for alarms:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchSchedulesAndReminders();
+    const interval = setInterval(fetchSchedulesAndReminders, 45000); // refresh list every 45s
+    return () => clearInterval(interval);
+  }, [user?.id]);
+
+  // 3. Periodic alarm checker loop (runs every 10 seconds)
+  useEffect(() => {
+    if (!user?.id || user.role !== 'patient') return;
+
+    const checkAlarms = async () => {
+      const now = new Date();
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+      const timeStr24 = `${String(currentHour).padStart(2, '0')}:${String(currentMinute).padStart(2, '0')}`;
+      
+      const todayStr = now.toISOString().split('T')[0];
+
+      const triggerAlarm = async (medId: string, medName: string, dosage: string, timeVal: string) => {
+        const alarmKey = `${medId}-${timeVal}-${todayStr}`;
+        if (triggeredAlarmsRef.current.has(alarmKey)) return;
+        triggeredAlarmsRef.current.add(alarmKey);
+
+        const bodyText = `⏰ It is time to take your ${medName} (${dosage})!`;
+        
+        console.log(`[Alarm Trigger] Medicine: ${medName} due at: ${timeVal}`);
+
+        // Insert notification row in database so it is recorded/synced
+        try {
+          const { data } = await supabase
+            .from('notifications')
+            .insert({
+              user_id: user.id,
+              type: 'SYSTEM',
+              title: 'Medication Alarm',
+              body: bodyText,
+              priority: 'MEDIUM',
+              is_read: false
+            })
+            .select();
+
+          const newNotifId = data && data[0] ? data[0].id : medId;
+
+          // Open active alarm modal on UI
+          setActiveAlarm({
+            id: newNotifId,
+            title: 'Medication Alarm',
+            body: bodyText,
+            type: 'SYSTEM',
+            priority: 'MEDIUM'
+          });
+        } catch (err) {
+          console.error("Failed to save alarm notification:", err);
+          // Local fallback to ensure patient gets alerted regardless
+          setActiveAlarm({
+            id: medId,
+            title: 'Medication Alarm',
+            body: bodyText,
+            type: 'SYSTEM',
+            priority: 'MEDIUM'
+          });
+        }
+      };
+
+      // Check Doctor-Prescribed Schedules
+      for (const sched of medSchedules) {
+        let slots: string[] = [];
+        try {
+          if (Array.isArray(sched.timing_slots)) {
+            slots = sched.timing_slots;
+          } else if (typeof sched.timing_slots === 'string') {
+            slots = JSON.parse(sched.timing_slots);
+          }
+        } catch (e) {
+          slots = [sched.timing_slots];
+        }
+
+        for (const slot of slots) {
+          if (!slot) continue;
+          const slotHHMM = String(slot).slice(0, 5); // "HH:MM"
+          if (slotHHMM === timeStr24) {
+            await triggerAlarm(sched.id, sched.medicine_name, sched.dosage, slotHHMM);
+          }
+        }
+      }
+
+      // Check Self Reminders
+      for (const rem of selfReminders) {
+        if (!rem.reminder_time) continue;
+        const remHHMM = String(rem.reminder_time).slice(0, 5); // "HH:MM"
+        if (remHHMM === timeStr24) {
+          await triggerAlarm(rem.id, rem.medicine_name, rem.dosage, remHHMM);
+        }
+      }
+    };
+
+    const checker = setInterval(checkAlarms, 10000);
+    return () => clearInterval(checker);
+  }, [medSchedules, selfReminders, user]);
 
   const handleLogout = () => {
     logout();
@@ -168,6 +324,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
     { icon: Video, label: 'Appointments', path: '/patient/appointments' },
     { icon: Phone, label: 'Doctor Chat', path: '/patient/chat' },
     { icon: Activity, label: 'Health Reports', path: '/patient/reports' },
+    { icon: UserPlus, label: 'Caretakers', path: '/patient/caretakers' },
     { icon: HeartPulse, label: 'Emergency SOS', path: '/patient/emergency' },
     { icon: User, label: 'Profile', path: '/patient/profile' },
     { icon: Settings, label: 'Settings', path: '/patient/settings' },

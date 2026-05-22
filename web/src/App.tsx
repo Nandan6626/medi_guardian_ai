@@ -25,6 +25,7 @@ import { HealthReports } from './pages/patient/HealthReports'
 import { EmergencySOS } from './pages/patient/EmergencySOS'
 import { Settings } from './pages/patient/Settings'
 import { Profile } from './pages/patient/Profile'
+import { Caretakers } from './pages/patient/Caretakers'
 
 import { PatientManagement } from './pages/doctor/PatientManagement'
 import { PatientWorkspace } from './pages/doctor/PatientWorkspace'
@@ -69,6 +70,7 @@ function App() {
               <Route path="/patient/appointments" element={<DashboardLayout><Appointments /></DashboardLayout>} />
               <Route path="/patient/chat" element={<DashboardLayout><DoctorChat /></DashboardLayout>} />
               <Route path="/patient/reports" element={<DashboardLayout><HealthReports /></DashboardLayout>} />
+              <Route path="/patient/caretakers" element={<DashboardLayout><Caretakers /></DashboardLayout>} />
               <Route path="/patient/emergency" element={<DashboardLayout><EmergencySOS /></DashboardLayout>} />
               <Route path="/patient/profile" element={<DashboardLayout><Profile /></DashboardLayout>} />
               <Route path="/patient/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />

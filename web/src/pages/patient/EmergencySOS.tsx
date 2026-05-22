@@ -50,9 +50,9 @@ export function EmergencySOS() {
           }
         } catch (error: any) {
           console.error("Failed to fetch hospitals:", error);
-          // Fallback to mock data if API key fails
+          // Fallback to mock data if the live lookup fails
           setHospitals(MOCK_HOSPITALS);
-          setErrorMsg("Google Places API failed (likely missing API key). Showing mock data.");
+          setErrorMsg("Live hospital lookup failed. Showing fallback hospitals.");
         } finally {
           setIsLoading(false);
         }
