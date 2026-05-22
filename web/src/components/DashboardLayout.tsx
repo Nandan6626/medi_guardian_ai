@@ -321,7 +321,6 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         .update({ is_read: true })
         .eq('id', activeAlarm.id);
 
-      window.dispatchEvent(new CustomEvent('dismiss-local-toast'));
       setActiveAlarm(null);
     } catch (err) {
       console.error('Error logging medication intake:', err);
@@ -428,10 +427,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
 
               <div className="flex gap-4">
                 <button
-                  onClick={() => {
-                    setActiveAlarm(null);
-                    window.dispatchEvent(new CustomEvent('dismiss-local-toast'));
-                  }}
+                  onClick={() => setActiveAlarm(null)}
                   className="flex-1 py-3.5 bg-bg-surface hover:bg-white/5 border border-border-subtle hover:text-white text-text-secondary rounded-2xl font-bold transition-all text-sm"
                 >
                   Dismiss
