@@ -303,6 +303,7 @@ CREATE TABLE IF NOT EXISTS public.medicine_schedules (
 CREATE TABLE IF NOT EXISTS public.medicine_logs (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   schedule_id uuid,
+  reminder_id uuid,
   patient_id uuid,
   scheduled_time timestamp without time zone,
   taken_time timestamp without time zone,
@@ -310,7 +311,8 @@ CREATE TABLE IF NOT EXISTS public.medicine_logs (
   logged_by public.log_actor,
   CONSTRAINT medicine_logs_pkey PRIMARY KEY (id),
   CONSTRAINT medicine_logs_patient_id_fkey FOREIGN KEY (patient_id) REFERENCES public.patient_profiles(id) ON DELETE CASCADE,
-  CONSTRAINT medicine_logs_schedule_id_fkey FOREIGN KEY (schedule_id) REFERENCES public.medicine_schedules(id) ON DELETE CASCADE
+  CONSTRAINT medicine_logs_schedule_id_fkey FOREIGN KEY (schedule_id) REFERENCES public.medicine_schedules(id) ON DELETE CASCADE,
+  CONSTRAINT medicine_logs_reminder_id_fkey FOREIGN KEY (reminder_id) REFERENCES public.reminders(id) ON DELETE CASCADE
 );
 
 -- PATIENT VITALS TABLE

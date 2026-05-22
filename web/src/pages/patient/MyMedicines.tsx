@@ -317,7 +317,7 @@ export function MyMedicines() {
     const { data: existingLog, error: checkError } = await supabase
       .from('medicine_logs')
       .select('id')
-      .eq('schedule_id', medicine.id)
+      .eq(medicine.is_self_reminder ? 'reminder_id' : 'schedule_id', medicine.id)
       .eq('patient_id', user.id)
       .gte('scheduled_time', todayStart)
       .lt('scheduled_time', todayEnd)
@@ -336,7 +336,7 @@ export function MyMedicines() {
     }
 
     const { error: logError } = await supabase.from('medicine_logs').insert({
-      schedule_id: medicine.id,
+      [medicine.is_self_reminder ? 'reminder_id' : 'schedule_id']: medicine.id,
       patient_id: user.id,
       scheduled_time: new Date().toISOString(),
       taken_time: new Date().toISOString(),

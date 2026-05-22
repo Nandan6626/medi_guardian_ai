@@ -282,16 +282,19 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         .select('id, medicine_name')
         .eq('patient_id', user.id);
 
-      const allMeds = [...(schedules || []), ...(reminders || [])];
+      const schedulesList = (schedules || []).map(s => ({ ...s, isSelf: false }));
+      const remindersList = (reminders || []).map(r => ({ ...r, isSelf: true }));
+      const allMeds = [...schedulesList, ...remindersList];
       const match = allMeds.find(m => bodyText.toLowerCase().includes(m.medicine_name.toLowerCase()));
       
-      const scheduleId = match?.id || activeAlarm.id; // Fallback to notification ID if schedule not found
+      const isSelf = match ? match.isSelf : false;
+      const targetId = match?.id || activeAlarm.id;
 
       // 2. Insert TAKE log
       const { error: logErr } = await supabase
         .from('medicine_logs')
         .insert({
-          schedule_id: scheduleId,
+          [isSelf ? 'reminder_id' : 'schedule_id']: targetId,
           patient_id: user.id,
           scheduled_time: new Date().toISOString(),
           taken_time: new Date().toISOString(),

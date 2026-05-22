@@ -249,12 +249,12 @@ async def check_self_reminders(session):
             slot_end = scheduled_dt + timedelta(minutes=2)
             log_exists_query = text("""
                 SELECT id FROM medicine_logs
-                WHERE schedule_id = :schedule_id
+                WHERE reminder_id = :reminder_id
                   AND scheduled_time >= :slot_start
                   AND scheduled_time <= :slot_end
             """)
             res = await session.execute(log_exists_query, {
-                "schedule_id": reminder_id, # Reminders map their logs by matching schedule_id = reminder_id
+                "reminder_id": reminder_id,
                 "slot_start": slot_start,
                 "slot_end": slot_end
             })
@@ -262,11 +262,11 @@ async def check_self_reminders(session):
                 logger.info(f"Escalating missed self reminder dose for patient {patient_first_name} (Med: {medicine_name})")
                 # Insert Missed log
                 insert_log_query = text("""
-                    INSERT INTO medicine_logs (schedule_id, patient_id, scheduled_time, status, logged_by)
-                    VALUES (:schedule_id, :patient_id, :scheduled_time, 'MISSED', 'SYSTEM_AUTO')
+                    INSERT INTO medicine_logs (reminder_id, patient_id, scheduled_time, status, logged_by)
+                    VALUES (:reminder_id, :patient_id, :scheduled_time, 'MISSED', 'SYSTEM_AUTO')
                 """)
                 await session.execute(insert_log_query, {
-                    "schedule_id": reminder_id,
+                    "reminder_id": reminder_id,
                     "patient_id": patient_id,
                     "scheduled_time": scheduled_dt
                 })

@@ -87,6 +87,7 @@ class MedicineLog(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
     schedule_id = Column(UUID(as_uuid=True), ForeignKey("medicine_schedules.id"))
+    reminder_id = Column(UUID(as_uuid=True), ForeignKey("reminders.id"), nullable=True)
     patient_id = Column(UUID(as_uuid=True), ForeignKey("patient_profiles.id"))
     scheduled_time = Column(DateTime(timezone=False))
     taken_time = Column(DateTime(timezone=False))
