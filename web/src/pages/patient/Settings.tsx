@@ -18,9 +18,27 @@ export function Settings() {
              <div>
                <h3 className="font-bold text-white text-lg">Alex (Patient)</h3>
                <p className="text-sm text-gray-400">alex@example.com</p>
+               <div className="mt-2 inline-block px-3 py-1 bg-brand-neon/10 border border-brand-neon/30 text-brand-neon rounded-lg font-mono text-sm tracking-widest font-bold">
+                 ID: MG-PAT-10458
+               </div>
              </div>
            </div>
            <button className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors text-sm font-bold">Edit Profile</button>
+        </div>
+
+        {/* Pending Connections */}
+        <div className="glass p-8 rounded-3xl border border-white/5">
+          <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2"><Shield size={20} className="text-orange-400" /> Pending Connection Requests</h2>
+          <div className="bg-[#1A1A2E] p-4 rounded-2xl border border-orange-500/20 flex justify-between items-center">
+            <div>
+              <p className="font-bold text-white">Dr. Sarah Jenkins</p>
+              <p className="text-sm text-gray-400">Cardiologist • Requested to manage your prescriptions.</p>
+            </div>
+            <div className="flex gap-2">
+              <button className="px-4 py-2 rounded-xl text-sm font-bold bg-white/10 text-white hover:bg-red-500/20 transition-colors">Decline</button>
+              <button className="px-4 py-2 rounded-xl text-sm font-bold bg-brand-neon text-black hover:bg-brand-neon/80 transition-colors">Accept</button>
+            </div>
+          </div>
         </div>
 
         {/* Toggles */}

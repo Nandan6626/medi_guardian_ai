@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import List, Optional
+from uuid import UUID
 
 class DoctorDashboardMetrics(BaseModel):
     doctor_name: str
@@ -11,7 +12,7 @@ class DoctorDashboardMetrics(BaseModel):
     pending_reviews: int
 
 class PatientAlert(BaseModel):
-    patient_id: int
+    patient_id: UUID
     patient_name: str
     issue: str
     risk_level: str # 'High', 'Medium', 'Low'
@@ -21,7 +22,7 @@ class DoctorDashboardResponse(BaseModel):
     action_required: List[PatientAlert]
 
 class PatientDetailMetrics(BaseModel):
-    id: int
+    id: UUID
     name: str
     age: int
     blood_group: Optional[str]
@@ -31,7 +32,7 @@ class PatientDetailMetrics(BaseModel):
     adherence_score: int
 
 class PatientListResponse(BaseModel):
-    id: int
+    id: UUID
     name: str
     status: str
     alerts: int

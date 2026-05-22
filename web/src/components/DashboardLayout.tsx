@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   LogOut, LayoutDashboard, Calendar, FileText, Activity, 
-  Users, Stethoscope, Video, Bell, Phone, HeartPulse, ShieldAlert 
+  Users, Stethoscope, Video, Bell, Phone, HeartPulse, ShieldAlert, User, Settings
 } from 'lucide-react';
 
 interface SidebarItem {
@@ -32,18 +32,17 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
     { icon: Phone, label: 'Doctor Chat', path: '/patient/chat' },
     { icon: Activity, label: 'Health Reports', path: '/patient/reports' },
     { icon: HeartPulse, label: 'Emergency SOS', path: '/patient/emergency' },
-    { icon: Users, label: 'Settings', path: '/patient/settings' },
+    { icon: User, label: 'Profile', path: '/patient/profile' },
+    { icon: Settings, label: 'Settings', path: '/patient/settings' },
   ];
 
   const doctorLinks: SidebarItem[] = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/doctor' },
     { icon: Users, label: 'Patient Management', path: '/doctor/patients' },
-    { icon: Calendar, label: 'Appointments', path: '/doctor/appointments' },
-    { icon: Stethoscope, label: 'Prescriptions', path: '/doctor/prescriptions' },
-    { icon: FileText, label: 'Medical History', path: '/doctor/history' },
-    { icon: Activity, label: 'AI Insights', path: '/doctor/ai-insights' },
-    { icon: Video, label: 'Video Consults', path: '/doctor/consults' },
-    { icon: ShieldAlert, label: 'Emergency Alerts', path: '/doctor/alerts' },
+    { icon: ShieldAlert, label: 'Emergency Monitoring', path: '/doctor/alerts' },
+    { icon: Bell, label: 'Notifications', path: '/doctor/notifications' },
+    { icon: Activity, label: 'Analytics', path: '/doctor/analytics' },
+    { icon: Settings, label: 'Settings', path: '/doctor/settings' },
   ];
 
   const familyLinks: SidebarItem[] = [

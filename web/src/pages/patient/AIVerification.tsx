@@ -57,14 +57,42 @@ export function AIVerification() {
             </div>
           </div>
 
-          <div className="glass p-6 rounded-3xl border border-white/5">
-             <h3 className="font-bold text-white mb-4 flex items-center gap-2"><Info size={18} className="text-brand-purple" /> AI Explanation</h3>
-             <p className="text-sm text-gray-400 leading-relaxed">
-               Metformin is used with a proper diet and exercise program to control high blood sugar. It is used in patients with type 2 diabetes. Controlling high blood sugar helps prevent kidney damage, blindness, nerve problems, loss of limbs, and sexual function problems.
-             </p>
+          <div className="glass p-6 rounded-3xl border border-white/5 space-y-4">
+             <h3 className="font-bold text-white flex items-center gap-2"><Info size={18} className="text-brand-purple" /> Complete AI Analysis</h3>
+             
+             <div className="bg-[#1A1A2E] p-4 rounded-2xl border border-white/5">
+                <p className="text-xs text-brand-neon font-bold uppercase tracking-wider mb-1">What is this for?</p>
+                <p className="text-sm text-gray-300">Primarily used for controlling high blood sugar in patients with Type 2 Diabetes.</p>
+             </div>
+
+             <div className="bg-[#1A1A2E] p-4 rounded-2xl border border-white/5">
+                <p className="text-xs text-brand-neon font-bold uppercase tracking-wider mb-1">Usage Instructions</p>
+                <p className="text-sm text-gray-300">Take strictly <span className="text-white font-bold">After Food</span> to prevent severe stomach upset.</p>
+             </div>
+
+             <div className="grid grid-cols-2 gap-4">
+               <div className="bg-[#1A1A2E] p-4 rounded-2xl border border-white/5">
+                  <p className="text-xs text-red-400 font-bold uppercase tracking-wider mb-1">Side Effects</p>
+                  <p className="text-sm text-gray-300">Nausea, mild stomach pain.</p>
+               </div>
+               <div className="bg-[#1A1A2E] p-4 rounded-2xl border border-white/5">
+                  <p className="text-xs text-brand-purple font-bold uppercase tracking-wider mb-1">Safe Dosage</p>
+                  <p className="text-sm text-gray-300">Max 2000mg / day.</p>
+               </div>
+             </div>
+
+             {/* Elderly Friendly Summary */}
+             <div className="mt-6 p-5 rounded-2xl bg-gradient-to-br from-brand-purple/20 to-transparent border border-brand-purple/30">
+                <p className="text-xs text-white font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
+                  <ShieldAlert size={14} className="text-brand-neon"/> Simple Summary
+                </p>
+                <p className="text-sm text-gray-200 leading-relaxed font-medium">
+                  "This is your diabetes medicine, Alex. It helps keep your sugar levels safe. Always eat a full meal before taking this pill, and do not take it at the same time as your Aspirin."
+                </p>
+             </div>
+             </div>
           </div>
         </div>
       </div>
-    </div>
   );
 }

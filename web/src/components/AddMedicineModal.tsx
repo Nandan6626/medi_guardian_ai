@@ -7,9 +7,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 interface AddMedicineModalProps {
   isOpen: boolean;
   onClose: () => void;
+  isSelfReminder?: boolean;
 }
 
-export function AddMedicineModal({ isOpen, onClose }: AddMedicineModalProps) {
+export function AddMedicineModal({ isOpen, onClose, isSelfReminder = false }: AddMedicineModalProps) {
   const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     name: '',
@@ -21,7 +22,7 @@ export function AddMedicineModal({ isOpen, onClose }: AddMedicineModalProps) {
 
   const mutation = useMutation({
     mutationFn: (newMedicine: typeof formData) => {
-      return api.post('/medicines/', newMedicine);
+      return api.post('/medicines/', { ...newMedicine, is_self_reminder: isSelfReminder });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['medicines'] });

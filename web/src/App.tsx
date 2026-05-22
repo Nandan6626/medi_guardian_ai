@@ -16,7 +16,22 @@ import { DashboardLayout } from './components/DashboardLayout'
 
 const queryClient = new QueryClient()
 
-import { MedicationManagement } from './pages/doctor/MedicationManagement'
+import { MyMedicines } from './pages/patient/MyMedicines'
+import { AIVerification } from './pages/patient/AIVerification'
+import { HealthTimeline } from './pages/patient/HealthTimeline'
+import { Appointments } from './pages/patient/Appointments'
+import { DoctorChat } from './pages/patient/DoctorChat'
+import { HealthReports } from './pages/patient/HealthReports'
+import { EmergencySOS } from './pages/patient/EmergencySOS'
+import { Settings } from './pages/patient/Settings'
+import { Profile } from './pages/patient/Profile'
+
+import { PatientManagement } from './pages/doctor/PatientManagement'
+import { PatientWorkspace } from './pages/doctor/PatientWorkspace'
+import { EmergencyMonitoring } from './pages/doctor/EmergencyMonitoring'
+import { Notifications } from './pages/doctor/Notifications'
+import { Analytics } from './pages/doctor/Analytics'
+import { Settings as DoctorSettings } from './pages/doctor/Settings'
 
 // A simple placeholder component for unimplemented features
 function ComingSoon() {
@@ -55,10 +70,16 @@ function App() {
               <Route path="/patient/chat" element={<DashboardLayout><DoctorChat /></DashboardLayout>} />
               <Route path="/patient/reports" element={<DashboardLayout><HealthReports /></DashboardLayout>} />
               <Route path="/patient/emergency" element={<DashboardLayout><EmergencySOS /></DashboardLayout>} />
+              <Route path="/patient/profile" element={<DashboardLayout><Profile /></DashboardLayout>} />
               <Route path="/patient/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
               
               <Route path="/doctor" element={<DashboardLayout><DoctorDashboard /></DashboardLayout>} />
-              <Route path="/doctor/prescriptions" element={<DashboardLayout><MedicationManagement /></DashboardLayout>} />
+              <Route path="/doctor/patients" element={<DashboardLayout><PatientManagement /></DashboardLayout>} />
+              <Route path="/doctor/patients/:id" element={<DashboardLayout><PatientWorkspace /></DashboardLayout>} />
+              <Route path="/doctor/alerts" element={<DashboardLayout><EmergencyMonitoring /></DashboardLayout>} />
+              <Route path="/doctor/notifications" element={<DashboardLayout><Notifications /></DashboardLayout>} />
+              <Route path="/doctor/analytics" element={<DashboardLayout><Analytics /></DashboardLayout>} />
+              <Route path="/doctor/settings" element={<DashboardLayout><DoctorSettings /></DashboardLayout>} />
               <Route path="/doctor/*" element={<DashboardLayout><ComingSoon /></DashboardLayout>} />
               
               <Route path="/family" element={<DashboardLayout><FamilyDashboard /></DashboardLayout>} />

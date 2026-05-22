@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
+from uuid import UUID
 
 class MedicineBase(BaseModel):
     name: str = Field(..., description="Name of the medicine")
@@ -20,11 +21,15 @@ class MedicineCreate(BaseModel):
     color: Optional[str] = None
     shape: Optional[str] = None
     food_instruction: Optional[str] = None
+    is_self_reminder: Optional[bool] = False
+    reminder_sound: Optional[bool] = True
+    requires_refill: Optional[bool] = False
+    refill_date: Optional[datetime] = None
 
 class MedicineResponse(BaseModel):
-    id: int
-    patient_id: int
-    added_by: int
+    id: UUID
+    patient_id: UUID
+    added_by: UUID
     name: str
     dosage: str
     timing: str
@@ -35,6 +40,10 @@ class MedicineResponse(BaseModel):
     color: Optional[str] = None
     shape: Optional[str] = None
     food_instruction: Optional[str] = None
+    is_self_reminder: bool
+    reminder_sound: bool
+    requires_refill: bool
+    refill_date: Optional[datetime] = None
     is_active: bool
     created_at: datetime
 
@@ -49,8 +58,8 @@ class MedicineLogCreate(MedicineLogBase):
     taken_time: Optional[datetime] = None
 
 class MedicineLogResponse(MedicineLogBase):
-    id: int
-    medicine_id: int
+    id: UUID
+    medicine_id: UUID
     taken_time: Optional[datetime]
     
     class Config:

@@ -1,0 +1,35 @@
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+dist/
+build/
+.next/
+out/
+
+# Database
+*.db
+*.sqlite3
+
+# Temp files
+error.log
+test_db.py
+test_endpoint.py
+migrate_schema.py
+
+# OS
+.DS_Store

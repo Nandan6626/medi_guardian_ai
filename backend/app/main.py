@@ -3,14 +3,21 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base
 from app.api.endpoints import medicines, family, doctor
 
-# Create database tables
-Base.metadata.create_all(bind=engine)
+from contextlib import asynccontextmanager
 
+# Async lifespan to create tables safely
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Note: In production, use Alembic for migrations instead of create_all
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    yield
 
 app = FastAPI(
     title="MediGuardian AI API",
     description="Backend API for the AI-Powered Smart Medication & Preventive Healthcare Ecosystem",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # Configure CORS
