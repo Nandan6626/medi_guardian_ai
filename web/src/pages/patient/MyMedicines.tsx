@@ -186,7 +186,13 @@ export function MyMedicines() {
   }, [doctorMeds, selfReminders, notificationStatus]);
 
   useEffect(() => {
+    const handleDismissLocalToast = () => {
+      setReminderToast(null);
+    };
+    window.addEventListener('dismiss-local-toast', handleDismissLocalToast);
+
     return () => {
+      window.removeEventListener('dismiss-local-toast', handleDismissLocalToast);
       if (toastTimerRef.current) {
         window.clearTimeout(toastTimerRef.current);
       }
@@ -351,6 +357,7 @@ export function MyMedicines() {
     }
 
     setNotificationMessage(`✓ Marked ${medicine.name} as taken.`);
+    window.dispatchEvent(new CustomEvent('dismiss-medication-alarm'));
     fetchDoctorMeds();
     fetchSelfReminders();
 
