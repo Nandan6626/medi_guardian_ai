@@ -161,7 +161,97 @@ export function SignUp() {
                   <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-text-muted">
                     <Briefcase size={18} />
                   </div>
-                  <input type="text" name="specialization" required value={formData.specialization} onChange={handleChange} className="w-full py-3 pl-10 pr-4 text-sm text-white bg-bg-input border border-border-subtle rounded-xl focus:border-brand-neon focus:ring-1 focus:ring-brand-neon outline-none transition-all placeholder:text-text-muted" placeholder="e.g. Cardiology" />
+                  <select
+                    name="specialization"
+                    required
+                    value={formData.specialization}
+                    onChange={handleChange}
+                    className="w-full py-3 pl-10 pr-4 text-sm text-white bg-bg-input border border-border-subtle rounded-xl focus:border-brand-neon focus:ring-1 focus:ring-brand-neon outline-none transition-all appearance-none cursor-pointer"
+                  >
+                    <option value="" disabled>Select specialization...</option>
+                    <optgroup label="Primary Care">
+                      <option>General Practice</option>
+                      <option>Family Medicine</option>
+                      <option>Internal Medicine</option>
+                      <option>Pediatrics</option>
+                      <option>Geriatrics</option>
+                    </optgroup>
+                    <optgroup label="Surgery">
+                      <option>General Surgery</option>
+                      <option>Cardiothoracic Surgery</option>
+                      <option>Neurosurgery</option>
+                      <option>Orthopedic Surgery</option>
+                      <option>Plastic & Reconstructive Surgery</option>
+                      <option>Vascular Surgery</option>
+                      <option>Urological Surgery</option>
+                      <option>Laparoscopic Surgery</option>
+                    </optgroup>
+                    <optgroup label="Medical Specialties">
+                      <option>Cardiology</option>
+                      <option>Neurology</option>
+                      <option>Endocrinology</option>
+                      <option>Gastroenterology</option>
+                      <option>Pulmonology</option>
+                      <option>Nephrology</option>
+                      <option>Rheumatology</option>
+                      <option>Hematology</option>
+                      <option>Oncology</option>
+                      <option>Infectious Disease</option>
+                      <option>Allergy & Immunology</option>
+                      <option>Hepatology</option>
+                    </optgroup>
+                    <optgroup label="Women's & Reproductive Health">
+                      <option>Obstetrics & Gynecology</option>
+                      <option>Reproductive Medicine & IVF</option>
+                      <option>Maternal-Fetal Medicine</option>
+                      <option>Gynecologic Oncology</option>
+                    </optgroup>
+                    <optgroup label="Mental Health">
+                      <option>Psychiatry</option>
+                      <option>Clinical Psychology</option>
+                      <option>Addiction Medicine</option>
+                      <option>Child & Adolescent Psychiatry</option>
+                    </optgroup>
+                    <optgroup label="Diagnostics & Imaging">
+                      <option>Radiology</option>
+                      <option>Nuclear Medicine</option>
+                      <option>Pathology</option>
+                      <option>Clinical Laboratory Medicine</option>
+                    </optgroup>
+                    <optgroup label="Specialized Care">
+                      <option>Ophthalmology</option>
+                      <option>ENT (Otolaryngology)</option>
+                      <option>Dermatology</option>
+                      <option>Orthopedics</option>
+                      <option>Sports Medicine</option>
+                      <option>Pain Management</option>
+                      <option>Anesthesiology</option>
+                      <option>Emergency Medicine</option>
+                      <option>Critical Care / ICU</option>
+                      <option>Palliative Care</option>
+                      <option>Sleep Medicine</option>
+                    </optgroup>
+                    <optgroup label="Dental & Oral">
+                      <option>General Dentistry</option>
+                      <option>Oral Surgery</option>
+                      <option>Orthodontics</option>
+                      <option>Periodontology</option>
+                    </optgroup>
+                    <optgroup label="Allied Health">
+                      <option>Physiotherapy</option>
+                      <option>Occupational Therapy</option>
+                      <option>Dietetics & Nutrition</option>
+                      <option>Audiology</option>
+                      <option>Speech Therapy</option>
+                    </optgroup>
+                    <optgroup label="Other">
+                      <option>Ayurveda</option>
+                      <option>Homeopathy</option>
+                      <option>Naturopathy</option>
+                      <option>Other</option>
+                    </optgroup>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-text-muted">▼</div>
                 </div>
               </div>
               <div>
