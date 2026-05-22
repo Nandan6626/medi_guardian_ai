@@ -157,10 +157,9 @@ export function AIVerification() {
     setResult(null);
 
     const stages = [
-      '🔍 Running EasyOCR on image...',
-      '🤖 Gemini AI analyzing medicine...',
+      '🔍 Reading text from image...',
+      '🤖 Gemini AI identifying medicine...',
       '🏥 Fetching FDA drug database...',
-      '💬 Generating simple explanation...',
     ];
 
     let stageIdx = 0;
@@ -168,7 +167,7 @@ export function AIVerification() {
     const stageTimer = setInterval(() => {
       stageIdx = Math.min(stageIdx + 1, stages.length - 1);
       setStage(stages[stageIdx]);
-    }, 3500);
+    }, 2500);
 
     try {
       const formData = new FormData();

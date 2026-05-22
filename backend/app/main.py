@@ -4,6 +4,7 @@ import asyncio
 from app.database import engine, Base
 from app.api.endpoints import medicines, family, doctor, emergency, medicine_verify
 from app.notifications_worker import notifications_worker_loop
+from app.services.ocr_service import warmup_ocr
 
 from contextlib import asynccontextmanager
 
@@ -15,6 +16,8 @@ async def lifespan(app: FastAPI):
         await conn.run_sync(Base.metadata.create_all)
     # Start notifications background loop
     asyncio.create_task(notifications_worker_loop())
+    # Pre-warm EasyOCR model in background (eliminates first-request ~15s delay)
+    asyncio.get_event_loop().run_in_executor(None, warmup_ocr)
     yield
 
 app = FastAPI(
