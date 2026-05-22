@@ -39,7 +39,7 @@ export function BookAppointmentModal({ isOpen, onClose, onSuccess }: BookAppoint
           patient_id: user.id,
           doctor_id: formData.doctorId,
           appointment_time: appointmentTime,
-          type: formData.type,
+          type: formData.type === 'video' ? 'VIDEO' : 'IN_PERSON',
           status: 'SCHEDULED',
           clinical_notes: formData.notes || null,
         });

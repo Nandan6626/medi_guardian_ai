@@ -111,14 +111,14 @@ export function WorkspaceAppointments({ patientId }: { patientId: string }) {
                     <div key={apt.id} className={`glass p-6 rounded-3xl border transition-all ${isActive ? 'border-brand-neon/50 bg-brand-neon/5 shadow-[0_0_20px_rgba(0,240,255,0.05)]' : 'border-border-subtle bg-bg-surface'} flex flex-col md:flex-row justify-between items-start md:items-center gap-6`}>
                        <div className="flex gap-4 items-center">
                           <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${isActive ? 'bg-brand-neon text-black' : 'bg-brand-neon/20 text-brand-neon'}`}>
-                            {apt.type === 'video' ? <Video size={24} /> : <Users size={24} />}
+                            {['video','VIDEO'].includes(apt.type) ? <Video size={24} /> : <Users size={24} />}
                           </div>
                           <div>
                             <p className="text-brand-neon text-xs font-bold uppercase tracking-widest mb-1">
                               {aptDate.toLocaleDateString()} • {aptDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                             </p>
                             <h3 className="text-xl font-bold text-white">
-                              {apt.type === 'video' ? 'Video Consultation' : 'In-Person Visit'}
+                              {['video','VIDEO'].includes(apt.type) ? 'Video Consultation' : 'In-Person Visit'}
                             </h3>
                             <p className="text-sm text-gray-400">{apt.clinical_notes || 'No notes provided by patient.'}</p>
                           </div>
@@ -143,7 +143,7 @@ export function WorkspaceAppointments({ patientId }: { patientId: string }) {
                            </>
                          ) : (
                            <button 
-                             onClick={() => updateStatus(apt.id, 'ACTIVE', apt.type === 'video')}
+                             onClick={() => updateStatus(apt.id, 'ACTIVE', ['video','VIDEO'].includes(apt.type))}
                              disabled={updatingId === apt.id}
                              className="flex-1 md:flex-none px-6 py-3 bg-white hover:bg-gray-200 text-black font-bold rounded-xl hover:bg-brand-neon/80 transition-colors text-sm flex justify-center items-center gap-2"
                            >
@@ -183,7 +183,7 @@ export function WorkspaceAppointments({ patientId }: { patientId: string }) {
                         <tr key={apt.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                           <td className="p-4 flex items-center gap-2"><Clock size={14} className="text-brand-purple"/> {aptDate.toLocaleDateString()}</td>
                           <td className="p-4">
-                            <span className={`px-2 py-1 rounded text-xs font-bold ${apt.type === 'video' ? 'bg-blue-500/20 text-blue-400' : 'bg-gray-500/20 text-gray-400'}`}>
+                            <span className={`px-2 py-1 rounded text-xs font-bold ${['video','VIDEO'].includes(apt.type) ? 'bg-blue-500/20 text-blue-400' : 'bg-gray-500/20 text-gray-400'}`}>
                               {apt.type}
                             </span>
                           </td>

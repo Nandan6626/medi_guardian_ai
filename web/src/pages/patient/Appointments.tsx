@@ -127,12 +127,12 @@ export function Appointments() {
                             <h3 className="text-2xl font-bold text-white mb-1">{doc.name}</h3>
                             <p className="text-gray-400 text-sm flex items-center gap-2">
                               {doc.spec} • 
-                              {apt.type === 'video' ? <span className="flex items-center gap-1"><Video size={14}/> Video Consult</span> : <span className="flex items-center gap-1"><Users size={14}/> In-Person</span>}
+                              {['video','VIDEO'].includes(apt.type) ? <span className="flex items-center gap-1"><Video size={14}/> Video Consult</span> : <span className="flex items-center gap-1"><Users size={14}/> In-Person</span>}
                             </p>
                           </div>
                         </div>
                         
-                        {apt.type === 'video' && (
+                        {['video','VIDEO'].includes(apt.type) && (
                           <a 
                             href={isActive && apt.meeting_link ? apt.meeting_link : '#'}
                             target={isActive && apt.meeting_link ? "_blank" : "_self"}
@@ -172,7 +172,7 @@ export function Appointments() {
                    return (
                      <div key={apt.id} className="glass p-6 rounded-2xl border border-white/5 flex gap-4 items-center bg-bg-surface/50 opacity-80 hover:opacity-100 transition-opacity">
                         <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center shrink-0 text-gray-500">
-                          {apt.type === 'video' ? <Video size={20} /> : <Users size={20} />}
+                          {['video','VIDEO'].includes(apt.type) ? <Video size={20} /> : <Users size={20} />}
                         </div>
                         <div className="flex-1">
                           <div className="flex justify-between items-start">
