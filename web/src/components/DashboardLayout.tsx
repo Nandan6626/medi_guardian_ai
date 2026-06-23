@@ -333,7 +333,6 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   const patientLinks: SidebarItem[] = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/patient' },
     { icon: Calendar, label: 'My Medicines', path: '/patient/medicines' },
-    { icon: ShieldAlert, label: 'AI Verification', path: '/patient/verify' },
     { icon: FileText, label: 'Health Timeline', path: '/patient/timeline' },
     { icon: Video, label: 'Appointments', path: '/patient/appointments' },
     { icon: Phone, label: 'Doctor Chat', path: '/patient/chat' },
@@ -435,7 +434,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                 <button
                   disabled={isLogging}
                   onClick={handleLogTaken}
-                  className="flex-1 py-3.5 bg-gradient-to-r from-brand-purple to-brand-neon text-white font-extrabold rounded-2xl transition-all shadow-[0_0_20px_rgba(112,0,255,0.4)] hover:brightness-110 flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+                  className="flex-1 py-3.5 bg-linear-to-r from-brand-purple to-brand-neon text-white font-extrabold rounded-2xl transition-all shadow-[0_0_20px_rgba(112,0,255,0.4)] hover:brightness-110 flex items-center justify-center gap-2 text-sm disabled:opacity-50"
                 >
                   {isLogging ? (
                     "Logging..."
@@ -453,10 +452,10 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       </AnimatePresence>
 
       {/* Sidebar */}
-      <aside className="w-72 flex flex-col justify-between p-6 bg-bg-sidebar border-r border-border-subtle z-10 hidden md:flex">
-        <div>
+      <aside className="w-72 hidden md:block bg-bg-sidebar border-r border-border-subtle z-10">
+        <div className="flex h-full flex-col justify-between p-6">
           <div className="flex items-center gap-3 mb-12 px-2">
-            <div className="flex items-center justify-center w-10 h-10 text-white rounded-xl bg-gradient-to-br from-brand-purple to-brand-neon purple-glow">
+            <div className="flex items-center justify-center w-10 h-10 text-white rounded-xl bg-linear-to-br from-brand-purple to-brand-neon purple-glow">
               <span className="font-bold">M</span>
             </div>
             <span className="text-xl font-extrabold tracking-tight text-text-primary">MediGuardian</span>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuthStore } from '../store/useAuthStore';
-import { Activity, ShieldAlert, HeartPulse, ArrowRight, ShieldCheck, Heart, Pill, Clock, X, PhoneCall } from 'lucide-react';
+import { Activity, HeartPulse, ArrowRight, ShieldCheck, Heart, Pill, Clock, X, PhoneCall } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
@@ -136,7 +136,7 @@ export function PatientDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         
         {/* Main Action Banner */}
-        <Link to="/patient/medicines" className="md:col-span-8 glass-panel p-8 rounded-3xl group relative overflow-hidden flex flex-col justify-center min-h-[240px] hover:border-white/20 transition-all">
+        <Link to="/patient/medicines" className="md:col-span-8 glass-panel p-8 rounded-3xl group relative overflow-hidden flex flex-col justify-center min-h-60 hover:border-white/20 transition-all">
            <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-brand-purple/20 rounded-full blur-[60px] group-hover:bg-brand-neon/20 transition-colors duration-700"></div>
            <div className="relative z-10">
              <h2 className="text-3xl font-extrabold text-white mb-3">My Medicines</h2>
@@ -151,25 +151,13 @@ export function PatientDashboard() {
 
         {/* AI Health Score */}
         <Link to="/patient/reports" className="md:col-span-4 glass-panel p-8 rounded-3xl flex flex-col justify-center items-center text-center group hover:border-white/20 transition-all">
-           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-brand-purple to-brand-neon flex items-center justify-center mb-6 ai-glow relative">
+           <div className="w-20 h-20 rounded-full bg-linear-to-br from-brand-purple to-brand-neon flex items-center justify-center mb-6 ai-glow relative">
              <div className="absolute inset-1 bg-bg-surface rounded-full flex items-center justify-center">
                <Activity size={28} className="text-brand-neon" />
              </div>
            </div>
            <h3 className="text-5xl font-extrabold text-white mb-2">92</h3>
            <p className="text-sm font-bold text-text-muted uppercase tracking-widest">AI Health Score</p>
-        </Link>
-
-        {/* AI Verification Quick Link */}
-        <Link to="/patient/verify" className="md:col-span-6 glass-panel p-8 rounded-3xl transition-all group hover:border-brand-neon/30 hover:bg-brand-neon/5">
-           <div className="w-14 h-14 rounded-2xl bg-brand-neon/10 text-brand-neon flex items-center justify-center mb-6 border border-brand-neon/20 shadow-inner">
-             <ShieldAlert size={28} />
-           </div>
-           <h3 className="text-2xl font-bold text-white mb-3">AI Verification</h3>
-           <p className="text-text-secondary mb-8 font-medium">Scan new prescriptions for drug interactions and safety checks.</p>
-           <div className="flex items-center gap-2 text-brand-neon font-bold group-hover:translate-x-2 transition-transform">
-               Scan Now <ArrowRight size={18} />
-           </div>
         </Link>
 
         {/* Appointments Quick Link */}
@@ -280,7 +268,7 @@ export function PatientDashboard() {
               ) : peerSchedule.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">No scheduled clinical prescriptions found for today.</div>
               ) : (
-                <div className="space-y-4 max-h-[350px] overflow-y-auto pr-1">
+                <div className="space-y-4 max-h-87.5 overflow-y-auto pr-1">
                   {peerSchedule.map((item: any) => (
                     <div key={item.id} className="bg-[#1A1A2E]/80 p-4 rounded-2xl border border-white/5 flex justify-between items-center">
                       <div className="flex-1 pr-4">

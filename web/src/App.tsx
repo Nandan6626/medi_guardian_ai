@@ -36,9 +36,6 @@ const queryClient = new QueryClient()
 const MyMedicines = lazy(() =>
   import('./pages/patient/MyMedicines').then((m) => ({ default: m.MyMedicines }))
 )
-const AIVerification = lazy(() =>
-  import('./pages/patient/AIVerification').then((m) => ({ default: m.AIVerification }))
-)
 const HealthTimeline = lazy(() =>
   import('./pages/patient/HealthTimeline').then((m) => ({ default: m.HealthTimeline }))
 )
@@ -123,7 +120,7 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="/patient" element={<DashboardLayout><PatientDashboard /></DashboardLayout>} />
               <Route path="/patient/medicines" element={<DashboardLayout><MyMedicines /></DashboardLayout>} />
-              <Route path="/patient/verify" element={<DashboardLayout><AIVerification /></DashboardLayout>} />
+              <Route path="/patient/verify" element={<Navigate to="/patient/reports" replace />} />
               <Route path="/patient/timeline" element={<DashboardLayout><HealthTimeline /></DashboardLayout>} />
               <Route path="/patient/appointments" element={<DashboardLayout><Appointments /></DashboardLayout>} />
               <Route path="/patient/chat" element={<DashboardLayout><DoctorChat /></DashboardLayout>} />
