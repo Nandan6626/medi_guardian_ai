@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import asyncio
+import os
 from app.database import engine, Base
 from app.api.endpoints import medicines, family, doctor, emergency, medicine_verify
 from app.notifications_worker import notifications_worker_loop
-from app.services.ocr_service import warmup_ocr
 
 from contextlib import asynccontextmanager
 
@@ -16,10 +16,9 @@ async def lifespan(app: FastAPI):
     # Note: In production, use Alembic for migrations instead of create_all
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    # Start notifications background loop
-    asyncio.create_task(notifications_worker_loop())
-    # Pre-warm EasyOCR model in background (eliminates first-request ~15s delay)
-    asyncio.create_task(asyncio.to_thread(warmup_ocr))
+    # Optional background worker; keep disabled by default in constrained environments.
+    if os.getenv("ENABLE_NOTIFICATIONS_WORKER", "false").lower() == "true":
+        asyncio.create_task(notifications_worker_loop())
     yield
 
 app = FastAPI(

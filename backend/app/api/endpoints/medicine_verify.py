@@ -19,6 +19,7 @@ from app.services.openfda_service import fetch_fda_drug_info
 logger = logging.getLogger("medicine_verify")
 
 router = APIRouter()
+MAX_UPLOAD_BYTES = 5 * 1024 * 1024
 
 
 # ─── Response Models ──────────────────────────────────────────────────────────
@@ -31,6 +32,7 @@ class AIExtraction(BaseModel):
     confidence: str
     cleaned_ocr_text: str
 
+
 class FDAInfo(BaseModel):
     found: bool
     brand_names: List[str]
@@ -42,6 +44,7 @@ class FDAInfo(BaseModel):
     precautions: str
     drug_interactions: str
     description: str
+
 
 class MedicineAnalysisResponse(BaseModel):
     success: bool
@@ -67,15 +70,23 @@ async def analyze_medicine_image(
     """
 
     if not file.content_type or not file.content_type.startswith("image/"):
-        raise HTTPException(status_code=400, detail="Only image files are accepted.")
+        raise HTTPException(
+            status_code=400, detail="Only image files are accepted.")
 
     try:
         image_bytes = await file.read()
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Failed to read file: {str(e)}")
+        raise HTTPException(
+            status_code=400, detail=f"Failed to read file: {str(e)}")
 
     if len(image_bytes) < 100:
-        raise HTTPException(status_code=400, detail="Uploaded file appears to be empty.")
+        raise HTTPException(
+            status_code=400, detail="Uploaded file appears to be empty.")
+    if len(image_bytes) > MAX_UPLOAD_BYTES:
+        raise HTTPException(
+            status_code=413,
+            detail="Image too large. Maximum allowed size is 5 MB."
+        )
 
     logger.info(f"Analyzing: {file.filename} ({len(image_bytes)} bytes)")
 
@@ -94,7 +105,8 @@ async def analyze_medicine_image(
 
     generic_name = ai_data.get("generic_name", "")
     medicine_name = ai_data.get("medicine_name", "Unknown")
-    simple_explanation = ai_data.get("simple_explanation", "Please consult your pharmacist.")
+    simple_explanation = ai_data.get(
+        "simple_explanation", "Please consult your pharmacist.")
 
     # ── Step 3: OpenFDA (in parallel — no longer blocks the response) ──
     try:
@@ -126,11 +138,13 @@ async def analyze_medicine_image(
             brand_names=fda_data.get("brand_names", []),
             manufacturer=fda_data.get("manufacturer", "Not available"),
             uses=fda_data.get("uses", "Not available"),
-            dosage=fda_data.get("dosage", ai_data.get("dosage", "As prescribed")),
+            dosage=fda_data.get("dosage", ai_data.get(
+                "dosage", "As prescribed")),
             warnings=fda_data.get("warnings", "Consult your doctor"),
             side_effects=fda_data.get("side_effects", "Not available"),
             precautions=fda_data.get("precautions", "Not available"),
-            drug_interactions=fda_data.get("drug_interactions", "Not available"),
+            drug_interactions=fda_data.get(
+                "drug_interactions", "Not available"),
             description=fda_data.get("description", "")
         ),
         simple_explanation=simple_explanation,
