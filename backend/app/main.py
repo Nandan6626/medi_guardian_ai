@@ -9,6 +9,8 @@ from app.services.ocr_service import warmup_ocr
 from contextlib import asynccontextmanager
 
 # Async lifespan to create tables safely
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Note: In production, use Alembic for migrations instead of create_all
@@ -17,7 +19,7 @@ async def lifespan(app: FastAPI):
     # Start notifications background loop
     asyncio.create_task(notifications_worker_loop())
     # Pre-warm EasyOCR model in background (eliminates first-request ~15s delay)
-    asyncio.get_event_loop().run_in_executor(None, warmup_ocr)
+    asyncio.create_task(asyncio.to_thread(warmup_ocr))
     yield
 
 app = FastAPI(
@@ -36,6 +38,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 async def root():
     return {
@@ -44,13 +47,17 @@ async def root():
         "message": "Welcome to the future of healthcare."
     }
 
+
 @app.get("/health")
 async def health_check():
     return {"status": "ok"}
 
 # Include routers
-app.include_router(medicines.router, prefix="/api/medicines", tags=["Medicines"])
+app.include_router(
+    medicines.router, prefix="/api/medicines", tags=["Medicines"])
 app.include_router(family.router, prefix="/api/family", tags=["Family"])
 app.include_router(doctor.router, prefix="/api/doctor", tags=["Doctor"])
-app.include_router(emergency.router, prefix="/api/emergency", tags=["Emergency"])
-app.include_router(medicine_verify.router, prefix="/api/medicine-verify", tags=["Medicine AI Verify"])
+app.include_router(
+    emergency.router, prefix="/api/emergency", tags=["Emergency"])
+app.include_router(medicine_verify.router,
+                   prefix="/api/medicine-verify", tags=["Medicine AI Verify"])

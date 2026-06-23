@@ -3,7 +3,11 @@ OpenFDA Service — Fetches drug information from the FDA drug label database.
 Docs: https://open.fda.gov/apis/drug/label/
 """
 import logging
-import httpx
+
+try:
+    import httpx
+except ImportError:
+    httpx = None
 
 logger = logging.getLogger("openfda_service")
 
@@ -38,6 +42,8 @@ async def fetch_fda_drug_info(generic_name: str) -> dict:
     Query OpenFDA drug label API using the generic name.
     Returns structured dict with uses, dosage, warnings, side effects, etc.
     """
+    if httpx is None:
+        return _empty_fda_response("OpenFDA client is not installed in this environment.")
     if not generic_name or generic_name.lower() in ("unknown", ""):
         return _empty_fda_response("Unknown medicine — no generic name available for lookup.")
 
@@ -67,8 +73,10 @@ async def fetch_fda_drug_info(generic_name: str) -> dict:
 
                         # Extract brand names and manufacturer
                         brand_names = openfda.get("brand_name", [])
-                        manufacturer = openfda.get("manufacturer_name", ["Not available"])[0]
-                        substance = openfda.get("substance_name", [generic_name.upper()])
+                        manufacturer = openfda.get(
+                            "manufacturer_name", ["Not available"])[0]
+                        substance = openfda.get(
+                            "substance_name", [generic_name.upper()])
 
                         return {
                             "found": True,
@@ -85,7 +93,8 @@ async def fetch_fda_drug_info(generic_name: str) -> dict:
                         }
 
             except httpx.RequestError as e:
-                logger.warning(f"OpenFDA request error for query '{query}': {e}")
+                logger.warning(
+                    f"OpenFDA request error for query '{query}': {e}")
             except Exception as e:
                 logger.warning(f"OpenFDA parse error for query '{query}': {e}")
 

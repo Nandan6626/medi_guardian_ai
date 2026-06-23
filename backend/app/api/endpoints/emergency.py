@@ -1,19 +1,31 @@
 import os
-from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 from typing import List, Optional
-from googleplaces import GooglePlaces, types, lang
 
-load_dotenv()
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    load_dotenv = None
+
+try:
+    from googleplaces import GooglePlaces, types
+except ImportError:
+    GooglePlaces = None
+    types = None
+
+if load_dotenv:
+    load_dotenv()
 router = APIRouter()
 
 API_KEY = os.getenv("GOOGLE_PLACES_API_KEY", "").strip()
-google_places = GooglePlaces(API_KEY) if API_KEY else None
+google_places = GooglePlaces(API_KEY) if API_KEY and GooglePlaces else None
+
 
 class Location(BaseModel):
     lat: float
     lng: float
+
 
 class Hospital(BaseModel):
     name: str
@@ -21,6 +33,7 @@ class Hospital(BaseModel):
     vicinity: Optional[str] = None
     rating: Optional[float] = None
     place_id: Optional[str] = None
+
 
 FALLBACK_HOSPITALS = [
     {
@@ -46,6 +59,7 @@ FALLBACK_HOSPITALS = [
     }
 ]
 
+
 @router.get("/nearby-hospitals", response_model=List[Hospital])
 async def get_nearby_hospitals(
     lat: float = Query(..., description="Latitude of the location"),
@@ -55,11 +69,8 @@ async def get_nearby_hospitals(
     """
     Find nearby hospitals based on latitude and longitude using Google Places API.
     """
-    if google_places is None:
-        raise HTTPException(
-            status_code=500,
-            detail="Google Places API key is not configured. Set GOOGLE_PLACES_API_KEY in the backend environment to enable live nearby hospital search."
-        )
+    if google_places is None or types is None:
+        return [Hospital(**hospital) for hospital in FALLBACK_HOSPITALS]
 
     try:
         query_result = google_places.nearby_search(
@@ -67,7 +78,7 @@ async def get_nearby_hospitals(
             radius=radius,
             types=[types.TYPE_HOSPITAL]
         )
-        
+
         hospitals = []
         for place in query_result.places:
             hospital = Hospital(
@@ -82,9 +93,9 @@ async def get_nearby_hospitals(
             # place.get_details()
             # hospital.vicinity = place.vicinity
             # hospital.rating = place.rating
-            
+
             hospitals.append(hospital)
-            
+
         return hospitals
     except Exception as e:
         raise HTTPException(

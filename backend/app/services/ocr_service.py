@@ -8,20 +8,31 @@ import io
 import asyncio
 import logging
 from concurrent.futures import ThreadPoolExecutor
-from typing import Optional
-from PIL import Image, ImageEnhance
-import easyocr
+from typing import Optional, Any
+
+try:
+    from PIL import Image, ImageEnhance
+except ImportError:
+    Image = None
+    ImageEnhance = None
+
+try:
+    import easyocr
+except ImportError:
+    easyocr = None
 
 logger = logging.getLogger("ocr_service")
 
 # Singleton reader + dedicated thread pool for CPU-bound OCR
-_reader: Optional[easyocr.Reader] = None
+_reader: Optional[Any] = None
 _executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="easyocr")
 
 
-def _init_reader() -> easyocr.Reader:
+def _init_reader() -> Any:
     """Initialize EasyOCR reader (call once at startup)."""
     global _reader
+    if easyocr is None:
+        raise RuntimeError("EasyOCR is not installed in this environment.")
     if _reader is None:
         logger.info("Initializing EasyOCR reader...")
         _reader = easyocr.Reader(
@@ -35,12 +46,14 @@ def _init_reader() -> easyocr.Reader:
     return _reader
 
 
-def get_reader() -> easyocr.Reader:
+def get_reader() -> Any:
     return _init_reader()
 
 
 def _preprocess_image(image_bytes: bytes) -> bytes:
     """Lightweight preprocessing — resize only if tiny, minimal sharpening."""
+    if Image is None or ImageEnhance is None:
+        return image_bytes
     try:
         img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
         w, h = img.size
@@ -84,6 +97,8 @@ async def extract_text_from_image(image_bytes: bytes) -> str:
     Non-blocking async OCR — offloads CPU-bound EasyOCR to thread pool
     so the FastAPI event loop stays responsive.
     """
+    if easyocr is None:
+        raise RuntimeError("OCR dependencies are not installed.")
     loop = asyncio.get_event_loop()
     try:
         return await loop.run_in_executor(_executor, _run_ocr_sync, image_bytes)
@@ -94,6 +109,9 @@ async def extract_text_from_image(image_bytes: bytes) -> str:
 
 def warmup_ocr():
     """Pre-warm the EasyOCR model at app startup (eliminates first-request lag)."""
+    if easyocr is None:
+        logger.warning("Skipping OCR warmup because EasyOCR is not installed.")
+        return
     try:
         logger.info("Pre-warming EasyOCR model...")
         reader = _init_reader()

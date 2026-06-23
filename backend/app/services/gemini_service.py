@@ -6,18 +6,29 @@ import json
 import logging
 import re
 import os
-from google import genai
-from google.genai import types
+from typing import Any
+
+try:
+    from google import genai
+    from google.genai import types
+except ImportError:
+    genai = None
+    types = None
 
 logger = logging.getLogger("gemini_service")
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyDc8MOZ7XqMkDDF74WyyAMcmTZcPbCqdn8")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
 MODEL = "models/gemini-2.5-flash-lite"
 
 _client = None
 
-def get_client() -> genai.Client:
+
+def get_client() -> Any:
     global _client
+    if genai is None:
+        raise RuntimeError("Google GenAI SDK is not installed.")
+    if not GEMINI_API_KEY:
+        raise RuntimeError("GEMINI_API_KEY is not configured.")
     if _client is None:
         _client = genai.Client(api_key=GEMINI_API_KEY)
     return _client
@@ -49,6 +60,9 @@ async def analyze_medicine_from_ocr(ocr_text: str) -> dict:
     Previously two separate calls — now combined for ~50% speed improvement.
     """
     try:
+        if genai is None or types is None:
+            raise RuntimeError(
+                "Gemini integration is unavailable in this environment.")
         client = get_client()
         prompt = COMBINED_PROMPT.format(ocr_text=ocr_text)
 
@@ -69,7 +83,8 @@ async def analyze_medicine_from_ocr(ocr_text: str) -> dict:
         raw = re.sub(r'\s*```$', '', raw)
 
         data = json.loads(raw)
-        logger.info(f"Gemini: {data.get('medicine_name')} / {data.get('generic_name')} [{data.get('confidence')}]")
+        logger.info(
+            f"Gemini: {data.get('medicine_name')} / {data.get('generic_name')} [{data.get('confidence')}]")
         return data
 
     except json.JSONDecodeError as e:
