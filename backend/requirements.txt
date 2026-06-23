@@ -13,7 +13,6 @@ python-multipart>=0.0.6
 supabase>=2.0.3
 alembic>=1.12.1
 google-genai>=0.5.0
-googleplaces>=4.0.0
 Pillow>=10.4.0
 numpy>=1.26.4
 easyocr>=1.7.1
