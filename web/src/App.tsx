@@ -1,38 +1,87 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-import { PatientDashboard } from './pages/PatientDashboard'
-import { DoctorDashboard } from './pages/DoctorDashboard'
-import { FamilyDashboard } from './pages/FamilyDashboard'
+const PatientDashboard = lazy(() =>
+  import('./pages/PatientDashboard').then((m) => ({ default: m.PatientDashboard }))
+)
+const DoctorDashboard = lazy(() =>
+  import('./pages/DoctorDashboard').then((m) => ({ default: m.DoctorDashboard }))
+)
+const FamilyDashboard = lazy(() =>
+  import('./pages/FamilyDashboard').then((m) => ({ default: m.FamilyDashboard }))
+)
 
 // Auth Pages
-import { Login } from './pages/auth/Login'
-import { RoleSelection } from './pages/auth/RoleSelection'
-import { SignUp } from './pages/auth/SignUp'
+const Login = lazy(() =>
+  import('./pages/auth/Login').then((m) => ({ default: m.Login }))
+)
+const RoleSelection = lazy(() =>
+  import('./pages/auth/RoleSelection').then((m) => ({ default: m.RoleSelection }))
+)
+const SignUp = lazy(() =>
+  import('./pages/auth/SignUp').then((m) => ({ default: m.SignUp }))
+)
 
 // Protected Routing & Layout
-import { ProtectedRoute } from './components/ProtectedRoute'
-import { DashboardLayout } from './components/DashboardLayout'
+const ProtectedRoute = lazy(() =>
+  import('./components/ProtectedRoute').then((m) => ({ default: m.ProtectedRoute }))
+)
+const DashboardLayout = lazy(() =>
+  import('./components/DashboardLayout').then((m) => ({ default: m.DashboardLayout }))
+)
 
 const queryClient = new QueryClient()
 
-import { MyMedicines } from './pages/patient/MyMedicines'
-import { AIVerification } from './pages/patient/AIVerification'
-import { HealthTimeline } from './pages/patient/HealthTimeline'
-import { Appointments } from './pages/patient/Appointments'
-import { DoctorChat } from './pages/patient/DoctorChat'
-import { HealthReports } from './pages/patient/HealthReports'
-import { EmergencySOS } from './pages/patient/EmergencySOS'
-import { Settings } from './pages/patient/Settings'
-import { Profile } from './pages/patient/Profile'
-import { Caretakers } from './pages/patient/Caretakers'
+const MyMedicines = lazy(() =>
+  import('./pages/patient/MyMedicines').then((m) => ({ default: m.MyMedicines }))
+)
+const AIVerification = lazy(() =>
+  import('./pages/patient/AIVerification').then((m) => ({ default: m.AIVerification }))
+)
+const HealthTimeline = lazy(() =>
+  import('./pages/patient/HealthTimeline').then((m) => ({ default: m.HealthTimeline }))
+)
+const Appointments = lazy(() =>
+  import('./pages/patient/Appointments').then((m) => ({ default: m.Appointments }))
+)
+const DoctorChat = lazy(() =>
+  import('./pages/patient/DoctorChat').then((m) => ({ default: m.DoctorChat }))
+)
+const HealthReports = lazy(() =>
+  import('./pages/patient/HealthReports').then((m) => ({ default: m.HealthReports }))
+)
+const EmergencySOS = lazy(() =>
+  import('./pages/patient/EmergencySOS').then((m) => ({ default: m.EmergencySOS }))
+)
+const Settings = lazy(() =>
+  import('./pages/patient/Settings').then((m) => ({ default: m.Settings }))
+)
+const Profile = lazy(() =>
+  import('./pages/patient/Profile').then((m) => ({ default: m.Profile }))
+)
+const Caretakers = lazy(() =>
+  import('./pages/patient/Caretakers').then((m) => ({ default: m.Caretakers }))
+)
 
-import { PatientManagement } from './pages/doctor/PatientManagement'
-import { PatientWorkspace } from './pages/doctor/PatientWorkspace'
-import { EmergencyMonitoring } from './pages/doctor/EmergencyMonitoring'
-import { Notifications } from './pages/doctor/Notifications'
-import { Analytics } from './pages/doctor/Analytics'
-import { Settings as DoctorSettings } from './pages/doctor/Settings'
+const PatientManagement = lazy(() =>
+  import('./pages/doctor/PatientManagement').then((m) => ({ default: m.PatientManagement }))
+)
+const PatientWorkspace = lazy(() =>
+  import('./pages/doctor/PatientWorkspace').then((m) => ({ default: m.PatientWorkspace }))
+)
+const EmergencyMonitoring = lazy(() =>
+  import('./pages/doctor/EmergencyMonitoring').then((m) => ({ default: m.EmergencyMonitoring }))
+)
+const Notifications = lazy(() =>
+  import('./pages/doctor/Notifications').then((m) => ({ default: m.Notifications }))
+)
+const Analytics = lazy(() =>
+  import('./pages/doctor/Analytics').then((m) => ({ default: m.Analytics }))
+)
+const DoctorSettings = lazy(() =>
+  import('./pages/doctor/Settings').then((m) => ({ default: m.Settings }))
+)
 
 // A simple placeholder component for unimplemented features
 function ComingSoon() {
@@ -40,6 +89,14 @@ function ComingSoon() {
     <div className="flex flex-col items-center justify-center min-h-screen text-text-primary">
       <h1 className="text-3xl font-bold text-text-secondary">Coming Soon</h1>
       <p className="mt-2 text-text-secondary">This feature is under development.</p>
+    </div>
+  )
+}
+
+function PageLoader() {
+  return (
+    <div className="flex min-h-screen items-center justify-center text-text-secondary">
+      Loading...
     </div>
   )
 }
@@ -52,7 +109,8 @@ function App() {
           {/* Deep space radial gradient behind everything */}
           <div className="fixed inset-0 z-[-1] bg-[radial-gradient(circle_at_top_right,rgba(112,0,255,0.08),transparent_40%),radial-gradient(circle_at_bottom_left,rgba(0,240,255,0.05),transparent_40%)]"></div>
           
-          <Routes>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
             {/* Redirect root to login page automatically */}
             <Route path="/" element={<Navigate to="/auth/login" replace />} />
             
@@ -90,7 +148,8 @@ function App() {
             
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+            </Routes>
+          </Suspense>
         </div>
       </BrowserRouter>
     </QueryClientProvider>
