@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { AuthLayout } from './AuthLayout';
-import { Stethoscope, HeartPulse } from 'lucide-react';
+import { Stethoscope, HeartPulse, Sparkles, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export function RoleSelection() {
@@ -40,10 +40,28 @@ export function RoleSelection() {
         </motion.button>
 
       </div>
+
+      {/* Quick Demo Access banner */}
+      <div className="mt-8 p-4 rounded-2xl bg-bg-surface/80 border border-brand-neon/30 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <Sparkles size={18} className="text-brand-neon" />
+          <div>
+            <p className="text-xs font-bold text-white">Want to explore right away?</p>
+            <p className="text-[11px] text-text-secondary">Use pre-configured demo credentials or 1-click login.</p>
+          </div>
+        </div>
+        <button
+          onClick={() => navigate('/auth/login')}
+          className="py-1.5 px-3 rounded-xl bg-brand-neon text-black text-xs font-bold hover:bg-white transition-colors flex items-center gap-1 shrink-0"
+        >
+          <span>Demo Login</span>
+          <ArrowRight size={12} />
+        </button>
+      </div>
       
-      <div className="mt-8 text-center">
-        <button onClick={() => navigate('/auth/login')} className="font-bold text-brand-neon hover:text-white transition-colors">
-          Back to Login
+      <div className="mt-6 text-center">
+        <button onClick={() => navigate('/auth/login')} className="text-sm font-bold text-text-muted hover:text-white transition-colors">
+          Already have an account? Back to Login
         </button>
       </div>
     </AuthLayout>

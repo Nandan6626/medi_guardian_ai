@@ -47,10 +47,27 @@ class Medicine(Base):
     __tablename__ = "medicines"
 
     id = Column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    name = Column(String)
-    generic_name = Column(String)
-    type = Column(String)
-    manufacturer = Column(String)
+    patient_id = Column(Uuid(as_uuid=True), ForeignKey("patient_profiles.id"), nullable=True)
+    added_by = Column(Uuid(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    name = Column(String, nullable=False)
+    generic_name = Column(String, nullable=True)
+    type = Column(String, nullable=True)
+    manufacturer = Column(String, nullable=True)
+    dosage = Column(String, nullable=True)
+    timing = Column(String, nullable=True)
+    duration = Column(String, nullable=True)
+    frequency = Column(String, default="Daily")
+    notes = Column(String, nullable=True)
+    image_url = Column(String, nullable=True)
+    color = Column(String, nullable=True)
+    shape = Column(String, nullable=True)
+    food_instruction = Column(String, nullable=True)
+    is_self_reminder = Column(Boolean, server_default="false")
+    reminder_sound = Column(Boolean, server_default="true")
+    requires_refill = Column(Boolean, server_default="false")
+    refill_date = Column(DateTime(timezone=False), nullable=True)
+    is_active = Column(Boolean, server_default="true")
+    created_at = Column(DateTime(timezone=False), server_default=func.now())
 
 
 class Prescription(Base):
@@ -100,8 +117,7 @@ class MedicineLog(Base):
     id = Column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
     schedule_id = Column(Uuid(as_uuid=True),
                          ForeignKey("medicine_schedules.id"))
-    reminder_id = Column(Uuid(as_uuid=True), ForeignKey(
-        "reminders.id"), nullable=True)
+    reminder_id = Column(Uuid(as_uuid=True), nullable=True)
     patient_id = Column(Uuid(as_uuid=True), ForeignKey("patient_profiles.id"))
     scheduled_time = Column(DateTime(timezone=False))
     taken_time = Column(DateTime(timezone=False))
