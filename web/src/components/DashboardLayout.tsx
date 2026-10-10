@@ -4,7 +4,7 @@ import { useAuthStore } from '../store/useAuthStore';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   LogOut, LayoutDashboard, Calendar, FileText, Activity, 
-  Users, UserPlus, Video, Bell, Phone, HeartPulse, ShieldAlert, User, Settings, Check, X, Clock
+  Users, UserPlus, Video, Bell, Phone, HeartPulse, ShieldAlert, User, Settings, Check, X, Clock, Menu
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -55,6 +55,12 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   const [activeToasts, setActiveToasts] = useState<ToastNotification[]>([]);
   const [activeAlarm, setActiveAlarm] = useState<ToastNotification | null>(null);
   const [isLogging, setIsLogging] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Close mobile drawer on route transition
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
 
   // Client-side Alarm checking & Audio Play states
   const alarmAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -451,60 +457,180 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         )}
       </AnimatePresence>
 
-      {/* Sidebar */}
-      <aside className="w-72 hidden md:block bg-bg-sidebar border-r border-border-subtle z-10">
-        <div className="flex h-full flex-col justify-between p-6">
-          <div className="flex items-center gap-3 mb-12 px-2">
-            <div className="flex items-center justify-center w-10 h-10 text-white rounded-xl bg-linear-to-br from-brand-purple to-brand-neon purple-glow">
-              <span className="font-bold">M</span>
-            </div>
-            <span className="text-xl font-extrabold tracking-tight text-text-primary">MediGuardian</span>
+      {/* Mobile Top Header (Small Screens Only) */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-30 bg-bg-sidebar/95 backdrop-blur-md border-b border-border-subtle px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="flex items-center justify-center w-8 h-8 text-black font-extrabold text-sm rounded-lg bg-brand-neon shadow-[0_0_12px_rgba(0,240,255,0.4)]">
+            M
           </div>
+          <span className="text-base font-extrabold text-white tracking-tight">MediGuardian</span>
+        </div>
+        <button
+          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+          className="p-2 rounded-xl bg-white/5 border border-border-subtle text-white hover:bg-white/10 transition-colors"
+          aria-label="Toggle menu"
+        >
+          {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
+      </div>
 
-          <nav className="space-y-2">
-            {links.map((link) => {
-              const isActive = location.pathname === link.path;
-              return (
-                <button
-                  key={link.path}
-                  onClick={() => navigate(link.path)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all text-sm font-semibold ${
-                    isActive 
-                      ? 'bg-brand-purple/10 text-brand-neon border-l-2 border-brand-neon' 
-                      : 'text-text-secondary hover:text-text-primary hover:bg-white/5 border-l-2 border-transparent'
-                  }`}
+      {/* Mobile Backdrop & Drawer */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <div className="md:hidden fixed inset-0 z-40 flex">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+            />
+            <motion.aside
+              initial={{ x: -280 }}
+              animate={{ x: 0 }}
+              exit={{ x: -280 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="relative w-72 max-w-[80vw] h-full bg-bg-sidebar border-r border-border-subtle z-50 flex flex-col justify-between"
+            >
+              <div className="p-4 border-b border-border-subtle/60 flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex items-center justify-center w-8 h-8 text-black font-extrabold text-sm rounded-lg bg-brand-neon">
+                    M
+                  </div>
+                  <span className="text-sm font-extrabold text-white">MediGuardian</span>
+                </div>
+                <button 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-1 rounded-lg text-text-muted hover:text-white"
                 >
-                  <link.icon size={18} className={isActive ? 'text-brand-neon' : ''} />
-                  {link.label}
+                  <X size={18} />
                 </button>
-              );
-            })}
-          </nav>
+              </div>
+
+              <nav className="flex-1 overflow-y-auto p-3 space-y-1">
+                {links.map((link) => {
+                  const isActive = location.pathname === link.path;
+                  return (
+                    <button
+                      key={link.path}
+                      onClick={() => {
+                        navigate(link.path);
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all text-xs font-semibold text-left ${
+                        isActive 
+                          ? 'bg-brand-neon/15 text-brand-neon border border-brand-neon/30 font-bold' 
+                          : 'text-text-secondary hover:text-white hover:bg-white/5 border border-transparent'
+                      }`}
+                    >
+                      <link.icon size={17} className={isActive ? 'text-brand-neon' : 'text-text-muted'} />
+                      <span className="truncate flex-1">{link.label}</span>
+                    </button>
+                  );
+                })}
+              </nav>
+
+              <div className="p-3 border-t border-border-subtle bg-bg-surface/50 space-y-2">
+                <div className="flex items-center gap-2.5 p-2 rounded-xl bg-white/5">
+                  <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name || 'User'}`} alt="Avatar" className="w-8 h-8 rounded-full border border-border-subtle" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-white truncate">{user?.name || 'User'}</p>
+                    <p className="text-[10px] text-brand-neon uppercase font-semibold truncate">{user?.role || 'Patient'}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center justify-center gap-2 py-2 text-xs font-bold text-status-error hover:bg-status-error/15 rounded-xl transition-colors border border-status-error/20"
+                >
+                  <LogOut size={14} />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            </motion.aside>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop Persistent Sidebar */}
+      <aside className="w-64 lg:w-72 hidden md:flex flex-col h-screen bg-bg-sidebar border-r border-border-subtle z-20 shrink-0">
+        {/* Brand Header */}
+        <div className="p-4 lg:p-5 pb-3 border-b border-border-subtle/50 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center w-9 h-9 text-black font-extrabold text-base rounded-xl bg-brand-neon shadow-[0_0_16px_rgba(0,240,255,0.35)] shrink-0">
+              M
+            </div>
+            <div>
+              <span className="text-base font-extrabold tracking-tight text-white block leading-tight">
+                MediGuardian
+              </span>
+              <span className="text-[10px] text-brand-neon font-semibold uppercase tracking-wider block mt-0.5">
+                AI Health Suite
+              </span>
+            </div>
+          </div>
         </div>
 
-        <div className="pt-6 border-t border-border-subtle mt-6">
-          <div className="flex items-center gap-3 mb-6 px-4">
-            <div className="w-10 h-10 rounded-full bg-bg-surface overflow-hidden border border-border-subtle">
-               <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name || 'User'}`} alt="Avatar" />
+        {/* Scrollable Navigation List */}
+        <div className="flex-1 overflow-y-auto px-3 py-3 space-y-1">
+          <div className="px-3 pb-1.5 text-[10px] font-extrabold uppercase tracking-wider text-text-muted">
+            Menu
+          </div>
+          {links.map((link) => {
+            const isActive = location.pathname === link.path;
+            return (
+              <button
+                key={link.path}
+                onClick={() => navigate(link.path)}
+                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all text-xs lg:text-sm font-semibold text-left group ${
+                  isActive 
+                    ? 'bg-brand-neon/15 text-brand-neon border border-brand-neon/30 shadow-[0_0_12px_rgba(0,240,255,0.15)] font-bold' 
+                    : 'text-text-secondary hover:text-white hover:bg-white/5 border border-transparent'
+                }`}
+              >
+                <link.icon 
+                  size={18} 
+                  className={`shrink-0 transition-transform group-hover:scale-110 ${
+                    isActive ? 'text-brand-neon' : 'text-text-muted group-hover:text-text-primary'
+                  }`} 
+                />
+                <span className="truncate flex-1">{link.label}</span>
+                {isActive && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand-neon shadow-[0_0_6px_#00F0FF] shrink-0"></span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Pinned Bottom User & Sign Out Footer */}
+        <div className="p-3 border-t border-border-subtle bg-bg-surface/40 mt-auto shrink-0 space-y-2">
+          <div className="flex items-center gap-3 p-2 rounded-xl bg-white/5 border border-white/5">
+            <div className="relative shrink-0">
+              <div className="w-9 h-9 rounded-full bg-bg-surface overflow-hidden border border-border-subtle">
+                <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name || 'User'}`} alt="Avatar" className="w-full h-full object-cover" />
+              </div>
+              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-status-success border-2 border-bg-surface shadow-sm"></span>
             </div>
-            <div className="flex-1 overflow-hidden text-left">
-              <p className="text-sm font-extrabold truncate text-text-primary">{user?.name || 'User'}</p>
-              <p className="text-xs text-brand-purple capitalize font-semibold truncate">{user?.role || 'Role'}</p>
+            <div className="flex-1 min-w-0 text-left">
+              <p className="text-xs font-bold truncate text-white leading-tight">{user?.name || 'User'}</p>
+              <p className="text-[10px] text-brand-neon capitalize font-semibold truncate mt-0.5">
+                {user?.role || 'Patient'} Account
+              </p>
             </div>
           </div>
           
           <button 
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 text-status-error hover:text-white hover:bg-status-error/20 rounded-2xl transition-colors text-sm font-bold"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 text-status-error/90 hover:text-white hover:bg-status-error rounded-xl transition-all text-xs font-bold border border-status-error/20 hover:border-transparent group shadow-sm"
           >
-            <LogOut size={18} />
-            Sign Out
+            <LogOut size={14} className="transition-transform group-hover:-translate-x-0.5" />
+            <span>Sign Out</span>
           </button>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 h-screen overflow-y-auto relative">
+      <main className="flex-1 h-screen overflow-y-auto relative pt-14 md:pt-0">
         {children}
       </main>
     </div>
