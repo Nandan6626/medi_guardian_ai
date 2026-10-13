@@ -140,7 +140,9 @@ function App() {
               <Route path="/doctor/*" element={<DashboardLayout><ComingSoon /></DashboardLayout>} />
               
               <Route path="/family" element={<DashboardLayout><FamilyDashboard /></DashboardLayout>} />
-              <Route path="/family/*" element={<DashboardLayout><ComingSoon /></DashboardLayout>} />
+              <Route path="/family/patients" element={<DashboardLayout><FamilyDashboard /></DashboardLayout>} />
+              <Route path="/family/alerts" element={<DashboardLayout><FamilyDashboard /></DashboardLayout>} />
+              <Route path="/family/*" element={<DashboardLayout><FamilyDashboard /></DashboardLayout>} />
             </Route>
             
             {/* Fallback */}
