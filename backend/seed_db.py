@@ -23,25 +23,19 @@ async def seed():
         await db.execute(delete(PatientProfile))
         await db.execute(delete(User))
         await db.commit()
-
-        # Mock UUIDs
         patient_user_id = uuid.UUID("00000000-0000-0000-0000-000000000001")
         caregiver_user_id = uuid.UUID("00000000-0000-0000-0000-000000000002")
         doctor_user_id = uuid.UUID("00000000-0000-0000-0000-000000000003")
-
         # Create Patient User
         db_patient = User(id=patient_user_id, email="alex@example.com", role=UserRole.PATIENT)
         db.add(db_patient)
-
         # Create Caregiver User
         db_caregiver = User(id=caregiver_user_id, email="sarah@example.com", role=UserRole.CAREGIVER)
         db.add(db_caregiver)
-
         # Create Doctor User
         db_doctor = User(id=doctor_user_id, email="dr.jenkins@example.com", role=UserRole.DOCTOR)
         db.add(db_doctor)
         await db.commit()
-
         # Create Patient Profile
         patient_profile_id = uuid.uuid4()
         db_patient_profile = PatientProfile(
@@ -57,7 +51,6 @@ async def seed():
             chronic_conditions=["Hypertension"]
         )
         db.add(db_patient_profile)
-
         # Create Caregiver Profile
         db_caregiver_profile = CaregiverProfile(
             user_id=caregiver_user_id,
@@ -66,7 +59,6 @@ async def seed():
             phone_number="+1-555-0100"
         )
         db.add(db_caregiver_profile)
-
         # Create Doctor Profile
         db_doctor_profile = DoctorProfile(
             user_id=doctor_user_id,
@@ -77,7 +69,6 @@ async def seed():
             is_verified=True
         )
         db.add(db_doctor_profile)
-
         # Create Connections
         conn1 = PatientConnection(
             patient_id=patient_profile_id,
@@ -95,7 +86,6 @@ async def seed():
 
         await db.commit()
         print("Database seeded successfully!")
-
 if __name__ == "__main__":
     asyncio.run(seed())
 
