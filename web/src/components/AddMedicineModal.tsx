@@ -57,92 +57,92 @@ export function AddMedicineModal({ isOpen, onClose }: AddMedicineModalProps) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="w-full max-w-lg p-8 border glass rounded-3xl border-brand-neon/30 glow-neon"
+            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+            className="w-full max-w-md p-6 border bg-zinc-950 rounded-xl border-zinc-800 shadow-lg"
           >
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-white">Add Medicine</h2>
-              <button onClick={onClose} className="text-gray-400 transition-colors hover:text-white">
-                <X size={24} />
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-base font-semibold text-zinc-100">Add medication</h2>
+              <button onClick={onClose} className="text-zinc-400 transition-colors hover:text-zinc-200 p-1 rounded-md bg-zinc-900 border border-zinc-800">
+                <X size={16} />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3.5">
               <div>
-                <label className="block mb-1 text-sm font-medium text-gray-300">Medicine Name</label>
+                <label className="block mb-1 text-xs font-medium text-zinc-300">Medication name</label>
                 <input
                   type="text"
                   name="name"
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 text-white transition-colors bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-brand-neon"
-                  placeholder="e.g. Amoxicillin"
+                  className="w-full px-3 py-2 text-xs text-zinc-100 bg-zinc-900 border border-zinc-800 rounded-lg focus:outline-none focus:border-sky-500 transition-colors placeholder:text-zinc-600"
+                  placeholder="Amoxicillin"
                 />
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block mb-1 text-sm font-medium text-gray-300">Dosage</label>
+                  <label className="block mb-1 text-xs font-medium text-zinc-300">Dosage</label>
                   <input
                     type="text"
                     name="dosage"
                     required
                     value={formData.dosage}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 text-white transition-colors bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-brand-neon"
-                    placeholder="e.g. 500mg"
+                    className="w-full px-3 py-2 text-xs text-zinc-100 bg-zinc-900 border border-zinc-800 rounded-lg focus:outline-none focus:border-sky-500 transition-colors placeholder:text-zinc-600"
+                    placeholder="500mg"
                   />
                 </div>
                 <div>
-                  <label className="block mb-1 text-sm font-medium text-gray-300">Timing</label>
+                  <label className="block mb-1 text-xs font-medium text-zinc-300">Timing</label>
                   <input
                     type="time"
                     name="timing"
                     required
                     value={formData.timing}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 text-white transition-colors bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-brand-neon"
+                    className="w-full px-3 py-2 text-xs text-zinc-100 bg-zinc-900 border border-zinc-800 rounded-lg focus:outline-none focus:border-sky-500 transition-colors"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block mb-1 text-sm font-medium text-gray-300">Duration</label>
+                <label className="block mb-1 text-xs font-medium text-zinc-300">Duration</label>
                 <input
                   type="text"
                   name="duration"
                   required
                   value={formData.duration}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 text-white transition-colors bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-brand-neon"
-                  placeholder="e.g. 7 days"
+                  className="w-full px-3 py-2 text-xs text-zinc-100 bg-zinc-900 border border-zinc-800 rounded-lg focus:outline-none focus:border-sky-500 transition-colors placeholder:text-zinc-600"
+                  placeholder="7 days"
                 />
               </div>
 
               <div>
-                <label className="block mb-1 text-sm font-medium text-gray-300">Notes (Optional)</label>
+                <label className="block mb-1 text-xs font-medium text-zinc-300">Notes (optional)</label>
                 <textarea
                   name="notes"
                   value={formData.notes}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 text-white transition-colors bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-brand-neon"
-                  placeholder="e.g. Take after food"
+                  className="w-full px-3 py-2 text-xs text-zinc-100 bg-zinc-900 border border-zinc-800 rounded-lg focus:outline-none focus:border-sky-500 transition-colors placeholder:text-zinc-600"
+                  placeholder="Take after food"
                   rows={2}
                 />
               </div>
 
-              <div className="pt-4">
+              <div className="pt-2">
                 <button
                   type="submit"
                   disabled={mutation.isPending}
-                  className="w-full py-4 font-bold text-black transition-all bg-brand-neon rounded-xl glow-neon hover:bg-white disabled:opacity-50"
+                  className="w-full py-2 font-medium text-xs text-white transition-colors bg-sky-700 rounded-lg hover:bg-sky-500 disabled:opacity-50"
                 >
-                  {mutation.isPending ? 'Adding...' : 'Add Medicine'}
+                  {mutation.isPending ? 'Adding...' : 'Add medication'}
                 </button>
               </div>
             </form>

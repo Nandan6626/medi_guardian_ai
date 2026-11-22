@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthLayout } from './AuthLayout';
-import { Mail, Lock, ArrowRight, Loader2, Stethoscope, HeartPulse, Users, Sparkles, Check, KeyRound } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Loader2, Stethoscope, User, Users, Check, KeyRound } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { supabase } from '../../lib/supabase';
 import { DEMO_ACCOUNTS, findDemoAccount, type DemoAccount } from '../../lib/demoAuth';
@@ -14,21 +14,19 @@ export function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ text: string; type: 'info' | 'success' } | null>(null);
 
-  // Quick auto-fill handler for testing credentials normally
   const handleAutoFill = (acc: DemoAccount) => {
     setEmail(acc.email);
     setPassword(acc.password);
     setStatusMessage({
-      text: `Populated ${acc.title} credentials. You can now test the standard "Sign In" button!`,
+      text: `Populated ${acc.title} credentials.`,
       type: 'info'
     });
-    setTimeout(() => setStatusMessage(null), 4000);
+    setTimeout(() => setStatusMessage(null), 3500);
   };
 
-  // Instant 1-click demo login bypassing manual form typing
   const handleDirectDemoLogin = (acc: DemoAccount) => {
     setIsLoading(true);
-    setStatusMessage({ text: `Logging in as ${acc.title}...`, type: 'success' });
+    setStatusMessage({ text: `Signing in as ${acc.title}...`, type: 'success' });
     setTimeout(() => {
       login({
         id: acc.id,
@@ -37,7 +35,7 @@ export function Login() {
         role: acc.role
       });
       navigate(acc.route);
-    }, 400);
+    }, 300);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -50,7 +48,6 @@ export function Login() {
       const demoMatch = findDemoAccount(rawInput);
       let targetEmail = demoMatch ? demoMatch.email : rawInput;
 
-      // Try querying Supabase first
       let userRecord: any = null;
       let userError: any = null;
 
@@ -66,10 +63,8 @@ export function Login() {
         console.warn('Supabase query error, fallback to demo/local auth mode:', err);
       }
 
-      // If user is not found in remote DB or Supabase threw an error, check demo accounts
       if (userError || !userRecord) {
         if (demoMatch) {
-          console.info(`Demo login activated for ${demoMatch.title}`);
           login({
             id: demoMatch.id,
             name: demoMatch.name,
@@ -80,7 +75,6 @@ export function Login() {
           return;
         }
 
-        // Also check default quick shortcuts
         if (rawInput === 'patient' || rawInput === 'alex') {
           const acc = DEMO_ACCOUNTS.find(a => a.role === 'patient')!;
           login({ id: acc.id, name: acc.name, email: acc.email, role: acc.role });
@@ -98,7 +92,6 @@ export function Login() {
           return;
         }
 
-        // If arbitrary test email is used (e.g. for testing)
         if (rawInput.includes('@')) {
           const fallbackRole = rawInput.includes('doc') ? 'doctor' : rawInput.includes('fam') ? 'family' : 'patient';
           login({
@@ -111,11 +104,10 @@ export function Login() {
           return;
         }
 
-        alert(`Account "${targetEmail}" was not found. Please click one of the Demo Account buttons below for instant access.`);
+        alert(`Account "${targetEmail}" was not found. Please click one of the demo account options.`);
         return;
       }
 
-      // Online database record was found!
       let id = userRecord.id;
       let name = '';
       let role: 'doctor' | 'patient' | 'family' = 'patient';
@@ -165,7 +157,6 @@ export function Login() {
       navigate(`/${role}`);
     } catch (err: any) {
       console.error(err);
-      // Fallback gracefully to demo patient if unexpected error occurs
       const acc = DEMO_ACCOUNTS.find(a => a.role === 'patient')!;
       login({ id: acc.id, name: acc.name, email: acc.email, role: acc.role });
       navigate(acc.route);
@@ -176,44 +167,36 @@ export function Login() {
 
   return (
     <AuthLayout 
-      title="Welcome to MediGuardian" 
-      subtitle="Sign in to your account or launch an instant demo portal."
+      title="Sign in" 
+      subtitle="Sign in to your account or choose a demo profile."
     >
-      {/* Demo Portals Showcase Card */}
-      <div className="mb-6 p-4 rounded-2xl bg-gradient-to-br from-brand-purple/20 via-bg-surface to-brand-neon/10 border border-brand-neon/30 shadow-[0_0_20px_rgba(0,240,255,0.1)]">
+      {/* Demo Accounts Panel */}
+      <div className="mb-6 p-4 rounded-xl bg-zinc-900 border border-zinc-800">
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <Sparkles className="text-brand-neon animate-pulse" size={18} />
-            <span className="text-xs font-extrabold uppercase tracking-wider text-brand-neon">Demo Mode • Instant Access</span>
-          </div>
-          <span className="text-[11px] px-2 py-0.5 rounded-full bg-brand-neon/20 text-brand-neon font-semibold">1-Click Demo</span>
+          <span className="text-xs font-medium text-zinc-300">Demo accounts</span>
+          <span className="text-xs text-zinc-500">Quick sign-in</span>
         </div>
-        <p className="text-xs text-text-secondary mb-3">
-          Select any role below to autofill demo credentials or log in instantly without typing:
-        </p>
 
-        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           {DEMO_ACCOUNTS.map((acc) => {
             const isDoctor = acc.role === 'doctor';
             const isPatient = acc.role === 'patient';
-            const Icon = isDoctor ? Stethoscope : isPatient ? HeartPulse : Users;
-            const accentClass = isDoctor ? 'border-brand-purple/40 hover:border-brand-purple' : isPatient ? 'border-brand-neon/40 hover:border-brand-neon' : 'border-emerald-500/40 hover:border-emerald-500';
-            const textAccent = isDoctor ? 'text-brand-purple' : isPatient ? 'text-brand-neon' : 'text-emerald-400';
+            const Icon = isDoctor ? Stethoscope : isPatient ? User : Users;
 
             return (
               <div 
                 key={acc.role}
-                className={`p-3 rounded-xl bg-bg-base/80 border ${accentClass} flex flex-col justify-between transition-all hover:bg-bg-surface group`}
+                className="p-3 rounded-lg bg-zinc-950 border border-zinc-800 flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <Icon size={16} className={textAccent} />
-                    <span className={`text-[10px] font-bold uppercase tracking-wider ${textAccent}`}>
+                  <div className="flex items-center gap-1.5 mb-1.5 text-zinc-400">
+                    <Icon size={14} />
+                    <span className="text-xs font-medium text-zinc-300">
                       {acc.badge.replace(' Portal', '')}
                     </span>
                   </div>
-                  <h4 className="text-xs font-bold text-white truncate">{acc.name}</h4>
-                  <p className="text-[10px] text-text-muted truncate font-mono">{acc.email}</p>
+                  <h4 className="text-xs font-medium text-zinc-100 truncate">{acc.name}</h4>
+                  <p className="text-[11px] text-zinc-500 truncate font-mono mt-0.5">{acc.email}</p>
                 </div>
 
                 <div className="mt-3 flex flex-col gap-1.5">
@@ -221,20 +204,18 @@ export function Login() {
                     type="button"
                     onClick={() => handleDirectDemoLogin(acc)}
                     disabled={isLoading}
-                    className={`w-full py-1.5 px-2 rounded-lg text-[11px] font-bold text-black transition-all flex items-center justify-center gap-1 shadow-sm ${
-                      isDoctor ? 'bg-brand-purple text-white hover:bg-brand-purple/80' : isPatient ? 'bg-brand-neon text-black hover:bg-white' : 'bg-emerald-400 text-black hover:bg-emerald-300'
-                    }`}
+                    className="w-full py-1.5 px-2 rounded-md text-xs font-medium bg-zinc-800 hover:bg-zinc-700 text-zinc-200 transition-colors flex items-center justify-center gap-1"
                   >
-                    <span>Instant Login</span>
+                    <span>Open</span>
                     <ArrowRight size={12} />
                   </button>
                   <button
                     type="button"
                     onClick={() => handleAutoFill(acc)}
-                    className="w-full py-1 px-2 rounded-lg text-[10px] font-medium text-text-secondary hover:text-white bg-white/5 hover:bg-white/10 transition-colors flex items-center justify-center gap-1"
+                    className="w-full py-1 px-2 rounded-md text-[11px] font-normal text-zinc-400 hover:text-zinc-200 transition-colors flex items-center justify-center gap-1"
                   >
-                    <KeyRound size={10} />
-                    <span>Auto-Fill</span>
+                    <KeyRound size={11} />
+                    <span>Fill</span>
                   </button>
                 </div>
               </div>
@@ -245,88 +226,75 @@ export function Login() {
 
       {/* Status Notice */}
       {statusMessage && (
-        <div className="mb-4 p-3 rounded-xl bg-brand-neon/10 border border-brand-neon/30 text-xs text-brand-neon flex items-center gap-2 animate-in fade-in">
-          <Check size={16} className="shrink-0" />
+        <div className="mb-4 p-3 rounded-lg bg-zinc-900 border border-zinc-700 text-xs text-zinc-300 flex items-center gap-2">
+          <Check size={14} className="text-emerald-400 shrink-0" />
           <span>{statusMessage.text}</span>
         </div>
       )}
 
-      {/* Main Login Form */}
-      <form onSubmit={handleLogin} className="space-y-5">
+      {/* Login Form */}
+      <form onSubmit={handleLogin} className="space-y-4">
         <div>
-          <label className="block mb-2 text-sm font-semibold text-text-secondary">Email Address / Demo Username</label>
+          <label className="block text-xs font-medium text-zinc-300 mb-1.5">Email address</label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-text-muted">
-              <Mail size={18} />
-            </div>
-            <input
+            <Mail className="absolute left-3 top-3 text-zinc-500" size={16} />
+            <input 
               type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full py-3.5 pl-11 pr-4 text-sm text-white bg-bg-input border border-border-subtle rounded-xl focus:border-brand-neon focus:ring-1 focus:ring-brand-neon outline-none transition-all placeholder:text-text-muted font-sans"
-              placeholder="e.g. amit.patel@email.in or 'patient'"
+              className="w-full py-2.5 pl-9 pr-3 text-sm text-zinc-100 bg-zinc-900 border border-zinc-800 rounded-lg focus:border-sky-500 focus:outline-none transition-colors placeholder:text-zinc-600"
+              placeholder="name@example.com"
             />
           </div>
         </div>
 
         <div>
-          <label className="block mb-2 text-sm font-semibold text-text-secondary">Password</label>
+          <label className="block text-xs font-medium text-zinc-300 mb-1.5">Password</label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-text-muted">
-              <Lock size={18} />
-            </div>
-            <input
+            <Lock className="absolute left-3 top-3 text-zinc-500" size={16} />
+            <input 
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full py-3.5 pl-11 pr-4 text-sm text-white bg-bg-input border border-border-subtle rounded-xl focus:border-brand-neon focus:ring-1 focus:ring-brand-neon outline-none transition-all placeholder:text-text-muted"
+              className="w-full py-2.5 pl-9 pr-3 text-sm text-zinc-100 bg-zinc-900 border border-zinc-800 rounded-lg focus:border-sky-500 focus:outline-none transition-colors placeholder:text-zinc-600"
               placeholder="••••••••"
             />
           </div>
         </div>
 
-        <div className="flex items-center justify-between text-xs sm:text-sm">
+        <div className="flex items-center justify-between text-xs">
           <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" defaultChecked className="w-4 h-4 rounded text-brand-neon bg-bg-input border-border-subtle focus:ring-brand-neon focus:ring-offset-bg-base" />
-            <span className="font-medium text-text-secondary">Remember me</span>
+            <input type="checkbox" defaultChecked className="w-3.5 h-3.5 rounded bg-zinc-900 border-zinc-700 text-sky-600 focus:ring-0" />
+            <span className="text-zinc-400 font-normal">Remember me</span>
           </label>
           <button 
             type="button" 
             onClick={() => handleAutoFill(DEMO_ACCOUNTS[1])}
-            className="font-bold text-brand-neon hover:text-white transition-colors"
+            className="text-xs text-zinc-400 hover:text-zinc-200 transition-colors"
           >
-            Fill Demo Patient
+            Fill demo patient
           </button>
         </div>
 
         <button 
           type="submit" 
           disabled={isLoading}
-          className="flex items-center justify-center w-full gap-2 py-3.5 font-bold transition-all rounded-xl bg-brand-neon text-black glow-neon hover:bg-white disabled:opacity-50 text-sm sm:text-base"
+          className="flex items-center justify-center w-full gap-2 py-2.5 font-medium transition-colors rounded-lg bg-sky-700 text-white hover:bg-sky-500 disabled:opacity-50 text-sm"
         >
           {isLoading ? (
-            <>Signing In... <Loader2 className="animate-spin" size={18} /></>
+            <>Signing in... <Loader2 className="animate-spin" size={16} /></>
           ) : (
-            <>Sign In Normally <ArrowRight size={18} /></>
+            <>Sign in <ArrowRight size={16} /></>
           )}
         </button>
 
-        <div className="relative py-2">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-border-subtle"></div>
-          </div>
-          <div className="relative flex justify-center">
-            <span className="px-4 text-xs text-text-muted bg-bg-base font-medium">Or create new account</span>
-          </div>
-        </div>
-
-        <div className="text-center">
-          <p className="text-sm text-text-secondary">
+        <div className="text-center pt-2">
+          <p className="text-xs text-zinc-400">
             Don't have an account?{' '}
-            <Link to="/auth/role" className="font-bold text-brand-neon hover:text-white transition-colors">
-              Sign up for free
+            <Link to="/auth/role" className="text-sky-400 hover:underline">
+              Create one
             </Link>
           </p>
         </div>

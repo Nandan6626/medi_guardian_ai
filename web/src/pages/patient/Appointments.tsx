@@ -75,9 +75,9 @@ export function Appointments() {
 
   return (
     <div className="p-8 max-w-6xl mx-auto min-h-screen relative">
-      <header className="mb-10">
-        <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500 mb-2">Appointments</h1>
-        <p className="text-gray-400">Manage your virtual and in-person consultations.</p>
+      <header className="mb-8">
+        <h1 className="text-2xl md:text-3xl font-semibold text-zinc-100 tracking-tight mb-1">Appointments</h1>
+        <p className="text-xs text-zinc-400">Manage your virtual and in-person consultations.</p>
       </header>
 
       {isLoading ? (
@@ -112,22 +112,22 @@ export function Appointments() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className={`glass p-8 rounded-3xl border transition-all shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-6
-                          ${isActive ? 'border-brand-neon/50 bg-brand-neon/5 shadow-[0_0_30px_rgba(0,240,255,0.1)]' : 'border-border-subtle bg-bg-surface'}
+                        className={`p-5 rounded-xl border transition-colors flex flex-col md:flex-row justify-between items-start md:items-center gap-4
+                          ${isActive ? 'border-sky-500/40 bg-zinc-900' : 'border-zinc-800 bg-zinc-950'}
                         `}
                       >
-                        <div className="flex gap-6 items-center">
-                          <div className={`w-20 h-20 rounded-full border-2 overflow-hidden shrink-0 ${isActive ? 'border-brand-neon glow-neon' : 'border-border-subtle'}`}>
+                        <div className="flex gap-4 items-center">
+                          <div className={`w-12 h-12 rounded-full border overflow-hidden shrink-0 ${isActive ? 'border-sky-500' : 'border-zinc-700'}`}>
                              <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${doc.name}`} alt="Doctor" />
                           </div>
                           <div>
-                            <p className={`${isActive ? 'text-brand-neon font-bold animate-pulse' : 'text-text-secondary font-medium'} text-sm tracking-wider uppercase mb-1`}>
-                              {isActive ? 'Live Now' : `${aptDate.toLocaleDateString()} • ${aptDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`}
+                            <p className={`${isActive ? 'text-sky-400 font-medium' : 'text-zinc-400 font-normal'} text-xs mb-0.5`}>
+                              {isActive ? 'Live now' : `${aptDate.toLocaleDateString()} · ${aptDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`}
                             </p>
-                            <h3 className="text-2xl font-bold text-white mb-1">{doc.name}</h3>
-                            <p className="text-gray-400 text-sm flex items-center gap-2">
-                              {doc.spec} • 
-                              {['video','VIDEO'].includes(apt.type) ? <span className="flex items-center gap-1"><Video size={14}/> Video Consult</span> : <span className="flex items-center gap-1"><Users size={14}/> In-Person</span>}
+                            <h3 className="text-base font-semibold text-zinc-100 mb-0.5">{doc.name}</h3>
+                            <p className="text-zinc-500 text-xs flex items-center gap-1.5">
+                              {doc.spec} · 
+                              {['video','VIDEO'].includes(apt.type) ? <span className="flex items-center gap-1"><Video size={13}/> Video consult</span> : <span className="flex items-center gap-1"><Users size={13}/> In-person</span>}
                             </p>
                           </div>
                         </div>
@@ -137,15 +137,15 @@ export function Appointments() {
                             href={isActive && apt.meeting_link ? apt.meeting_link : '#'}
                             target={isActive && apt.meeting_link ? "_blank" : "_self"}
                             rel="noreferrer"
-                            className={`px-8 py-4 rounded-xl flex items-center justify-center gap-3 font-bold transition-all
+                            className={`px-4 py-2 rounded-lg flex items-center justify-center gap-2 text-xs font-medium transition-colors
                               ${isActive 
-                                ? 'bg-brand-neon text-black hover:bg-brand-neon/90 glow-neon shadow-lg' 
-                                : 'bg-white/5 text-text-muted cursor-not-allowed border border-white/5'}
+                                ? 'bg-sky-700 text-white hover:bg-sky-500' 
+                                : 'bg-zinc-900 text-zinc-500 cursor-not-allowed border border-zinc-800'}
                             `}
                             onClick={(e) => { if(!isActive) e.preventDefault(); }}
                           >
-                             <Video size={20} />
-                             {isActive ? 'Join Call' : 'Awaiting Doctor'}
+                             <Video size={14} />
+                             {isActive ? 'Join call' : 'Awaiting doctor'}
                           </a>
                         )}
                       </motion.div>

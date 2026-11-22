@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { AuthLayout } from './AuthLayout';
 import { 
   User, Mail, Lock, Phone, Briefcase, Award, Calendar, AlertCircle, 
-  Loader2, Sparkles, Check, KeyRound, ArrowRight, Stethoscope, HeartPulse 
+  Loader2, Check, KeyRound, ArrowRight, Stethoscope, HeartPulse 
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { supabase } from '../../lib/supabase';
@@ -194,49 +194,42 @@ export function SignUp() {
       subtitle="Fill in the details below to complete your registration."
     >
       {/* Demo Quick Registration Banner */}
-      <div className="mb-6 p-4 rounded-2xl bg-gradient-to-br from-brand-purple/20 via-bg-surface to-brand-neon/15 border border-brand-neon/40 shadow-[0_0_20px_rgba(0,240,255,0.1)]">
+      <div className="mb-6 p-4 rounded-xl bg-zinc-900 border border-zinc-800">
         <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <Sparkles className="text-brand-neon animate-pulse" size={18} />
-            <span className="text-xs font-extrabold uppercase tracking-wider text-brand-neon">
-              Demo Helper • {isDoctor ? 'Doctor' : 'Patient'} Testing
-            </span>
-          </div>
-          <span className="text-[11px] px-2 py-0.5 rounded-full bg-brand-neon/20 text-brand-neon font-semibold">
-            Instant Demo Fill
+          <span className="text-xs font-medium text-zinc-300">
+            Demo registration · {isDoctor ? 'Doctor' : 'Patient'}
           </span>
+          <span className="text-xs text-zinc-500">Quick fill</span>
         </div>
-        <p className="text-xs text-text-secondary mb-3">
-          Testing or evaluating the app? Use our demo controls to auto-fill the whole form or sign up instantly in one click:
+        <p className="text-xs text-zinc-400 mb-3">
+          Auto-fill credentials or register instantly for demonstration testing:
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <button
             type="button"
             onClick={handleAutoFillDemo}
-            className="py-2.5 px-3 rounded-xl bg-bg-base/90 hover:bg-bg-surface border border-brand-neon/40 text-white text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm"
+            className="py-2 px-3 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-200 text-xs font-medium transition-colors flex items-center justify-center gap-2"
           >
-            <KeyRound size={14} className="text-brand-neon" />
-            <span>Auto-Fill Demo Credentials</span>
+            <KeyRound size={14} className="text-zinc-400" />
+            <span>Auto-fill sample data</span>
           </button>
 
           <button
             type="button"
             onClick={handleInstantDemoSignup}
             disabled={isLoading}
-            className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm ${
-              isDoctor ? 'bg-brand-purple text-white hover:bg-brand-purple/80' : 'bg-brand-neon text-black hover:bg-white'
-            }`}
+            className="py-2 px-3 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-200 text-xs font-medium transition-colors flex items-center justify-center gap-2"
           >
-            <span>1-Click Demo Registration</span>
+            <span>One-click register</span>
             <ArrowRight size={14} />
           </button>
         </div>
 
-        <div className="mt-3 pt-2.5 border-t border-white/5 flex items-center justify-between text-xs text-text-muted">
+        <div className="mt-3 pt-2.5 border-t border-zinc-800 flex items-center justify-between text-xs text-zinc-500">
           <span>Already have demo credentials?</span>
-          <Link to="/auth/login" className="font-bold text-brand-neon hover:text-white transition-colors flex items-center gap-1">
-            <span>Use Demo Login</span>
+          <Link to="/auth/login" className="font-medium text-sky-400 hover:underline flex items-center gap-1">
+            <span>Demo login</span>
             <ArrowRight size={12} />
           </Link>
         </div>
@@ -244,8 +237,8 @@ export function SignUp() {
 
       {/* Status Notice */}
       {statusMessage && (
-        <div className="mb-4 p-3 rounded-xl bg-brand-neon/10 border border-brand-neon/30 text-xs text-brand-neon flex items-center gap-2 animate-in fade-in">
-          <Check size={16} className="shrink-0" />
+        <div className="mb-4 p-3 rounded-lg bg-zinc-900 border border-zinc-700 text-xs text-zinc-300 flex items-center gap-2">
+          <Check size={14} className="text-emerald-400 shrink-0" />
           <span>{statusMessage.text}</span>
         </div>
       )}
@@ -458,12 +451,12 @@ export function SignUp() {
         <button 
           type="submit" 
           disabled={isLoading}
-          className="w-full py-3.5 mt-4 font-bold transition-all rounded-xl bg-brand-neon text-black glow-neon hover:bg-white disabled:opacity-50 flex items-center justify-center gap-2 text-sm sm:text-base"
+          className="w-full py-2.5 mt-4 font-medium transition-colors rounded-lg bg-sky-700 text-white hover:bg-sky-500 disabled:opacity-50 flex items-center justify-center gap-2 text-sm"
         >
           {isLoading ? (
-            <>Completing Registration... <Loader2 className="animate-spin" size={18} /></>
+            <>Completing registration... <Loader2 className="animate-spin" size={16} /></>
           ) : (
-            'Complete Registration'
+            'Complete registration'
           )}
         </button>
         

@@ -108,123 +108,120 @@ export function PatientDashboard() {
   });
 
   return (
-    <div className="p-8 max-w-6xl mx-auto space-y-8 min-h-screen">
-      <header className="flex justify-between items-end mb-12">
+    <div className="p-6 max-w-6xl mx-auto space-y-6 min-h-screen">
+      <header className="flex justify-between items-end mb-8">
         <div>
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-5xl font-extrabold text-text-primary mb-2 tracking-tight"
-          >
-            Welcome back, {user?.name?.split(' ')[0] || 'Alex'}
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-text-secondary font-semibold text-lg"
-          >
-            Your AI healthcare assistant is monitoring your vitals.
-          </motion.p>
+          <h1 className="text-2xl md:text-3xl font-semibold text-zinc-100 mb-1 tracking-tight">
+            Patient overview
+          </h1>
+          <p className="text-zinc-400 font-normal text-sm">
+            Active medication schedule and health monitoring for {user?.name || 'Alex Patel'}.
+          </p>
         </div>
-        <Link to="/patient/emergency" className="hidden md:flex items-center gap-2 bg-status-error/10 text-status-error px-6 py-3 rounded-2xl border border-status-error/20 hover:bg-status-error/20 transition-all font-bold shadow-[0_0_20px_rgba(244,63,94,0.15)] group">
-          <HeartPulse size={20} className="group-hover:animate-ping" />
+        <Link to="/patient/emergency" className="hidden md:flex items-center gap-2 bg-red-950/20 text-red-400 px-4 py-2 rounded-lg border border-red-900/40 hover:bg-red-950/40 transition-colors text-xs font-medium">
+          <HeartPulse size={16} />
           Emergency SOS
         </Link>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         
-        {/* Main Action Banner */}
-        <Link to="/patient/medicines" className="md:col-span-8 glass-panel p-8 rounded-3xl group relative overflow-hidden flex flex-col justify-center min-h-60 hover:border-white/20 transition-all">
-           <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-brand-purple/20 rounded-full blur-[60px] group-hover:bg-brand-neon/20 transition-colors duration-700"></div>
-           <div className="relative z-10">
-             <h2 className="text-3xl font-extrabold text-white mb-3">My Medicines</h2>
-             <p className="text-text-secondary mb-8 max-w-md font-medium text-lg">
-               You have {medicinesCount} medicine{medicinesCount === 1 ? '' : 's'} scheduled in your profile. View your timeline to mark them as taken.
-             </p>
-             <div className="inline-flex items-center gap-2 text-brand-neon font-bold bg-brand-neon/10 border border-brand-neon/20 px-5 py-2.5 rounded-xl group-hover:bg-brand-neon/20 transition-colors">
-                Open Scheduler <ArrowRight size={18} />
-             </div>
-           </div>
+        {/* Main Action Banner: Spotlight Card (8 cols) */}
+        <Link to="/patient/medicines" className="md:col-span-8 p-6 rounded-xl border border-zinc-800 bg-zinc-900 group flex flex-col justify-between hover:border-zinc-700 transition-colors">
+          <div>
+            <h2 className="text-lg font-semibold text-zinc-100 mb-2">Medication schedule</h2>
+            <p className="text-zinc-400 mb-6 max-w-md font-normal text-sm leading-relaxed">
+              {medicinesCount} active prescription{medicinesCount === 1 ? '' : 's'} scheduled for today. Confirm dose times and log adherence in your timeline.
+            </p>
+          </div>
+          <div className="inline-flex items-center gap-2 text-sky-400 font-medium text-xs">
+            <span>Open schedule</span>
+            <ArrowRight size={14} />
+          </div>
         </Link>
 
-        {/* AI Health Score */}
-        <Link to="/patient/reports" className="md:col-span-4 glass-panel p-8 rounded-3xl flex flex-col justify-center items-center text-center group hover:border-white/20 transition-all">
-           <div className="w-20 h-20 rounded-full bg-linear-to-br from-brand-purple to-brand-neon flex items-center justify-center mb-6 ai-glow relative">
-             <div className="absolute inset-1 bg-bg-surface rounded-full flex items-center justify-center">
-               <Activity size={28} className="text-brand-neon" />
-             </div>
-           </div>
-           <h3 className="text-5xl font-extrabold text-white mb-2">92</h3>
-           <p className="text-sm font-bold text-text-muted uppercase tracking-widest">AI Health Score</p>
+        {/* AI Health Score Card (4 cols) */}
+        <Link to="/patient/reports" className="md:col-span-4 p-6 rounded-xl border border-zinc-800 bg-zinc-900 flex flex-col justify-center items-center text-center hover:border-zinc-700 transition-colors">
+          <div className="w-12 h-12 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center mb-3 text-sky-400">
+            <Activity size={22} />
+          </div>
+          <h3 className="text-3xl font-semibold text-zinc-100 mb-1">92</h3>
+          <p className="text-xs font-medium text-zinc-400">Health score · +4 vs last month</p>
         </Link>
 
-        {/* Appointments Quick Link */}
-        <Link to="/patient/appointments" className="md:col-span-6 glass-panel p-8 rounded-3xl transition-all group hover:border-brand-purple/30 hover:bg-brand-purple/5">
-           <div className="w-14 h-14 rounded-2xl bg-brand-purple/10 text-brand-purple flex items-center justify-center mb-6 border border-brand-purple/20 shadow-inner">
-             <Activity size={28} />
-           </div>
-           <h3 className="text-2xl font-bold text-white mb-3">Upcoming Consults</h3>
-           <p className="text-text-secondary mb-8 font-medium">Check scheduled video consultations with your doctor.</p>
-           <div className="flex items-center gap-2 text-brand-purple font-bold group-hover:translate-x-2 transition-transform">
-               View Details <ArrowRight size={18} />
-           </div>
+        {/* Appointments Quick Link (7 cols) */}
+        <Link to="/patient/appointments" className="md:col-span-7 p-6 rounded-xl border border-zinc-800 bg-zinc-900 transition-colors hover:border-zinc-700 flex flex-col justify-between">
+          <div>
+            <div className="w-10 h-10 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-300 flex items-center justify-center mb-4">
+              <Activity size={20} />
+            </div>
+            <h3 className="text-base font-semibold text-zinc-100 mb-1">Upcoming consultations</h3>
+            <p className="text-zinc-400 text-xs mb-6 font-normal">Review scheduled telemedicine appointments with your physician.</p>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-sky-400 font-medium">
+            <span>View appointments</span>
+            <ArrowRight size={14} />
+          </div>
         </Link>
 
-        {/* Caretaker Booking Quick Link */}
-        <Link to="/patient/caretakers" className="md:col-span-6 glass-panel p-8 rounded-3xl transition-all group hover:border-brand-neon/30 hover:bg-brand-neon/5">
-           <div className="w-14 h-14 rounded-2xl bg-brand-neon/10 text-brand-neon flex items-center justify-center mb-6 border border-brand-neon/20 shadow-inner">
-             <PhoneCall size={28} />
-           </div>
-           <h3 className="text-2xl font-bold text-white mb-3">Book Caretaker</h3>
-           <p className="text-text-secondary mb-8 font-medium">Call an emergency caretaker immediately when you need quick support.</p>
-           <div className="flex items-center gap-2 text-brand-neon font-bold group-hover:translate-x-2 transition-transform">
-               Connect Now <ArrowRight size={18} />
-           </div>
+        {/* Caretaker Booking Quick Link (5 cols) */}
+        <Link to="/patient/caretakers" className="md:col-span-5 p-6 rounded-xl border border-zinc-800 bg-zinc-900 transition-colors hover:border-zinc-700 flex flex-col justify-between">
+          <div>
+            <div className="w-10 h-10 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-300 flex items-center justify-center mb-4">
+              <PhoneCall size={20} />
+            </div>
+            <h3 className="text-base font-semibold text-zinc-100 mb-1">Caregiver network</h3>
+            <p className="text-zinc-400 text-xs mb-6 font-normal">Emergency caretaker contacts and fast support dispatch.</p>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-sky-400 font-medium">
+            <span>Manage caregivers</span>
+            <ArrowRight size={14} />
+          </div>
         </Link>
       </div>
 
       {/* Monitored Peers Panel */}
-      <div className="glass-panel p-8 rounded-3xl border border-white/5">
-        <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-          <Heart className="text-red-400" /> Monitored Peers & Loved Ones
+      <div className="p-6 rounded-xl border border-zinc-800 bg-zinc-900">
+        <h2 className="text-base font-semibold text-zinc-100 mb-4 flex items-center gap-2">
+          <Heart size={18} className="text-zinc-400" /> Monitored family and peers
         </h2>
         {isLoadingPeers ? (
-          <div className="text-center py-8 text-gray-500">Loading peers...</div>
+          <div className="text-center py-6 text-zinc-500 text-xs">Loading records...</div>
         ) : monitoredPeers.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            No monitored peers. Go to <Link to="/patient/settings" className="text-brand-neon underline hover:text-white">Settings</Link> to connect and monitor family members or friends.
+          <div className="text-center py-6 text-zinc-500 text-xs">
+            No connected family members. Go to <Link to="/patient/settings" className="text-sky-400 hover:underline">Settings</Link> to connect.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {monitoredPeers.map((peer: any) => (
               <div 
                 key={peer.id}
                 onClick={() => setSelectedPeer(peer)}
-                className="bg-[#1A1A2E]/50 p-6 rounded-3xl border border-white/5 hover:border-brand-purple/40 cursor-pointer transition-all flex flex-col justify-between"
+                className="bg-zinc-950 p-5 rounded-lg border border-zinc-800 hover:border-zinc-700 cursor-pointer transition-colors flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-full border border-white/10 bg-[#141425] overflow-hidden">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-full border border-zinc-700 bg-zinc-800 overflow-hidden">
                       <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${peer.first_name}`} alt="Avatar" />
                     </div>
                     <div>
-                      <h4 className="font-extrabold text-white text-base">{peer.first_name} {peer.last_name}</h4>
-                      <p className="text-xs text-brand-neon font-mono mt-0.5">{peer.mg_pat_id}</p>
+                      <h4 className="font-medium text-zinc-100 text-sm">{peer.first_name} {peer.last_name}</h4>
+                      <p className="text-xs text-zinc-500 font-mono">{peer.mg_pat_id}</p>
                     </div>
                   </div>
-                  <div className="flex justify-between text-sm py-2 border-b border-white/5">
-                    <span className="text-gray-400">Adherence Score</span>
-                    <span className="text-white font-bold">{peer.adherence_score}%</span>
+                  <div className="flex justify-between text-xs py-1.5 border-b border-zinc-800">
+                    <span className="text-zinc-400">Adherence</span>
+                    <span className="text-zinc-200 font-medium">{peer.adherence_score}% (vs 90% avg)</span>
                   </div>
-                  <div className="flex justify-between text-sm py-2">
-                    <span className="text-gray-400">Status</span>
-                    <span className={`font-bold ${peer.health_status === 'CRITICAL' ? 'text-status-error animate-pulse' : 'text-status-success'}`}>{peer.health_status}</span>
+                  <div className="flex justify-between text-xs py-1.5">
+                    <span className="text-zinc-400">Status</span>
+                    <span className={`font-medium ${peer.health_status === 'CRITICAL' ? 'text-red-400' : 'text-emerald-400'}`}>
+                      {peer.health_status === 'CRITICAL' ? 'Critical' : 'Stable'}
+                    </span>
                   </div>
                 </div>
-                <button className="w-full mt-4 py-2.5 rounded-xl bg-brand-purple/10 text-brand-purple border border-brand-purple/20 text-xs font-bold transition-all hover:bg-brand-purple/20 hover:text-brand-neon">
-                  Monitor Medicines
+                <button className="w-full mt-3 py-1.5 rounded-md bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 font-medium hover:bg-zinc-800 transition-colors">
+                  View medication timeline
                 </button>
               </div>
             ))}
@@ -235,59 +232,59 @@ export function PatientDashboard() {
       {/* Compliance Timeline Modal */}
       <AnimatePresence>
         {selectedPeer && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="glass-panel-deep p-8 w-full max-w-lg relative rounded-3xl"
+              className="bg-zinc-950 border border-zinc-800 p-6 w-full max-w-lg relative rounded-xl shadow-lg"
             >
               <button 
                 onClick={() => setSelectedPeer(null)}
-                className="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors bg-white/5 p-2 rounded-full"
+                className="absolute top-5 right-5 text-zinc-400 hover:text-zinc-200 transition-colors bg-zinc-900 p-1.5 rounded-md border border-zinc-800"
               >
-                <X size={20} />
+                <X size={16} />
               </button>
 
-              <div className="flex items-center gap-4 mb-6 pb-6 border-b border-white/5">
-                <div className="w-14 h-14 rounded-full border border-white/10 overflow-hidden bg-[#141425]">
+              <div className="flex items-center gap-3 mb-5 pb-5 border-b border-zinc-800">
+                <div className="w-12 h-12 rounded-full border border-zinc-700 overflow-hidden bg-zinc-800">
                   <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${selectedPeer.first_name}`} alt="Avatar" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-extrabold text-white">{selectedPeer.first_name} {selectedPeer.last_name}</h3>
-                  <p className="text-xs text-text-secondary mt-1 font-mono">{selectedPeer.mg_pat_id} • Adherence Score: <strong className="text-brand-neon">{selectedPeer.adherence_score}%</strong></p>
+                  <h3 className="text-lg font-semibold text-zinc-100">{selectedPeer.first_name} {selectedPeer.last_name}</h3>
+                  <p className="text-xs text-zinc-400 font-mono">{selectedPeer.mg_pat_id} · Adherence: <strong className="text-zinc-200">{selectedPeer.adherence_score}%</strong></p>
                 </div>
               </div>
 
-              <h4 className="text-base font-bold text-white mb-4 flex items-center gap-2">
-                <Pill size={18} className="text-brand-neon" /> Today's Medicine Intake Compliance
+              <h4 className="text-sm font-medium text-zinc-200 mb-3 flex items-center gap-2">
+                <Pill size={16} className="text-sky-400" /> Prescribed medication compliance
               </h4>
 
               {isLoadingSchedule ? (
-                <div className="text-center py-8 text-gray-500">Loading compliance data...</div>
+                <div className="text-center py-6 text-zinc-500 text-xs">Loading compliance data...</div>
               ) : peerSchedule.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">No scheduled clinical prescriptions found for today.</div>
+                <div className="text-center py-6 text-zinc-500 text-xs">No scheduled prescriptions found for today.</div>
               ) : (
-                <div className="space-y-4 max-h-87.5 overflow-y-auto pr-1">
+                <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
                   {peerSchedule.map((item: any) => (
-                    <div key={item.id} className="bg-[#1A1A2E]/80 p-4 rounded-2xl border border-white/5 flex justify-between items-center">
-                      <div className="flex-1 pr-4">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h5 className="font-extrabold text-white text-sm">{item.name}</h5>
-                          <span className="text-[10px] text-brand-purple bg-brand-purple/10 px-2 py-0.5 rounded font-bold">{item.dosage}</span>
+                    <div key={item.id} className="bg-zinc-900 p-3.5 rounded-lg border border-zinc-800 flex justify-between items-center">
+                      <div className="flex-1 pr-3">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <h5 className="font-medium text-zinc-200 text-xs">{item.name}</h5>
+                          <span className="text-[10px] text-zinc-400 bg-zinc-800 px-1.5 py-0.5 rounded font-mono">{item.dosage}</span>
                         </div>
-                        <p className="text-xs text-gray-400 flex items-center gap-1"><Clock size={12} className="text-brand-neon" /> {item.timing}</p>
-                        <p className="text-[11px] text-gray-500 mt-1 italic">{item.instructions}</p>
+                        <p className="text-xs text-zinc-500 flex items-center gap-1"><Clock size={11} className="text-zinc-400" /> {item.timing}</p>
+                        <p className="text-[11px] text-zinc-500 mt-0.5">{item.instructions}</p>
                       </div>
                       
                       <div>
                         {item.isTaken ? (
-                          <div className="px-3 py-1.5 rounded-xl bg-status-success/15 border border-status-success/30 text-status-success text-xs font-bold flex items-center gap-1.5">
-                            <ShieldCheck size={14} /> Taken at {item.takenAt}
+                          <div className="px-2.5 py-1 rounded-md bg-emerald-950/60 border border-emerald-800/40 text-emerald-400 text-xs font-medium flex items-center gap-1">
+                            <ShieldCheck size={12} /> Taken at {item.takenAt}
                           </div>
                         ) : (
-                          <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-gray-400 text-xs font-bold">
-                            Not Taken Yet
+                          <div className="px-2.5 py-1 rounded-md bg-zinc-800 border border-zinc-700 text-zinc-400 text-xs font-medium">
+                            Pending
                           </div>
                         )}
                       </div>

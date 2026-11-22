@@ -1,67 +1,64 @@
 import { useNavigate } from 'react-router-dom';
 import { AuthLayout } from './AuthLayout';
-import { Stethoscope, HeartPulse, Sparkles, ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Stethoscope, User, ArrowRight } from 'lucide-react';
 
 export function RoleSelection() {
   const navigate = useNavigate();
 
   return (
     <AuthLayout 
-      title="Join MediGuardian" 
-      subtitle="How will you be using the platform today?"
+      title="Create account" 
+      subtitle="Select the type of account you want to create."
     >
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        
-        <motion.button
-          whileHover={{ y: -5 }}
-          whileTap={{ scale: 0.98 }}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <button
           onClick={() => navigate('/auth/register?role=patient')}
-          className="flex flex-col items-center justify-center p-8 text-center transition-all bg-bg-surface border border-border-subtle rounded-3xl hover:border-brand-neon/50 group"
+          className="flex flex-col items-center justify-center p-6 text-center transition-colors bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 hover:bg-zinc-850"
         >
-          <div className="flex items-center justify-center w-20 h-20 mb-6 rounded-full bg-brand-neon/10 text-brand-neon group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(0,240,255,0.2)]">
-            <HeartPulse size={40} />
+          <div className="flex items-center justify-center w-12 h-12 mb-4 rounded-lg bg-zinc-800 text-sky-400">
+            <User size={24} />
           </div>
-          <h3 className="mb-2 text-xl font-bold text-white">I'm a Patient</h3>
-          <p className="text-sm text-text-secondary">Manage my medications and stay connected with my doctor.</p>
-        </motion.button>
+          <h3 className="mb-1 text-base font-semibold text-zinc-100">Patient</h3>
+          <p className="text-xs text-zinc-400 font-normal leading-relaxed">
+            Manage medication schedules, confirm doses, and share vitals.
+          </p>
+        </button>
 
-        <motion.button
-          whileHover={{ y: -5 }}
-          whileTap={{ scale: 0.98 }}
+        <button
           onClick={() => navigate('/auth/register?role=doctor')}
-          className="flex flex-col items-center justify-center p-8 text-center transition-all bg-bg-surface border border-border-subtle rounded-3xl hover:border-brand-purple/50 group"
+          className="flex flex-col items-center justify-center p-6 text-center transition-colors bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 hover:bg-zinc-850"
         >
-          <div className="flex items-center justify-center w-20 h-20 mb-6 rounded-full bg-brand-purple/10 text-brand-purple group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(112,0,255,0.2)]">
-            <Stethoscope size={40} />
+          <div className="flex items-center justify-center w-12 h-12 mb-4 rounded-lg bg-zinc-800 text-zinc-300">
+            <Stethoscope size={24} />
           </div>
-          <h3 className="mb-2 text-xl font-bold text-white">I'm a Doctor</h3>
-          <p className="text-sm text-text-secondary">Monitor my patients, view analytics, and issue prescriptions.</p>
-        </motion.button>
-
+          <h3 className="mb-1 text-base font-semibold text-zinc-100">Doctor</h3>
+          <p className="text-xs text-zinc-400 font-normal leading-relaxed">
+            Monitor patient adherence, review trends, and issue prescriptions.
+          </p>
+        </button>
       </div>
 
       {/* Quick Demo Access banner */}
-      <div className="mt-8 p-4 rounded-2xl bg-bg-surface/80 border border-brand-neon/30 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <Sparkles size={18} className="text-brand-neon" />
-          <div>
-            <p className="text-xs font-bold text-white">Want to explore right away?</p>
-            <p className="text-[11px] text-text-secondary">Use pre-configured demo credentials or 1-click login.</p>
-          </div>
+      <div className="mt-6 p-4 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-between">
+        <div>
+          <p className="text-xs font-medium text-zinc-200">Evaluating or testing</p>
+          <p className="text-xs text-zinc-400">Pre-configured demo accounts are available.</p>
         </div>
         <button
           onClick={() => navigate('/auth/login')}
-          className="py-1.5 px-3 rounded-xl bg-brand-neon text-black text-xs font-bold hover:bg-white transition-colors flex items-center gap-1 shrink-0"
+          className="py-1.5 px-3 rounded-md bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-200 text-xs font-medium transition-colors flex items-center gap-1 shrink-0"
         >
-          <span>Demo Login</span>
+          <span>Demo login</span>
           <ArrowRight size={12} />
         </button>
       </div>
       
       <div className="mt-6 text-center">
-        <button onClick={() => navigate('/auth/login')} className="text-sm font-bold text-text-muted hover:text-white transition-colors">
-          Already have an account? Back to Login
+        <button 
+          onClick={() => navigate('/auth/login')} 
+          className="text-xs font-medium text-zinc-400 hover:text-zinc-200 transition-colors"
+        >
+          Already have an account? Sign in
         </button>
       </div>
     </AuthLayout>

@@ -203,34 +203,28 @@ export function FamilyDashboard() {
       {/* Header */}
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-brand-neon/15 text-brand-neon border border-brand-neon/30">
-              Caregiver Active Mode
-            </span>
-            <span className="text-xs text-text-muted">• Real-Time Guardian</span>
-          </div>
-          <h1 className="text-3xl lg:text-4xl font-extrabold text-white">Family Portal</h1>
-          <p className="mt-1 text-text-secondary text-sm">
-            Monitor and protect your loved ones' medication adherence in real time.
+          <h1 className="text-2xl md:text-3xl font-semibold text-zinc-100 tracking-tight">Family care overview</h1>
+          <p className="mt-1 text-zinc-400 text-sm font-normal">
+            Adherence telemetry and alerts for family members.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsConnectModalOpen(true)}
-            className="px-4 py-2.5 rounded-xl bg-brand-neon text-black font-bold text-xs lg:text-sm hover:bg-white transition-all shadow-[0_0_15px_rgba(0,240,255,0.25)] flex items-center gap-2"
+            className="px-4 py-2 rounded-lg bg-sky-700 text-white font-medium text-xs hover:bg-sky-500 transition-colors flex items-center gap-2"
           >
-            <UserPlus size={16} />
-            <span>+ Connect Patient</span>
+            <UserPlus size={15} />
+            <span>Connect patient</span>
           </button>
 
-          <div className="flex items-center gap-2.5 p-1.5 pr-3 rounded-2xl bg-bg-surface border border-border-subtle">
-            <div className="w-10 h-10 overflow-hidden rounded-xl border border-brand-purple/40">
+          <div className="flex items-center gap-2.5 p-1.5 pr-3 rounded-lg bg-zinc-900 border border-zinc-800">
+            <div className="w-8 h-8 overflow-hidden rounded-md border border-zinc-700">
               <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=suresh" alt="Profile" className="w-full h-full object-cover" />
             </div>
             <div className="hidden sm:block text-left">
-              <p className="text-xs font-bold text-white leading-tight">{user?.name || 'Suresh Patel'}</p>
-              <p className="text-[10px] text-text-muted">Primary Caregiver</p>
+              <p className="text-xs font-medium text-zinc-200 leading-tight">{user?.name || 'Suresh Patel'}</p>
+              <p className="text-[10px] text-zinc-500">Primary caregiver</p>
             </div>
           </div>
         </div>
@@ -292,38 +286,38 @@ export function FamilyDashboard() {
                       {/* Quick Call Action */}
                       <button 
                         onClick={() => setCallingPatient(patient)}
-                        className="p-2.5 text-white bg-brand-purple/20 border border-brand-purple/40 rounded-xl hover:bg-brand-purple transition-all shadow-[0_0_12px_rgba(112,0,255,0.2)]"
-                        title="Call Patient"
+                        className="p-2 text-zinc-300 bg-zinc-800 border border-zinc-700 rounded-lg hover:bg-zinc-700 transition-colors"
+                        title="Call patient"
                       >
-                        <Phone size={16} />
+                        <Phone size={15} />
                       </button>
                     </div>
 
-                    <div className="p-3 rounded-2xl bg-bg-base/70 border border-white/5 space-y-2 mb-4">
+                    <div className="p-3 rounded-lg bg-zinc-950 border border-zinc-800 space-y-2 mb-4">
                       <div className="flex justify-between items-center text-xs">
-                        <span className="text-text-secondary font-medium">Adherence Score</span>
-                        <span className={`font-extrabold ${patient.adherence_score >= 80 ? 'text-status-success' : 'text-status-error'}`}>
-                          {patient.adherence_score}%
+                        <span className="text-zinc-400 font-normal">Adherence score</span>
+                        <span className={`font-medium ${patient.adherence_score >= 80 ? 'text-emerald-400' : 'text-red-400'}`}>
+                          {patient.adherence_score}% (vs 90% benchmark)
                         </span>
                       </div>
                       
                       {/* Adherence progress bar */}
-                      <div className="w-full bg-bg-surface rounded-full h-2 overflow-hidden">
+                      <div className="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
                         <div 
-                          className={`h-full rounded-full ${patient.adherence_score >= 80 ? 'bg-gradient-to-r from-brand-neon to-status-success' : 'bg-status-error'}`} 
+                          className={`h-full rounded-full ${patient.adherence_score >= 80 ? 'bg-emerald-500' : 'bg-red-500'}`} 
                           style={{ width: `${patient.adherence_score}%` }}
                         ></div>
                       </div>
 
                       <div className="flex justify-between text-xs pt-1">
-                        <span className="text-text-secondary">Daily Regimen</span>
-                        <span className="font-bold text-white">{patient.total_medicines} Prescribed</span>
+                        <span className="text-zinc-400">Daily regimen</span>
+                        <span className="font-medium text-zinc-200">{patient.total_medicines} prescribed</span>
                       </div>
 
                       <div className="flex justify-between text-xs">
-                        <span className="text-text-secondary">Missed Today</span>
-                        <span className={`font-bold ${patient.missed_medicines > 0 ? 'text-status-error font-extrabold' : 'text-status-success'}`}>
-                          {patient.missed_medicines > 0 ? `${patient.missed_medicines} Dose Overdue` : '0 (On Track)'}
+                        <span className="text-zinc-400">Missed today</span>
+                        <span className={`font-medium ${patient.missed_medicines > 0 ? 'text-red-400' : 'text-emerald-400'}`}>
+                          {patient.missed_medicines > 0 ? `${patient.missed_medicines} dose overdue` : '0 (on track)'}
                         </span>
                       </div>
                     </div>
@@ -388,39 +382,39 @@ export function FamilyDashboard() {
             </div>
 
             {urgentAlerts.length === 0 ? (
-              <div className="p-5 text-center rounded-2xl bg-status-success/10 border border-status-success/20">
-                <CheckCircle2 size={24} className="text-status-success mx-auto mb-2" />
-                <p className="text-xs font-bold text-white">All Clear!</p>
-                <p className="text-[11px] text-text-secondary mt-1">
-                  No missed doses or critical escalations currently reported.
+              <div className="p-5 text-center rounded-lg bg-emerald-950/20 border border-emerald-900/40">
+                <CheckCircle2 size={22} className="text-emerald-400 mx-auto mb-2" />
+                <p className="text-xs font-medium text-zinc-200">All clear</p>
+                <p className="text-[11px] text-zinc-500 mt-0.5">
+                  No missed doses or critical escalations reported.
                 </p>
               </div>
             ) : (
               <div className="space-y-3">
                 {urgentAlerts.map(alert => (
-                  <div key={alert.id} className="p-4 bg-status-error/10 rounded-2xl border border-status-error/25 space-y-2">
+                  <div key={alert.id} className="p-4 bg-red-950/20 rounded-lg border border-red-900/40 space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-extrabold text-status-error uppercase tracking-wider">
+                      <span className="text-xs font-medium text-red-400">
                         {alert.title}
                       </span>
-                      <span className="text-[10px] text-text-muted">{alert.timestamp}</span>
+                      <span className="text-[10px] text-zinc-500">{alert.timestamp}</span>
                     </div>
-                    <p className="text-xs text-text-primary leading-relaxed font-medium">
+                    <p className="text-xs text-zinc-300 leading-relaxed font-normal">
                       {alert.message}
                     </p>
                     <div className="flex items-center gap-2 pt-2">
                       <button 
                         onClick={() => setCallingPatient({ patient_name: alert.patientName, phone: alert.phone })}
-                        className="flex-1 py-2 px-3 text-xs font-bold text-white bg-status-error hover:bg-status-error/80 transition-all rounded-xl shadow-[0_0_12px_rgba(244,63,94,0.4)] flex items-center justify-center gap-1.5"
+                        className="flex-1 py-1.5 px-3 text-xs font-medium text-white bg-red-600 hover:bg-red-500 transition-colors rounded-md flex items-center justify-center gap-1.5"
                       >
                         <Phone size={13} />
                         <span>Call {alert.patientName.split(' ')[0]}</span>
                       </button>
                       <button 
                         onClick={() => handleResolveAlert(alert.id)}
-                        className="py-2 px-3 text-xs font-bold text-text-secondary hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors border border-white/10"
+                        className="py-1.5 px-3 text-xs font-medium text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-750 rounded-md transition-colors border border-zinc-700"
                       >
-                        Mark Handled
+                        Mark handled
                       </button>
                     </div>
                   </div>
@@ -430,27 +424,27 @@ export function FamilyDashboard() {
           </div>
           
           {/* Overall Health Status Card */}
-          <div className="p-6 glass-panel rounded-3xl border border-border-subtle space-y-4">
-            <h3 className="flex items-center gap-2 text-lg font-bold text-brand-neon">
-              <HeartPulse size={20} />
-              <span>Overall Guardian Status</span>
+          <div className="p-5 rounded-xl bg-zinc-900 border border-zinc-800 space-y-4">
+            <h3 className="flex items-center gap-2 text-sm font-semibold text-zinc-200">
+              <HeartPulse size={16} className="text-zinc-400" />
+              <span>Guardian status</span>
             </h3>
             
-            <div className="p-3.5 rounded-2xl bg-bg-base/80 border border-white/5 space-y-2.5">
+            <div className="p-3 rounded-lg bg-zinc-950 border border-zinc-800 space-y-2">
               <div className="flex items-center justify-between text-xs">
-                <span className="text-text-secondary">Emergency Fallback</span>
-                <span className="text-status-success font-bold flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-status-success animate-pulse"></span>
-                  Active & Armed
+                <span className="text-zinc-400">Emergency fallback</span>
+                <span className="text-emerald-400 font-medium flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  Active and armed
                 </span>
               </div>
               <div className="flex items-center justify-between text-xs">
-                <span className="text-text-secondary">Doctor Oversight</span>
-                <span className="text-white font-semibold">Dr. Rajesh Kumar (Apollo)</span>
+                <span className="text-zinc-400">Doctor oversight</span>
+                <span className="text-zinc-200 font-medium">Dr. Rajesh Kumar (Apollo)</span>
               </div>
               <div className="flex items-center justify-between text-xs">
-                <span className="text-text-secondary">Next Prescribed Check</span>
-                <span className="text-brand-neon font-semibold">Tomorrow, 08:00 AM</span>
+                <span className="text-zinc-400">Next scheduled check</span>
+                <span className="text-zinc-200 font-medium">Tomorrow, 08:00</span>
               </div>
             </div>
 
@@ -581,17 +575,17 @@ export function FamilyDashboard() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-md bg-bg-secondary border border-brand-purple/40 p-6 rounded-3xl shadow-[0_0_40px_rgba(112,0,255,0.25)] text-center relative overflow-hidden"
+              className="w-full max-w-sm bg-zinc-950 border border-zinc-800 p-6 rounded-xl text-center relative shadow-sm"
             >
-              <div className="w-16 h-16 rounded-full bg-brand-purple/20 text-brand-purple flex items-center justify-center mx-auto mb-4 border border-brand-purple/40 animate-pulse">
-                <Phone size={28} />
+              <div className="w-12 h-12 rounded-lg bg-zinc-900 text-sky-400 flex items-center justify-center mx-auto mb-4 border border-zinc-800">
+                <Phone size={22} />
               </div>
 
-              <h3 className="text-xl font-bold text-white mb-1">
+              <h3 className="text-base font-semibold text-zinc-100 mb-1">
                 Contact {callingPatient.patient_name || 'Amit Patel'}
               </h3>
-              <p className="text-xs text-text-secondary font-mono mb-6">
-                Connected Mobile: {callingPatient.phone || '+91 98765 43210'}
+              <p className="text-xs text-zinc-400 font-mono mb-6">
+                Connected: {callingPatient.phone || '+91 98765 43210'}
               </p>
 
               <div className="space-y-2.5">

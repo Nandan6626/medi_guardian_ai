@@ -82,16 +82,13 @@ export function EmergencySOS() {
       
       {/* Panic Button Area */}
       <div className="flex-1 flex flex-col items-center justify-center py-12">
-         <div className="relative group cursor-pointer">
-            <div className="absolute inset-0 bg-status-error rounded-full blur-[100px] opacity-40 group-hover:opacity-60 transition-opacity duration-500 animate-pulse"></div>
-            <div className="absolute inset-0 bg-red-500 rounded-full blur-2xl opacity-50 animate-ping" style={{ animationDuration: '3s' }}></div>
-            
-            <button className="relative w-64 h-64 bg-gradient-to-br from-red-500 to-red-800 rounded-full shadow-[inset_0_-10px_20px_rgba(0,0,0,0.5),0_20px_50px_rgba(244,63,94,0.5)] border-4 border-red-400 flex flex-col items-center justify-center transform group-hover:scale-105 group-active:scale-95 transition-all duration-300">
-               <ShieldAlert size={80} className="text-white mb-2" />
-               <span className="text-3xl font-black text-white tracking-widest">SOS</span>
+         <div className="relative cursor-pointer">
+            <button className="relative w-48 h-48 bg-red-600 hover:bg-red-500 rounded-full border-4 border-red-700 flex flex-col items-center justify-center transition-colors">
+               <ShieldAlert size={56} className="text-white mb-1" />
+               <span className="text-2xl font-semibold text-white tracking-wider">SOS</span>
             </button>
          </div>
-         <p className="text-red-400 mt-12 font-bold tracking-widest uppercase text-sm">Hold for 3 seconds to alert emergency contacts</p>
+         <p className="text-red-400 mt-8 font-medium text-xs">Hold for 3 seconds to alert emergency contacts</p>
       </div>
 
       {/* Info Cards */}

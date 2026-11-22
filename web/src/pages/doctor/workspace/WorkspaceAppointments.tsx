@@ -129,7 +129,7 @@ export function WorkspaceAppointments({ patientId }: { patientId: string }) {
                              <a 
                                href={apt.meeting_link || '#'}
                                target="_blank" rel="noreferrer"
-                               className="flex-1 md:flex-none px-6 py-3 bg-brand-neon text-black font-bold rounded-xl transition-all glow-neon flex justify-center items-center gap-2"
+                               className="flex-1 md:flex-none px-6 py-3 bg-sky-700 hover:bg-sky-700 text-white font-medium text-xs rounded-lg transition-colors flex justify-center items-center gap-1.5"
                              >
                                <Video size={18}/> Join Call
                              </a>

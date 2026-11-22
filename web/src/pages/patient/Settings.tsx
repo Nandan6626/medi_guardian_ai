@@ -398,45 +398,45 @@ export function Settings() {
 
   return (
     <div className="p-8 max-w-4xl mx-auto min-h-screen">
-      <header className="mb-10">
-        <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500 mb-2">Settings</h1>
-        <p className="text-gray-400">Manage your profile, account connections, and healthcare preferences.</p>
+      <header className="mb-6">
+        <h1 className="text-2xl md:text-3xl font-semibold text-zinc-100 tracking-tight mb-1">Settings</h1>
+        <p className="text-xs text-zinc-400">Manage profile, account connections, and healthcare preferences.</p>
       </header>
 
       {/* Tabs Selection */}
-      <div className="flex gap-4 mb-8">
+      <div className="flex gap-2 mb-6">
         <button 
           onClick={() => setActiveTab('profile')} 
-          className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all border ${activeTab === 'profile' ? 'bg-brand-purple/20 text-brand-neon border-brand-purple/50' : 'bg-bg-surface text-text-secondary border-border-subtle hover:text-white'}`}
+          className={`px-3.5 py-1.5 rounded-lg font-medium text-xs transition-colors border ${activeTab === 'profile' ? 'bg-zinc-800 text-sky-400 border-zinc-700' : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-zinc-200'}`}
         >
-          General Settings
+          General settings
         </button>
         <button 
           onClick={() => setActiveTab('connections')} 
-          className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all border ${activeTab === 'connections' ? 'bg-brand-purple/20 text-brand-neon border-brand-purple/50' : 'bg-bg-surface text-text-secondary border-border-subtle hover:text-white'}`}
+          className={`px-3.5 py-1.5 rounded-lg font-medium text-xs transition-colors border ${activeTab === 'connections' ? 'bg-zinc-800 text-sky-400 border-zinc-700' : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-zinc-200'}`}
         >
-          Connections Center
+          Connections center
         </button>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         {activeTab === 'profile' && (
           <>
             {/* Profile Dynamic Information */}
-            <div className="glass p-6 rounded-3xl border border-white/5 flex items-center justify-between">
+            <div className="p-5 rounded-xl border border-zinc-800 bg-zinc-900 flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-brand-purple/20 flex items-center justify-center text-brand-purple border border-brand-purple/30">
-                  <User size={32} />
+                <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-300 border border-zinc-700">
+                  <User size={24} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-lg">{user?.name || 'Patient'}</h3>
-                  <p className="text-sm text-gray-400">{user?.email}</p>
-                  <div className="mt-2 inline-block px-3 py-1 bg-brand-neon/10 border border-brand-neon/30 text-brand-neon rounded-lg font-mono text-sm tracking-widest font-bold">
-                    ID: {loadingProfile ? 'Loading...' : (myProfile?.mg_pat_id || 'Not Assigned')}
+                  <h3 className="font-semibold text-zinc-100 text-base">{user?.name || 'Patient'}</h3>
+                  <p className="text-xs text-zinc-400">{user?.email}</p>
+                  <div className="mt-1.5 inline-block px-2 py-0.5 bg-zinc-950 border border-zinc-800 text-zinc-300 rounded font-mono text-xs">
+                    ID: {loadingProfile ? 'Loading...' : (myProfile?.mg_pat_id || 'Not assigned')}
                   </div>
                 </div>
               </div>
-              <button className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors text-sm font-bold">Edit Profile</button>
+              <button className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-750 text-zinc-300 rounded-lg transition-colors text-xs font-medium border border-zinc-700">Edit profile</button>
             </div>
 
             {/* Static Settings Toggles */}
@@ -492,29 +492,29 @@ export function Settings() {
             
             {/* Pending Requests */}
             {incomingRequests.length > 0 && (
-              <div className="glass p-6 rounded-3xl border border-orange-500/20 bg-orange-500/5">
-                <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                  <Shield size={20} className="text-orange-400 animate-pulse" /> Pending Connection Requests
+              <div className="p-5 rounded-xl border border-amber-900/30 bg-amber-950/20">
+                <h2 className="text-sm font-semibold text-zinc-100 mb-3 flex items-center gap-2">
+                  <Shield size={16} className="text-amber-400" /> Pending connection requests
                 </h2>
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {incomingRequests.map((req) => (
-                    <div key={req.id} className="bg-[#1A1A2E]/80 p-4 rounded-2xl border border-white/5 flex justify-between items-center">
+                    <div key={req.id} className="bg-zinc-950 p-3 rounded-lg border border-zinc-800 flex justify-between items-center">
                       <div>
-                        <p className="font-bold text-white text-sm">{req.senderName}</p>
-                        <p className="text-xs text-gray-400 mt-1">{req.description}</p>
+                        <p className="font-medium text-zinc-200 text-xs">{req.senderName}</p>
+                        <p className="text-[11px] text-zinc-500 mt-0.5">{req.description}</p>
                       </div>
                       <div className="flex gap-2">
                         <button 
                           disabled={isActionLoading}
                           onClick={() => handleDeclineRequest(req.id)}
-                          className="px-3 py-1.5 rounded-xl text-xs font-bold bg-white/10 text-white hover:bg-red-500/25 transition-colors disabled:opacity-50"
+                          className="px-2.5 py-1 rounded-md text-xs font-normal bg-zinc-850 text-zinc-300 border border-zinc-700 hover:bg-zinc-800 transition-colors disabled:opacity-50"
                         >
                           Decline
                         </button>
                         <button 
                           disabled={isActionLoading}
                           onClick={() => handleAcceptRequest(req.id)}
-                          className="px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-purple text-white hover:bg-brand-neon hover:text-black transition-colors disabled:opacity-50"
+                          className="px-2.5 py-1 rounded-md text-xs font-medium bg-sky-700 text-white hover:bg-sky-500 transition-colors disabled:opacity-50"
                         >
                           Accept
                         </button>
@@ -551,21 +551,24 @@ export function Settings() {
                 </div>
 
                 <div className="relative">
-                  <Search size={20} className="absolute left-4 top-3.5 text-text-muted" />
+                  <Search size={16} className="absolute left-3.5 top-3 text-zinc-500" />
                   <input 
                     type="text" 
                     required
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder={searchType === 'doctor' ? "Search doctors by name or specialization..." : "Search patients by name or Patient ID..."} 
-                    className="w-full enterprise-input py-3.5 pl-12 pr-24 text-white text-sm"
+                    placeholder={searchType === 'doctor' ? "Search doctors" : "Search patients"} 
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg py-2 pl-9 pr-24 text-xs text-zinc-100 outline-none focus:border-sky-500 placeholder:text-zinc-600 transition-colors"
                   />
-                  <button 
-                    type="submit" 
-                    className="absolute right-2 top-2 bottom-2 px-4 bg-brand-purple hover:bg-brand-purple/80 text-white rounded-lg text-xs font-bold transition-colors"
-                  >
-                    Search
-                  </button>
+                  <div className="absolute right-2 top-1.5 flex items-center gap-1.5">
+                    <kbd className="px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 bg-zinc-800 border border-zinc-700 rounded">↵</kbd>
+                    <button 
+                      type="submit" 
+                      className="px-3 py-1 bg-sky-700 hover:bg-sky-600 text-white rounded-md text-xs font-medium transition-colors"
+                    >
+                      Search
+                    </button>
+                  </div>
                 </div>
               </form>
 

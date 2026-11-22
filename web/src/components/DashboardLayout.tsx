@@ -389,20 +389,20 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                   : 'bg-bg-surface/90 border-border-subtle text-white'
               }`}
             >
-              <div className="p-2 rounded-xl bg-white/5 shrink-0">
+              <div className="p-2 rounded-lg bg-white/5 shrink-0">
                 {toast.priority === 'CRITICAL' ? (
-                  <HeartPulse className="text-status-error animate-pulse" size={18} />
+                  <HeartPulse className="text-status-error" size={18} />
                 ) : (
-                  <Bell className="text-brand-neon" size={18} />
+                  <Bell className="text-sky-400" size={18} />
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="font-extrabold text-sm truncate">{toast.title}</h4>
+                <h4 className="font-medium text-sm truncate">{toast.title}</h4>
                 <p className="text-xs text-text-secondary mt-0.5 leading-relaxed">{toast.body}</p>
               </div>
               <button
                 onClick={() => setActiveToasts((prev) => prev.filter((t) => t.id !== toast.id))}
-                className="p-1 rounded-lg hover:bg-white/5 text-text-muted hover:text-white transition-colors"
+                className="p-1 rounded-md hover:bg-white/5 text-text-muted hover:text-white transition-colors"
               >
                 <X size={14} />
               </button>
@@ -414,40 +414,38 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       {/* Medication Alarm Overlay Modal */}
       <AnimatePresence>
         {activeAlarm && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/85 backdrop-blur-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: -20 }}
-              className="w-full max-w-md bg-bg-secondary border border-brand-neon/30 p-8 rounded-3xl shadow-[0_0_50px_rgba(0,242,254,0.15)] text-center relative overflow-hidden"
+              exit={{ opacity: 0, scale: 0.95, y: -10 }}
+              className="w-full max-w-sm bg-zinc-950 border border-zinc-800 p-6 rounded-xl text-center relative shadow-sm"
             >
-              <div className="absolute -top-12 -left-12 w-32 h-32 bg-brand-neon/10 rounded-full blur-2xl"></div>
-              
-              <div className="w-16 h-16 bg-brand-neon/15 text-brand-neon rounded-2xl flex items-center justify-center mx-auto mb-6 border border-brand-neon/20 animate-bounce">
-                <Clock size={32} />
+              <div className="w-12 h-12 bg-zinc-900 text-sky-400 rounded-lg flex items-center justify-center mx-auto mb-4 border border-zinc-800">
+                <Clock size={24} />
               </div>
 
-              <h3 className="text-2xl font-extrabold text-white mb-2">{activeAlarm.title}</h3>
-              <p className="text-text-secondary text-sm mb-8 leading-relaxed px-4">{activeAlarm.body}</p>
+              <h3 className="text-base font-semibold text-zinc-100 mb-1">{activeAlarm.title}</h3>
+              <p className="text-zinc-400 text-xs mb-6 leading-relaxed">{activeAlarm.body}</p>
 
-              <div className="flex gap-4">
+              <div className="flex gap-3">
                 <button
                   onClick={() => setActiveAlarm(null)}
-                  className="flex-1 py-3.5 bg-bg-surface hover:bg-white/5 border border-border-subtle hover:text-white text-text-secondary rounded-2xl font-bold transition-all text-sm"
+                  className="flex-1 py-2 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-zinc-300 rounded-lg font-medium transition-colors text-xs"
                 >
                   Dismiss
                 </button>
                 <button
                   disabled={isLogging}
                   onClick={handleLogTaken}
-                  className="flex-1 py-3.5 bg-linear-to-r from-brand-purple to-brand-neon text-white font-extrabold rounded-2xl transition-all shadow-[0_0_20px_rgba(112,0,255,0.4)] hover:brightness-110 flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+                  className="flex-1 py-2 bg-sky-700 hover:bg-sky-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 text-xs disabled:opacity-50"
                 >
                   {isLogging ? (
                     "Logging..."
                   ) : (
                     <>
-                      <Check size={18} />
-                      Log Taken
+                      <Check size={14} />
+                      Log taken
                     </>
                   )}
                 </button>
@@ -458,19 +456,19 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       </AnimatePresence>
 
       {/* Mobile Top Header (Small Screens Only) */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-30 bg-bg-sidebar/95 backdrop-blur-md border-b border-border-subtle px-4 py-3 flex items-center justify-between">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-30 bg-zinc-950 border-b border-zinc-800 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="flex items-center justify-center w-8 h-8 text-black font-extrabold text-sm rounded-lg bg-brand-neon shadow-[0_0_12px_rgba(0,240,255,0.4)]">
+          <div className="flex items-center justify-center w-7 h-7 text-white font-semibold text-xs rounded-md bg-sky-700">
             M
           </div>
-          <span className="text-base font-extrabold text-white tracking-tight">MediGuardian</span>
+          <span className="text-sm font-semibold text-zinc-100 tracking-tight">MediGuardian</span>
         </div>
         <button
           onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-          className="p-2 rounded-xl bg-white/5 border border-border-subtle text-white hover:bg-white/10 transition-colors"
+          className="p-1.5 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-800 transition-colors"
           aria-label="Toggle menu"
         >
-          {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
         </button>
       </div>
 
@@ -483,27 +481,27 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+              className="fixed inset-0 bg-black/60"
             />
             <motion.aside
               initial={{ x: -280 }}
               animate={{ x: 0 }}
               exit={{ x: -280 }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="relative w-72 max-w-[80vw] h-full bg-bg-sidebar border-r border-border-subtle z-50 flex flex-col justify-between"
+              className="relative w-72 max-w-[80vw] h-full bg-zinc-950 border-r border-zinc-800 z-50 flex flex-col justify-between"
             >
-              <div className="p-4 border-b border-border-subtle/60 flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <div className="flex items-center justify-center w-8 h-8 text-black font-extrabold text-sm rounded-lg bg-brand-neon">
+              <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-center w-7 h-7 text-white font-semibold text-xs rounded-md bg-sky-700">
                     M
                   </div>
-                  <span className="text-sm font-extrabold text-white">MediGuardian</span>
+                  <span className="text-sm font-semibold text-zinc-100">MediGuardian</span>
                 </div>
                 <button 
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-1 rounded-lg text-text-muted hover:text-white"
+                  className="p-1 rounded-md text-zinc-400 hover:text-zinc-200"
                 >
-                  <X size={18} />
+                  <X size={16} />
                 </button>
               </div>
 
@@ -517,33 +515,33 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                         navigate(link.path);
                         setIsMobileMenuOpen(false);
                       }}
-                      className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all text-xs font-semibold text-left ${
+                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-xs font-medium text-left ${
                         isActive 
-                          ? 'bg-brand-neon/15 text-brand-neon border border-brand-neon/30 font-bold' 
-                          : 'text-text-secondary hover:text-white hover:bg-white/5 border border-transparent'
+                          ? 'bg-zinc-900 text-sky-400 border border-zinc-800' 
+                          : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900 border border-transparent'
                       }`}
                     >
-                      <link.icon size={17} className={isActive ? 'text-brand-neon' : 'text-text-muted'} />
+                      <link.icon size={16} className={isActive ? 'text-sky-400' : 'text-zinc-500'} />
                       <span className="truncate flex-1">{link.label}</span>
                     </button>
                   );
                 })}
               </nav>
 
-              <div className="p-3 border-t border-border-subtle bg-bg-surface/50 space-y-2">
-                <div className="flex items-center gap-2.5 p-2 rounded-xl bg-white/5">
-                  <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name || 'User'}`} alt="Avatar" className="w-8 h-8 rounded-full border border-border-subtle" />
+              <div className="p-3 border-t border-zinc-800 bg-zinc-950 space-y-2">
+                <div className="flex items-center gap-2.5 p-2 rounded-lg bg-zinc-900 border border-zinc-800">
+                  <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name || 'User'}`} alt="Avatar" className="w-7 h-7 rounded-full border border-zinc-700" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-bold text-white truncate">{user?.name || 'User'}</p>
-                    <p className="text-[10px] text-brand-neon uppercase font-semibold truncate">{user?.role || 'Patient'}</p>
+                    <p className="text-xs font-medium text-zinc-200 truncate">{user?.name || 'User'}</p>
+                    <p className="text-[10px] text-zinc-400 capitalize truncate">{user?.role || 'Patient'}</p>
                   </div>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center justify-center gap-2 py-2 text-xs font-bold text-status-error hover:bg-status-error/15 rounded-xl transition-colors border border-status-error/20"
+                  className="w-full flex items-center justify-center gap-2 py-1.5 text-xs font-medium text-red-400 hover:bg-red-950/20 rounded-lg transition-colors border border-red-900/30"
                 >
-                  <LogOut size={14} />
-                  <span>Sign Out</span>
+                  <LogOut size={13} />
+                  <span>Sign out</span>
                 </button>
               </div>
             </motion.aside>
@@ -552,19 +550,19 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       </AnimatePresence>
 
       {/* Desktop Persistent Sidebar */}
-      <aside className="w-64 lg:w-72 hidden md:flex flex-col h-screen bg-bg-sidebar border-r border-border-subtle z-20 shrink-0">
+      <aside className="w-64 lg:w-72 hidden md:flex flex-col h-screen bg-zinc-950 border-r border-zinc-800 z-20 shrink-0">
         {/* Brand Header */}
-        <div className="p-4 lg:p-5 pb-3 border-b border-border-subtle/50 flex items-center justify-between shrink-0">
+        <div className="p-4 lg:p-5 pb-3 border-b border-zinc-800 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-9 h-9 text-black font-extrabold text-base rounded-xl bg-brand-neon shadow-[0_0_16px_rgba(0,240,255,0.35)] shrink-0">
+            <div className="flex items-center justify-center w-8 h-8 text-white font-semibold text-sm rounded-lg bg-sky-700 shrink-0">
               M
             </div>
             <div>
-              <span className="text-base font-extrabold tracking-tight text-white block leading-tight">
+              <span className="text-sm font-semibold tracking-tight text-zinc-100 block leading-tight">
                 MediGuardian
               </span>
-              <span className="text-[10px] text-brand-neon font-semibold uppercase tracking-wider block mt-0.5">
-                AI Health Suite
+              <span className="text-[11px] text-zinc-500 font-normal block mt-0.5">
+                Clinical adherence suite
               </span>
             </div>
           </div>
@@ -572,8 +570,8 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
 
         {/* Scrollable Navigation List */}
         <div className="flex-1 overflow-y-auto px-3 py-3 space-y-1">
-          <div className="px-3 pb-1.5 text-[10px] font-extrabold uppercase tracking-wider text-text-muted">
-            Menu
+          <div className="px-3 pb-1.5 text-xs font-medium text-zinc-500">
+            Navigation
           </div>
           {links.map((link) => {
             const isActive = location.pathname === link.path;
@@ -581,21 +579,21 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               <button
                 key={link.path}
                 onClick={() => navigate(link.path)}
-                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all text-xs lg:text-sm font-semibold text-left group ${
+                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg transition-colors text-xs lg:text-sm font-medium text-left ${
                   isActive 
-                    ? 'bg-brand-neon/15 text-brand-neon border border-brand-neon/30 shadow-[0_0_12px_rgba(0,240,255,0.15)] font-bold' 
-                    : 'text-text-secondary hover:text-white hover:bg-white/5 border border-transparent'
+                    ? 'bg-zinc-900 text-sky-400 border border-zinc-800' 
+                    : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 border border-transparent'
                 }`}
               >
                 <link.icon 
-                  size={18} 
-                  className={`shrink-0 transition-transform group-hover:scale-110 ${
-                    isActive ? 'text-brand-neon' : 'text-text-muted group-hover:text-text-primary'
+                  size={16} 
+                  className={`shrink-0 ${
+                    isActive ? 'text-sky-400' : 'text-zinc-500 group-hover:text-zinc-300'
                   }`} 
                 />
                 <span className="truncate flex-1">{link.label}</span>
                 {isActive && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-neon shadow-[0_0_6px_#00F0FF] shrink-0"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span>
                 )}
               </button>
             );
@@ -603,28 +601,28 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         </div>
 
         {/* Pinned Bottom User & Sign Out Footer */}
-        <div className="p-3 border-t border-border-subtle bg-bg-surface/40 mt-auto shrink-0 space-y-2">
-          <div className="flex items-center gap-3 p-2 rounded-xl bg-white/5 border border-white/5">
+        <div className="p-3 border-t border-zinc-800 bg-zinc-950 mt-auto shrink-0 space-y-2">
+          <div className="flex items-center gap-2.5 p-2 rounded-lg bg-zinc-900 border border-zinc-800">
             <div className="relative shrink-0">
-              <div className="w-9 h-9 rounded-full bg-bg-surface overflow-hidden border border-border-subtle">
+              <div className="w-8 h-8 rounded-full bg-zinc-800 overflow-hidden border border-zinc-700">
                 <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name || 'User'}`} alt="Avatar" className="w-full h-full object-cover" />
               </div>
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-status-success border-2 border-bg-surface shadow-sm"></span>
+              <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-500 border border-zinc-900"></span>
             </div>
             <div className="flex-1 min-w-0 text-left">
-              <p className="text-xs font-bold truncate text-white leading-tight">{user?.name || 'User'}</p>
-              <p className="text-[10px] text-brand-neon capitalize font-semibold truncate mt-0.5">
-                {user?.role || 'Patient'} Account
+              <p className="text-xs font-medium truncate text-zinc-100 leading-tight">{user?.name || 'User'}</p>
+              <p className="text-[11px] text-zinc-500 capitalize truncate mt-0.5">
+                {user?.role || 'Patient'}
               </p>
             </div>
           </div>
           
           <button 
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 text-status-error/90 hover:text-white hover:bg-status-error rounded-xl transition-all text-xs font-bold border border-status-error/20 hover:border-transparent group shadow-sm"
+            className="w-full flex items-center justify-center gap-2 px-3 py-1.5 text-zinc-400 hover:text-red-400 hover:bg-red-950/20 rounded-lg transition-colors text-xs font-medium border border-zinc-800"
           >
-            <LogOut size={14} className="transition-transform group-hover:-translate-x-0.5" />
-            <span>Sign Out</span>
+            <LogOut size={13} />
+            <span>Sign out</span>
           </button>
         </div>
       </aside>

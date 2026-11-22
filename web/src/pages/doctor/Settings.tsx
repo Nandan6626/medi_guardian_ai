@@ -133,45 +133,45 @@ export function Settings() {
         </motion.div>
       )}
 
-      <header className="mb-10">
-        <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500 mb-2">Operational Settings</h1>
-        <p className="text-gray-400">Manage your professional profile and global availability preferences.</p>
+      <header className="mb-6">
+        <h1 className="text-2xl md:text-3xl font-semibold text-zinc-100 tracking-tight mb-1">Operational settings</h1>
+        <p className="text-xs text-zinc-400">Manage professional profile and consultation availability.</p>
       </header>
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Profile */}
-        <div className="glass p-8 rounded-3xl border border-white/5 flex items-center justify-between">
-           <div className="flex items-center gap-6">
-             <div className="w-20 h-20 rounded-full border-2 border-brand-purple flex items-center justify-center text-brand-purple bg-[#1A1A2E]">
-               <User size={36} />
+        <div className="p-5 rounded-xl border border-zinc-800 bg-zinc-900 flex items-center justify-between">
+           <div className="flex items-center gap-4">
+             <div className="w-12 h-12 rounded-lg border border-zinc-700 flex items-center justify-center text-zinc-300 bg-zinc-800">
+               <User size={24} />
              </div>
              <div>
-               <h3 className="font-bold text-white text-2xl">{user?.name || 'Dr. Sarah Jenkins'}</h3>
-               <p className="text-brand-purple font-bold">Cardiologist • City General Hospital</p>
-               <p className="text-sm text-gray-400 mt-1">{user?.email || 'sarah.jenkins@hospital.com'}</p>
+               <h3 className="font-semibold text-zinc-100 text-base">{user?.name || 'Dr. Sarah Jenkins'}</h3>
+               <p className="text-xs text-zinc-400 mt-0.5">Cardiologist · City General Hospital</p>
+               <p className="text-xs text-zinc-500 mt-0.5 font-mono">{user?.email || 'sarah.jenkins@hospital.com'}</p>
              </div>
            </div>
-           <button className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors text-sm font-bold">Edit Profile</button>
+           <button className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-750 text-zinc-300 rounded-lg transition-colors text-xs font-medium border border-zinc-700">Edit profile</button>
         </div>
 
         {/* Global Configuration */}
-        <div className="glass p-8 rounded-3xl border border-white/5 space-y-8">
+        <div className="p-5 rounded-xl border border-zinc-800 bg-zinc-900 space-y-6">
            
            <div className="flex justify-between items-center">
-             <div className="flex gap-4">
-               <div className="mt-1 text-brand-neon"><CalendarClock size={24}/></div>
+             <div className="flex gap-3">
+               <div className="mt-0.5 text-zinc-400"><CalendarClock size={20}/></div>
                <div>
-                 <h4 className="font-bold text-white text-lg">Consultation Availability</h4>
-                 <p className="text-sm text-gray-400">Allow patients to request video consults during working hours.</p>
+                 <h4 className="font-medium text-zinc-200 text-sm">Consultation availability</h4>
+                 <p className="text-xs text-zinc-400">Allow patients to request video consults during working hours.</p>
                </div>
              </div>
              <button 
                onClick={() => handleToggle('consultation_available')}
-               className={`w-12 h-6 rounded-full relative flex items-center px-1 transition-colors shadow-inner ${settings.consultation_available ? 'bg-brand-neon shadow-[0_0_10px_rgba(0,240,255,0.3)]' : 'bg-gray-700'}`}
+               className={`w-11 h-6 rounded-full relative flex items-center px-1 transition-colors ${settings.consultation_available ? 'bg-sky-700' : 'bg-zinc-700'}`}
              >
                <motion.div 
                  layout 
-                 className={`w-4 h-4 rounded-full ${settings.consultation_available ? 'ml-auto bg-[#141423]' : 'bg-gray-400'}`}
+                 className={`w-4 h-4 rounded-full ${settings.consultation_available ? 'ml-auto bg-white' : 'bg-zinc-400'}`}
                />
              </button>
            </div>
@@ -209,7 +209,7 @@ export function Settings() {
              </div>
              <button 
                onClick={() => handleToggle('push_notifications')}
-               className={`w-12 h-6 rounded-full relative flex items-center px-1 transition-colors shadow-inner ${settings.push_notifications ? 'bg-brand-purple shadow-[0_0_10px_rgba(112,0,255,0.3)]' : 'bg-gray-700'}`}
+               className={`w-11 h-6 rounded-full relative flex items-center px-1 transition-colors ${settings.push_notifications ? 'bg-sky-700' : 'bg-zinc-700'}`}
              >
                <motion.div 
                  layout 

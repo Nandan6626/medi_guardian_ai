@@ -1,33 +1,41 @@
 @import "tailwindcss";
 
 @theme {
-  /* Brand Core */
-  --color-brand-neon: #00F0FF;
-  --color-brand-purple: #7000FF;
+  /* Single Accent Color: Sky-700 (#0369a1) / Sky-400 (#38bdf8)
+     Contrast Verification (WCAG AA Requires >= 4.5:1):
+     - #ffffff text on #0369a1 (Sky-700): 5.93:1 (PASSES 4.5:1)
+     - #38bdf8 (Sky-400) text on #09090b (Zinc-950): 9.29:1 (PASSES 4.5:1)
+     - #38bdf8 (Sky-400) text on #18181b (Zinc-900): 8.16:1 (PASSES 4.5:1)
+  */
+  --color-brand-accent: #0369a1;
+  --color-brand-accent-hover: #0284c7;
+  --color-brand-accent-text: #38bdf8;
+  --color-brand-neon: #38bdf8;
+  --color-brand-purple: #0369a1;
   
-  /* Backgrounds */
-  --color-bg-base: #060B18;
-  --color-bg-secondary: #0D1527;
-  --color-bg-sidebar: #090F1E;
-  --color-bg-surface: #131D36;
-  --color-bg-elevated: #1B2745;
-  --color-bg-input: #0F172A;
+  /* Backgrounds: Neutral Ramp (Zinc) */
+  --color-bg-base: #09090b;
+  --color-bg-secondary: #121215;
+  --color-bg-sidebar: #09090b;
+  --color-bg-surface: #18181b;
+  --color-bg-elevated: #27272a;
+  --color-bg-input: #18181b;
 
-  /* Text - High Visibility & WCAG Contrast */
-  --color-text-primary: #F8FAFC;
-  --color-text-secondary: #CBD5E1;
-  --color-text-muted: #94A3B8;
+  /* Text: Neutral Ramp */
+  --color-text-primary: #f4f4f5;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #71717a;
   
-  /* Status */
+  /* Functional Status */
   --color-status-success: #10B981;
   --color-status-warning: #F59E0B;
-  --color-status-error: #F43F5E;
-  --color-status-info: #0EA5E9;
+  --color-status-error: #EF4444;
+  --color-status-info: #0284c7;
   
-  /* UI Elements - Sharper, High-Visibility Borders */
-  --color-border-subtle: rgba(255, 255, 255, 0.15);
-  --color-border-hover: rgba(255, 255, 255, 0.30);
-  --color-border-strong: rgba(255, 255, 255, 0.45);
+  /* Neutral Borders */
+  --color-border-subtle: #27272a;
+  --color-border-hover: #3f3f46;
+  --color-border-strong: #52525b;
   
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -47,98 +55,77 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* Sleek modern scrollbars for Windows & desktop browsers */
+  /* Neutral clean scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #080D1A;
+    background: #09090b;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.22);
-    border-radius: 9999px;
-    border: 2px solid #080D1A;
+    background: #27272a;
+    border-radius: 4px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 240, 255, 0.6);
+    background: #3f3f46;
   }
 }
 
 @layer utilities {
-  /* High-visibility Glass panels & Modal Windows */
+  /* Neutral surface panels without colored glows or heavy blur */
   .glass {
-    background: rgba(13, 21, 39, 0.90);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+    background-color: #121215;
+    border: 1px solid #27272a;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
   }
 
   .glass-panel {
-    background: rgba(16, 26, 48, 0.88);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(255, 255, 255, 0.08) inset;
+    background-color: #18181b;
+    border: 1px solid #27272a;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
   }
   
   .glass-panel-deep {
-    background: rgba(9, 15, 28, 0.95);
-    backdrop-filter: blur(28px);
-    -webkit-backdrop-filter: blur(28px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.85), 0 1px 0 rgba(255, 255, 255, 0.12) inset;
+    background-color: #121215;
+    border: 1px solid #27272a;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
   }
   
-  /* Rich Radiant Ambient Glows */
-  .glow-neon {
-    box-shadow: 0 0 35px -5px rgba(0, 240, 255, 0.35), 0 0 15px -2px rgba(0, 240, 255, 0.25);
-  }
-  
-  .glow-purple {
-    box-shadow: 0 0 35px -5px rgba(112, 0, 255, 0.35), 0 0 15px -2px rgba(112, 0, 255, 0.25);
-  }
-
-  .ai-glow {
-    box-shadow: 0 0 45px -8px rgba(0, 240, 255, 0.30);
-  }
-  
-  .purple-glow {
-    box-shadow: 0 0 45px -8px rgba(112, 0, 255, 0.30);
-  }
-
+  /* Kill every glow and colored shadow */
+  .glow-neon,
+  .glow-purple,
+  .ai-glow,
+  .purple-glow,
   .card-float {
-    box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+    box-shadow: none !important;
   }
 
-  /* Utility components */
+  /* Utility components on standard 4-pixel grid */
   .enterprise-card {
     background-color: var(--color-bg-surface);
     border: 1px solid var(--color-border-subtle);
-    border-radius: 1rem;
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 0.75rem; /* 12px */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    transition: border-color 0.15s ease;
   }
   
   .enterprise-card:hover {
     border-color: var(--color-border-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.65), 0 0 25px -5px rgba(0, 240, 255, 0.18);
   }
 
   .enterprise-input {
     background-color: var(--color-bg-input);
     border: 1px solid var(--color-border-subtle);
-    border-radius: 0.75rem;
+    border-radius: 0.5rem; /* 8px */
     color: var(--color-text-primary);
-    transition: all 0.25s ease;
+    transition: border-color 0.15s ease;
   }
   
   .enterprise-input:focus {
     outline: none;
-    border-color: var(--color-brand-neon);
-    box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.25), 0 0 20px -5px rgba(0, 240, 255, 0.3);
+    border-color: var(--color-brand-accent);
+    box-shadow: 0 0 0 1px var(--color-brand-accent);
   }
 
   .enterprise-input::placeholder {

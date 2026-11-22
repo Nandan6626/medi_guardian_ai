@@ -60,16 +60,16 @@ export function WorkspaceHistory({ patientId: _patientId }: { patientId: string 
                   <div className="w-12 h-12 rounded-full border-4 border-[#141423] shrink-0 flex items-center justify-center bg-[#1A1A2E]">
                     <event.icon size={18} className={
                       event.color === 'red' ? 'text-red-400' :
-                      event.color === 'purple' ? 'text-brand-purple' :
+                      event.color === 'purple' ? 'text-sky-400' :
                       event.color === 'blue' ? 'text-blue-400' : 'text-green-400'
                     } />
                   </div>
                   
                   <div className="flex-1 bg-[#1A1A2E] border border-white/5 p-5 rounded-2xl hover:border-white/20 transition-colors">
                     <div className="flex justify-between items-start mb-2">
-                      <span className={`text-xs font-bold uppercase tracking-wider ${
+                      <span className={`text-xs font-bold font-normal ${
                         event.color === 'red' ? 'text-red-400' :
-                        event.color === 'purple' ? 'text-brand-purple' :
+                        event.color === 'purple' ? 'text-sky-400' :
                         event.color === 'blue' ? 'text-blue-400' : 'text-green-400'
                       }`}>{event.type}</span>
                       <span className="text-xs text-gray-500">{event.date}</span>

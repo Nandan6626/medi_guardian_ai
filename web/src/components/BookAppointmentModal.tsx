@@ -68,20 +68,20 @@ export function BookAppointmentModal({ isOpen, onClose, onSuccess }: BookAppoint
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
           />
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-lg glass-panel rounded-3xl border border-border-subtle p-8 overflow-y-auto max-h-[90vh]"
+            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+            className="relative w-full max-w-lg bg-zinc-950 rounded-xl border border-zinc-800 p-6 overflow-y-auto max-h-[90vh] shadow-lg"
           >
             <button 
               onClick={onClose}
-              className="absolute top-6 right-6 text-text-muted hover:text-white transition-colors"
+              className="absolute top-5 right-5 text-zinc-400 hover:text-zinc-200 transition-colors p-1 rounded-md bg-zinc-900 border border-zinc-800"
             >
-              <X size={24} />
+              <X size={16} />
             </button>
 
-            <h2 className="text-2xl font-bold text-white mb-2">Book Consultation</h2>
-            <p className="text-text-secondary mb-8">Schedule an appointment with your healthcare provider.</p>
+            <h2 className="text-base font-semibold text-zinc-100 mb-1">Book consultation</h2>
+            <p className="text-xs text-zinc-400 mb-6 font-normal">Schedule an appointment with your healthcare provider.</p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Doctor Selection (Mocked for now) */}
@@ -171,14 +171,14 @@ export function BookAppointmentModal({ isOpen, onClose, onSuccess }: BookAppoint
               <button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full py-4 bg-brand-neon hover:bg-white text-black font-bold rounded-xl transition-all glow-neon flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-2.5 bg-sky-700 hover:bg-sky-700 text-white font-medium text-xs rounded-lg transition-colors flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2 size={20} className="animate-spin" /> Scheduling...
+                    <Loader2 size={16} className="animate-spin" /> Scheduling...
                   </>
                 ) : (
-                  'Confirm Appointment'
+                  'Confirm appointment'
                 )}
               </button>
             </form>

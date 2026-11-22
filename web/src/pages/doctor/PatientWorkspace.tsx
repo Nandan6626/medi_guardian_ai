@@ -92,24 +92,24 @@ export function PatientWorkspace() {
           
           <div className="flex-1">
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-extrabold text-white">{patientDetails?.name || 'Unknown Patient'}</h1>
-              <span className="px-3 py-1 bg-brand-purple/10 text-brand-neon border border-brand-purple/20 rounded-xl font-mono text-xs font-bold tracking-widest shadow-sm">
+              <h1 className="text-xl font-semibold text-zinc-100">{patientDetails?.name || 'Unknown Patient'}</h1>
+              <span className="px-2 py-0.5 bg-zinc-900 text-zinc-300 border border-zinc-800 rounded-md font-mono text-xs">
                 {patientDetails?.mg_pat_id || (patientDetails?.id ? 'MG-PAT-' + patientDetails.id.slice(0, 5) : 'N/A')}
               </span>
-              <span className="px-3 py-1 bg-status-success/10 text-status-success border border-status-success/20 rounded-full text-xs font-bold flex items-center gap-1 shadow-sm">
-                <span className="w-2 h-2 bg-status-success rounded-full animate-pulse"></span> Stable
+              <span className="px-2 py-0.5 bg-emerald-950/40 text-emerald-400 border border-emerald-900/40 rounded-full text-xs font-normal flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Stable
               </span>
             </div>
-            <div className="text-sm text-text-secondary mt-1 flex gap-4 font-medium">
-              <span>{patientDetails?.age || 'N/A'} yrs • {patientDetails?.blood_group || 'N/A'}</span>
-              <span>Allergies: <strong className="text-status-error">{patientDetails?.allergies || 'None'}</strong></span>
+            <div className="text-xs text-zinc-400 mt-1 flex gap-3 font-normal">
+              <span>{patientDetails?.age || 'N/A'} yrs · {patientDetails?.blood_group || 'N/A'}</span>
+              <span>Allergies: <strong className="text-red-400 font-medium">{patientDetails?.allergies || 'None'}</strong></span>
             </div>
           </div>
 
-          <div className="flex gap-4 shrink-0 bg-bg-surface px-5 py-3 rounded-2xl border border-border-subtle shadow-inner">
+          <div className="flex gap-4 shrink-0 bg-zinc-900 px-4 py-2.5 rounded-lg border border-zinc-800">
              <div className="text-right">
-               <p className="text-xs text-text-muted uppercase font-bold tracking-wider mb-1">Adherence Score</p>
-               <p className="text-2xl font-extrabold text-brand-neon">{patientDetails?.adherence_score || 0}%</p>
+               <p className="text-[11px] text-zinc-400 font-normal mb-0.5">Adherence (vs 80% target)</p>
+               <p className="text-xl font-semibold text-zinc-100">{patientDetails?.adherence_score || 0}%</p>
              </div>
           </div>
         </div>
@@ -118,18 +118,18 @@ export function PatientWorkspace() {
       {/* Tabs Layout */}
       <div className="flex flex-1 overflow-hidden">
         {/* Vertical Tab Navigation */}
-        <div className="w-64 border-r border-border-subtle bg-bg-sidebar p-6 space-y-2 shrink-0 overflow-y-auto">
+        <div className="w-60 border-r border-zinc-800 bg-zinc-950 p-4 space-y-1 shrink-0 overflow-y-auto">
           {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all font-bold text-sm border ${
+              className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg transition-colors font-medium text-xs border ${
                 activeTab === tab.id 
-                  ? 'bg-brand-purple/20 text-brand-neon border-brand-purple/50 shadow-[inset_0_0_10px_rgba(112,0,255,0.1)]' 
-                  : 'text-text-secondary border-transparent hover:bg-white/5 hover:text-white'
+                  ? 'bg-zinc-900 text-sky-400 border-zinc-800' 
+                  : 'text-zinc-400 border-transparent hover:bg-zinc-900/50 hover:text-zinc-200'
               }`}
             >
-              <tab.icon size={18} className={activeTab === tab.id ? 'text-brand-neon' : ''} />
+              <tab.icon size={16} className={activeTab === tab.id ? 'text-sky-400' : 'text-zinc-500'} />
               {tab.label}
             </button>
           ))}

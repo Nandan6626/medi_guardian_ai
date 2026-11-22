@@ -171,16 +171,16 @@ export function Caretakers() {
               type="text"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder="e.g. Mumbai, Delhi, Priya"
-              className="w-full rounded-3xl border border-border-subtle bg-[#090A10] px-4 py-3 text-sm text-white outline-none transition focus:border-brand-neon focus:ring-2 focus:ring-brand-neon/10"
+              placeholder="Search city or name"
+              className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 outline-none transition focus:border-sky-500 placeholder:text-zinc-600"
             />
           </div>
-          <div className="glass-panel rounded-3xl border border-border-subtle bg-slate-950/90 p-5 shadow-black/10">
-            <label className="block text-sm font-semibold text-white mb-3">Sort by city</label>
+          <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
+            <label className="block text-xs font-medium text-zinc-300 mb-2">Sort by city</label>
             <select
               value={sortOrder}
               onChange={(event) => setSortOrder(event.target.value as 'city-asc' | 'city-desc')}
-              className="w-full rounded-3xl border border-border-subtle bg-[#090A10] px-4 py-3 text-sm text-white outline-none transition focus:border-brand-neon focus:ring-2 focus:ring-brand-neon/10"
+              className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 outline-none transition focus:border-sky-500"
             >
               <option value="city-asc">City A → Z</option>
               <option value="city-desc">City Z → A</option>
@@ -284,16 +284,16 @@ export function Caretakers() {
                   <div className="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-500/20">
                     <Check size={32} />
                   </div>
-                  <h3 className="text-2xl font-extrabold text-white mb-2">Booking Confirmed!</h3>
-                  <p className="text-text-secondary text-sm mb-6 leading-relaxed">
-                    You have booked <span className="text-brand-neon font-bold">{selectedCaretaker.name}</span> for {bookingHours} hours on {bookingDate} at {bookingTime}.
+                  <h3 className="text-base font-semibold text-zinc-100 mb-1">Booking confirmed</h3>
+                  <p className="text-zinc-400 text-xs mb-6 leading-relaxed">
+                    You have booked <span className="text-sky-400 font-medium">{selectedCaretaker.name}</span> for {bookingHours} hours on {bookingDate} at {bookingTime}.
                   </p>
                   <button
                     onClick={() => {
                       setSelectedCaretaker(null);
                       setBookingSuccess(false);
                     }}
-                    className="w-full py-3.5 bg-brand-neon hover:bg-white text-black font-extrabold rounded-2xl transition-all"
+                    className="w-full py-2 bg-sky-700 hover:bg-sky-700 text-white font-medium text-xs rounded-lg transition-colors"
                   >
                     Done
                   </button>

@@ -281,16 +281,16 @@ export function PatientManagement() {
 
   return (
     <div className="p-8 max-w-7xl mx-auto min-h-screen">
-      <header className="mb-8 flex justify-between items-end">
+      <header className="mb-6 flex justify-between items-end">
         <div>
-          <h1 className="text-4xl font-extrabold text-white mb-2 tracking-tight">Patient Management</h1>
-          <p className="text-text-secondary font-medium">Manage and monitor your connected patients in real-time.</p>
+          <h1 className="text-2xl md:text-3xl font-semibold text-zinc-100 mb-1 tracking-tight">Patient management</h1>
+          <p className="text-zinc-400 font-normal text-xs">Manage and monitor connected patients in real time.</p>
         </div>
         <button 
           onClick={() => setIsConnectModalOpen(true)}
-          className="bg-brand-purple hover:bg-brand-purple/80 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-[0_0_15px_rgba(112,0,255,0.4)] transition-colors"
+          className="bg-sky-700 hover:bg-sky-700 text-white px-4 py-2 rounded-lg font-medium text-xs flex items-center gap-1.5 transition-colors"
         >
-          <UserPlus size={20} /> Add New Patient
+          <UserPlus size={16} /> Add patient
         </button>
       </header>
 
@@ -329,23 +329,24 @@ export function PatientManagement() {
       )}
 
       {/* Controls */}
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
+      <div className="flex flex-col md:flex-row gap-3 mb-6">
         <div className="relative flex-1">
-          <Search size={20} className="absolute left-4 top-3.5 text-text-muted" />
+          <Search size={16} className="absolute left-3.5 top-3 text-zinc-500" />
           <input 
             type="text" 
-            placeholder="Search patients by name or ID..." 
+            placeholder="Search patients" 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full enterprise-input py-3 pl-12 pr-4 text-white font-medium"
+            className="w-full bg-zinc-900 border border-zinc-800 rounded-lg py-2 pl-9 pr-14 text-xs text-zinc-100 outline-none focus:border-sky-500 placeholder:text-zinc-600 transition-colors"
           />
+          <kbd className="absolute right-3 top-2 px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 bg-zinc-800 border border-zinc-700 rounded">⌘K</kbd>
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
+        <div className="flex gap-2 overflow-x-auto pb-1 md:pb-0 hide-scrollbar">
           {filters.map(f => (
             <button 
               key={f}
               onClick={() => setActiveFilter(f)}
-              className={`px-5 py-3 rounded-2xl font-bold text-sm transition-all whitespace-nowrap border ${activeFilter === f ? 'bg-brand-purple/20 text-brand-neon border-brand-purple/50' : 'bg-bg-surface text-text-secondary border-border-subtle hover:bg-white/5 hover:text-white'}`}
+              className={`px-3 py-1.5 rounded-lg font-medium text-xs transition-colors whitespace-nowrap border ${activeFilter === f ? 'bg-zinc-800 text-sky-400 border-zinc-700' : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-zinc-200'}`}
             >
               {f}
             </button>
@@ -368,46 +369,43 @@ export function PatientManagement() {
               onClick={() => navigate(`/doctor/patients/${p.id}`)}
               className="glass-panel rounded-3xl p-6 cursor-pointer group relative overflow-hidden hover:border-brand-purple/30 transition-all"
             >
-              {p.status === 'Critical' && (
-                <div className="absolute top-0 right-0 w-24 h-24 bg-status-error/20 blur-2xl rounded-full"></div>
-              )}
-              
-              <div className="flex items-start justify-between mb-6 relative z-10">
+              <div className="flex items-start justify-between mb-4 relative z-10">
                 <div className="flex items-center gap-3">
-                  <div className="w-14 h-14 rounded-full border-2 border-border-subtle shadow-sm bg-bg-base overflow-hidden">
+                  <div className="w-10 h-10 rounded-full border border-zinc-700 bg-zinc-800 overflow-hidden">
                     <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${p.name}`} alt="Avatar" />
                   </div>
                   <div>
-                    <h3 className="font-extrabold text-white text-lg group-hover:text-brand-neon transition-colors">{p.name}</h3>
-                    <p className="text-xs text-text-secondary font-mono font-bold tracking-widest">{p.mg_pat_id || ('MG-PAT-' + p.id.slice(0, 5))}</p>
+                    <h3 className="font-semibold text-zinc-100 text-sm">{p.name}</h3>
+                    <p className="text-xs text-zinc-500 font-mono">{p.mg_pat_id || ('MG-PAT-' + p.id.slice(0, 5))}</p>
                   </div>
                 </div>
-                <div className={`w-3 h-3 rounded-full shadow-sm ${p.status === 'Critical' ? 'bg-status-error ai-glow' : 'bg-status-success'}`}></div>
+                <div className={`w-2.5 h-2.5 rounded-full ${p.status === 'Critical' ? 'bg-red-500' : 'bg-emerald-500'}`}></div>
               </div>
 
-              <div className="space-y-4 mb-6 relative z-10">
-                <div className="flex justify-between text-sm border-b border-border-subtle pb-3">
-                  <span className="text-text-secondary font-medium">Condition</span>
-                  <span className="text-white font-bold truncate max-w-[120px]">Hypertension</span>
+              <div className="space-y-2 mb-4 text-xs relative z-10">
+                <div className="flex justify-between border-b border-zinc-800 pb-2">
+                  <span className="text-zinc-400">Condition</span>
+                  <span className="text-zinc-200 font-medium">Hypertension</span>
                 </div>
-                <div className="flex justify-between text-sm border-b border-border-subtle pb-3">
-                  <span className="text-text-secondary font-medium">Adherence</span>
-                  <span className="text-brand-neon font-bold">85%</span>
+                <div className="flex justify-between border-b border-zinc-800 pb-2">
+                  <span className="text-zinc-400">Adherence</span>
+                  <span className="text-zinc-200 font-medium">85% (vs 80% target)</span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-text-secondary font-medium">Last Active</span>
-                  <span className="text-white font-bold">2 hours ago</span>
+                <div className="flex justify-between">
+                  <span className="text-zinc-400">Last active</span>
+                  <span className="text-zinc-400">2 hours ago</span>
                 </div>
               </div>
 
               {p.status === 'Critical' && (
-                <div className="mb-6 p-3 rounded-xl bg-status-error/10 border border-status-error/20 flex gap-2 items-center text-status-error text-xs font-bold relative z-10">
-                  <AlertTriangle size={16} /> Needs attention (Missed Dose)
+                <div className="mb-4 p-2.5 rounded-md bg-red-950/20 border border-red-900/30 flex gap-2 items-center text-red-400 text-xs font-normal relative z-10">
+                  <AlertTriangle size={14} /> Attention required (missed dose)
                 </div>
               )}
 
-              <button className="w-full py-3 rounded-xl bg-brand-purple/10 text-brand-purple border border-brand-purple/20 font-bold transition-colors flex items-center justify-center gap-2 text-sm group-hover:bg-brand-purple/20 group-hover:text-brand-neon">
-                Open Workspace <ArrowRight size={16} />
+              <button className="w-full py-2 rounded-lg bg-zinc-800 text-zinc-300 border border-zinc-700 font-medium transition-colors flex items-center justify-center gap-1.5 text-xs hover:bg-zinc-750">
+                <span>Open workspace</span>
+                <ArrowRight size={14} />
               </button>
             </motion.div>
           ))
@@ -417,29 +415,29 @@ export function PatientManagement() {
       {/* Connect Patient Modal */}
       <AnimatePresence>
         {isConnectModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="glass-panel-deep p-8 w-full max-w-md relative rounded-3xl"
+              exit={{ opacity: 0, scale: 0.95, y: -10 }}
+              className="bg-zinc-950 border border-zinc-800 p-6 w-full max-w-sm relative rounded-xl shadow-lg"
             >
               <button 
                 onClick={() => setIsConnectModalOpen(false)}
-                className="absolute top-6 right-6 text-text-muted hover:text-white transition-colors bg-white/5 p-2 rounded-full"
+                className="absolute top-5 right-5 text-zinc-400 hover:text-zinc-200 transition-colors bg-zinc-900 p-1.5 rounded-md border border-zinc-800"
               >
-                <X size={20} />
+                <X size={16} />
               </button>
               
-              <div className="w-16 h-16 bg-gradient-to-br from-brand-purple to-brand-neon rounded-2xl flex items-center justify-center text-white mb-6 shadow-md purple-glow">
-                <UserPlus size={32} />
+              <div className="w-10 h-10 bg-zinc-900 border border-zinc-800 text-sky-400 rounded-lg flex items-center justify-center mb-4">
+                <UserPlus size={20} />
               </div>
 
-              <h2 className="text-2xl font-extrabold text-white mb-2">Connect Patient</h2>
-              <p className="text-text-secondary font-medium text-sm mb-8">Enter the patient's unique MG-PAT ID to send a monitoring request.</p>
+              <h2 className="text-base font-semibold text-zinc-100 mb-1">Connect patient</h2>
+              <p className="text-zinc-400 font-normal text-xs mb-6">Enter the patient's unique MG-PAT ID to send a monitoring request.</p>
 
               <form onSubmit={handleConnect}>
-                <label className="block text-xs font-bold text-text-muted mb-2 uppercase tracking-wider">Patient ID</label>
+                <label className="block text-xs font-medium text-zinc-300 mb-1.5">Patient ID</label>
                 <input 
                   type="text" 
                   required

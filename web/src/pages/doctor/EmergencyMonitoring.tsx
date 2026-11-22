@@ -39,61 +39,60 @@ export function EmergencyMonitoring() {
 
   return (
     <div className="p-8 max-w-7xl mx-auto min-h-screen">
-      <header className="mb-8 flex justify-between items-end">
+      <header className="mb-6 flex justify-between items-end">
         <div>
-          <h1 className="text-4xl font-extrabold text-white mb-2 tracking-tight flex items-center gap-3">
-             <ShieldAlert size={36} className="text-status-error animate-pulse" />
-             Emergency Monitoring
+          <h1 className="text-2xl md:text-3xl font-semibold text-zinc-100 mb-1 tracking-tight flex items-center gap-2">
+             <ShieldAlert size={24} className="text-red-400" />
+             Emergency monitoring
           </h1>
-          <p className="text-status-error font-bold bg-status-error/10 inline-block px-3 py-1 rounded-full border border-status-error/20">
-             LIVE: {alertsToDisplay.length} Active Alerts
+          <p className="text-red-400 text-xs font-normal">
+             {alertsToDisplay.length} active emergency alerts
           </p>
         </div>
       </header>
 
       {isLoading ? (
-        <div className="text-center py-20 text-text-muted">Initializing emergency link...</div>
+        <div className="text-center py-20 text-zinc-500 text-xs">Initializing emergency link...</div>
       ) : alertsToDisplay.length === 0 ? (
-        <div className="glass-panel rounded-3xl p-12 text-center border border-status-success/20">
-          <div className="w-20 h-20 bg-status-success/10 text-status-success rounded-full flex items-center justify-center mx-auto mb-6">
-             <CheckCircle size={40} />
+        <div className="rounded-xl p-8 text-center border border-zinc-800 bg-zinc-900">
+          <div className="w-12 h-12 bg-emerald-950/40 text-emerald-400 border border-emerald-900/40 rounded-full flex items-center justify-center mx-auto mb-3">
+             <CheckCircle size={24} />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">All Clear</h2>
-          <p className="text-text-secondary">No active emergency SOS alerts from your patients.</p>
+          <h2 className="text-base font-semibold text-zinc-100 mb-1">All clear</h2>
+          <p className="text-zinc-400 text-xs">No active emergency SOS alerts from monitored patients.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-           <div className="lg:col-span-2 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+           <div className="lg:col-span-2 space-y-4">
               <AnimatePresence>
                 {alertsToDisplay.map((alert: any, i: number) => (
                    <motion.div 
                      initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }}
                      key={alert.id}
-                     className={`glass-panel rounded-3xl p-6 relative overflow-hidden group hover:border-white/20 transition-all ${alert.priority === 'CRITICAL' ? 'border border-status-error/50 shadow-[0_0_30px_rgba(244,63,94,0.1)]' : ''}`}
+                     className={`rounded-xl p-5 border bg-zinc-900 ${alert.priority === 'CRITICAL' ? 'border-red-900/50' : 'border-zinc-800'}`}
                    >
-                     {alert.priority === 'CRITICAL' && <div className="absolute top-0 right-0 w-32 h-32 bg-status-error/20 blur-3xl rounded-full animate-pulse"></div>}
-
-                     <div className="flex items-start justify-between mb-6 relative z-10">
-                        <div className="flex items-center gap-5">
-                           <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 border ${alert.bg} ${alert.color}`}>
-                              <alert.icon size={28} />
+                     <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                           <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-red-950/40 text-red-400 border border-red-900/40">
+                              <alert.icon size={20} />
                            </div>
                            <div>
-                              <p className={`text-xs font-bold uppercase tracking-widest mb-1 ${alert.color}`}>{alert.priority} • {alert.time}</p>
-                              <h3 className="text-xl font-bold text-white mb-1"><span className="text-text-secondary mr-2 font-medium">{alert.patient}</span> {alert.message}</h3>
+                              <p className="text-xs text-red-400 mb-0.5">{alert.priority.toLowerCase()} · {alert.time}</p>
+                              <h3 className="text-sm font-semibold text-zinc-100"><span className="text-zinc-400 mr-1.5 font-normal">{alert.patient}</span> {alert.message}</h3>
                            </div>
                         </div>
                      </div>
 
-                     <div className="flex gap-4 pt-4 border-t border-border-subtle mt-2 relative z-10">
-                        <button className="flex-1 py-3.5 bg-bg-surface hover:bg-white/5 rounded-xl font-bold transition-colors text-sm flex justify-center items-center gap-2 text-white border border-border-subtle">
-                           <PhoneCall size={18}/> Contact Caregiver
+                     <div className="flex gap-3 pt-3 border-t border-zinc-800 mt-2">
+                        <button className="flex-1 py-2 bg-zinc-950 hover:bg-zinc-800 rounded-lg font-medium text-xs flex justify-center items-center gap-1.5 text-zinc-300 border border-zinc-700 transition-colors">
+                           <PhoneCall size={14}/> Contact caregiver
                         </button>
                         <button 
                            onClick={() => navigate(`/doctor/patients/${alert.patientId}`)}
-                           className={`flex-1 py-3.5 rounded-xl font-bold transition-colors text-sm flex justify-center items-center gap-2 text-white shadow-sm ${alert.priority === 'CRITICAL' ? 'bg-status-error hover:bg-status-error/80 shadow-[0_0_15px_rgba(244,63,94,0.4)]' : 'bg-brand-purple hover:bg-brand-purple/80 shadow-[0_0_15px_rgba(112,0,255,0.4)]'}`}
+                           className="flex-1 py-2 rounded-lg font-medium text-xs flex justify-center items-center gap-1.5 text-white bg-sky-700 hover:bg-sky-700 transition-colors"
                         >
-                           View Workspace <ArrowRight size={18}/>
+                           <span>View workspace</span>
+                           <ArrowRight size={14}/>
                         </button>
                      </div>
                    </motion.div>

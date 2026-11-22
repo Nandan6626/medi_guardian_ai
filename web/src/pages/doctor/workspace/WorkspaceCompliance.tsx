@@ -92,7 +92,7 @@ export function WorkspaceCompliance({ patientId }: { patientId: string }) {
     <div className="space-y-6">
       <div className="glass-panel p-6 rounded-3xl border border-white/5 bg-[#121225]/40">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-brand-purple/15 text-brand-neon flex items-center justify-center border border-brand-purple/20">
+          <div className="w-10 h-10 rounded-xl bg-zinc-800 text-sky-400 flex items-center justify-center border border-zinc-700">
             <Calendar size={20} />
           </div>
           <div>
@@ -109,7 +109,7 @@ export function WorkspaceCompliance({ patientId }: { patientId: string }) {
           <div className="overflow-x-auto rounded-2xl border border-border-subtle bg-[#1A1A2E]/50">
             <table className="w-full border-collapse text-left">
               <thead>
-                <tr className="border-b border-border-subtle bg-[#1A1A2E] text-text-muted text-xs uppercase font-extrabold tracking-wider">
+                <tr className="border-b border-border-subtle bg-[#1A1A2E] text-text-muted text-xs font-normal">
                   <th className="py-4 px-6 min-w-[200px]">Medication / Timing</th>
                   {last7Days.map((date, idx) => (
                     <th key={idx} className="py-4 px-4 text-center min-w-[120px]">
@@ -136,7 +136,7 @@ export function WorkspaceCompliance({ patientId }: { patientId: string }) {
                   return slots.map((slot, sIdx) => (
                     <tr key={`${schedule.id}-${sIdx}`} className="hover:bg-white/5 transition-colors">
                       <td className="py-4 px-6 flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-brand-purple/10 text-brand-neon flex items-center justify-center shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-zinc-800 text-sky-400 flex items-center justify-center shrink-0">
                           <Pill size={16} />
                         </div>
                         <div>

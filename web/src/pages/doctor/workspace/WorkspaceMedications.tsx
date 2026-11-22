@@ -124,7 +124,7 @@ export function WorkspaceMedications({ patientId }: { patientId: string }) {
       <div className="flex justify-between items-center">
         <div>
            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-             <Pill className="text-brand-neon" /> Clinical Prescriptions
+             <Pill className="text-sky-400" /> Clinical Prescriptions
            </h2>
            <p className="text-sm text-gray-400 mt-1">Manage official medicines prescribed to this patient.</p>
         </div>
@@ -168,13 +168,13 @@ export function WorkspaceMedications({ patientId }: { patientId: string }) {
                 {previewImage ? (
                   <div className="flex flex-col items-center">
                     <img src={previewImage} alt="Medicine preview" className="h-32 object-contain mb-4 rounded-lg shadow-lg" />
-                    <div className="flex items-center gap-2 text-sm text-brand-neon bg-brand-neon/10 px-4 py-2 rounded-full">
+                    <div className="flex items-center gap-2 text-sm text-sky-400 bg-brand-neon/10 px-4 py-2 rounded-full">
                       <ShieldCheck size={16} /> AI Verification Match: {newMed.name || 'Detecting...'}
                     </div>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-4">
-                    <div className="w-16 h-16 rounded-full bg-brand-purple/20 text-brand-purple flex items-center justify-center mb-4">
+                    <div className="w-16 h-16 rounded-full bg-zinc-800 text-zinc-300 flex items-center justify-center mb-4">
                       <Camera size={24} />
                     </div>
                     <p className="font-bold text-white">Scan Medicine or Prescription</p>
@@ -186,22 +186,22 @@ export function WorkspaceMedications({ patientId }: { patientId: string }) {
               {/* Form Fields */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
-                  <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Medicine Name</label>
-                  <input type="text" required value={newMed.name} onChange={e => setNewMed({...newMed, name: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-purple outline-none" placeholder="e.g. Metformin" />
+                  <label className="block text-xs font-bold text-gray-400 mb-2 font-normal">Medicine Name</label>
+                  <input type="text" required value={newMed.name} onChange={e => setNewMed({...newMed, name: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-sky-500 outline-none" placeholder="e.g. Metformin" />
                 </div>
                 
                 <div>
-                  <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Dosage</label>
-                  <input type="text" required value={newMed.dosage} onChange={e => setNewMed({...newMed, dosage: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-purple outline-none" placeholder="e.g. 500mg" />
+                  <label className="block text-xs font-bold text-gray-400 mb-2 font-normal">Dosage</label>
+                  <input type="text" required value={newMed.dosage} onChange={e => setNewMed({...newMed, dosage: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-sky-500 outline-none" placeholder="e.g. 500mg" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Timing</label>
-                  <input type="time" required value={newMed.timing} onChange={e => setNewMed({...newMed, timing: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-purple outline-none" />
+                  <label className="block text-xs font-bold text-gray-400 mb-2 font-normal">Timing</label>
+                  <input type="time" required value={newMed.timing} onChange={e => setNewMed({...newMed, timing: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-sky-500 outline-none" />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Frequency</label>
-                  <select value={newMed.frequency} onChange={e => setNewMed({...newMed, frequency: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-purple outline-none">
+                  <label className="block text-xs font-bold text-gray-400 mb-2 font-normal">Frequency</label>
+                  <select value={newMed.frequency} onChange={e => setNewMed({...newMed, frequency: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-sky-500 outline-none">
                     <option value="Daily">Daily</option>
                     <option value="Weekly">Weekly</option>
                     <option value="As Needed">As Needed</option>
@@ -209,8 +209,8 @@ export function WorkspaceMedications({ patientId }: { patientId: string }) {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Food Instruction</label>
-                  <select value={newMed.food_instruction} onChange={e => setNewMed({...newMed, food_instruction: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-purple outline-none">
+                  <label className="block text-xs font-bold text-gray-400 mb-2 font-normal">Food Instruction</label>
+                  <select value={newMed.food_instruction} onChange={e => setNewMed({...newMed, food_instruction: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-sky-500 outline-none">
                     <option value="">No Instruction</option>
                     <option value="Before Food">Before Food</option>
                     <option value="After Food">After Food</option>
@@ -218,22 +218,22 @@ export function WorkspaceMedications({ patientId }: { patientId: string }) {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Duration</label>
-                  <input type="text" required value={newMed.duration} onChange={e => setNewMed({...newMed, duration: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-purple outline-none" placeholder="e.g. 30 Days" />
+                  <label className="block text-xs font-bold text-gray-400 mb-2 font-normal">Duration</label>
+                  <input type="text" required value={newMed.duration} onChange={e => setNewMed({...newMed, duration: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-sky-500 outline-none" placeholder="e.g. 30 Days" />
                 </div>
 
                 {/* Visual Identifiers */}
                 <div>
-                  <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Color Tag</label>
+                  <label className="block text-xs font-bold text-gray-400 mb-2 font-normal">Color Tag</label>
                   <div className="flex gap-2">
                     {['White', 'Red', 'Blue', 'Yellow', 'Purple'].map(color => (
-                      <button type="button" key={color} onClick={() => setNewMed({...newMed, color})} className={`w-8 h-8 rounded-full border-2 ${newMed.color === color ? 'border-brand-neon' : 'border-transparent'}`} style={{ backgroundColor: color.toLowerCase() === 'white' ? '#fff' : color.toLowerCase() }} />
+                      <button type="button" key={color} onClick={() => setNewMed({...newMed, color})} className={`w-8 h-8 rounded-full border-2 ${newMed.color === color ? 'border-sky-500' : 'border-transparent'}`} style={{ backgroundColor: color.toLowerCase() === 'white' ? '#fff' : color.toLowerCase() }} />
                     ))}
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Shape</label>
-                  <select value={newMed.shape} onChange={e => setNewMed({...newMed, shape: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-purple outline-none">
+                  <label className="block text-xs font-bold text-gray-400 mb-2 font-normal">Shape</label>
+                  <select value={newMed.shape} onChange={e => setNewMed({...newMed, shape: e.target.value})} className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-sky-500 outline-none">
                     <option value="">Select Shape...</option>
                     <option value="Round Tablet">Round Tablet</option>
                     <option value="Oblong Capsule">Oblong Capsule</option>

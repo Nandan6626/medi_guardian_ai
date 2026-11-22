@@ -202,57 +202,56 @@ export function MyMedicines() {
     <div className="p-8 max-w-6xl mx-auto min-h-screen">
       <header className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h1 className="text-4xl font-extrabold text-white mb-2 tracking-tight">My Medicines</h1>
-          <p className="text-text-secondary font-medium">Manage your clinical prescriptions and personal reminders.</p>
+          <h1 className="text-2xl md:text-3xl font-semibold text-zinc-100 mb-1 tracking-tight">My medicines</h1>
+          <p className="text-zinc-400 font-normal text-xs">Manage your clinical prescriptions and personal reminders.</p>
         </div>
-        <div className="flex flex-col gap-4 items-start sm:items-end">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <button className="flex items-center gap-2 bg-brand-neon/10 text-brand-neon border border-brand-neon/20 px-5 py-3 rounded-2xl font-bold shadow-sm hover:bg-brand-neon/20 hover:text-white transition-colors group">
-              <Mic size={18} className="group-hover:animate-pulse" />
-              Voice Reminder
+        <div className="flex flex-col gap-3 items-start sm:items-end">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <button className="flex items-center gap-2 bg-zinc-900 text-zinc-200 border border-zinc-800 px-3.5 py-1.5 rounded-lg text-xs font-medium hover:bg-zinc-850 transition-colors">
+              <Mic size={14} className="text-zinc-400" />
+              <span>Voice reminder</span>
             </button>
           </div>
         </div>
       </header>
 
-      {/* Adherence & Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="glass-panel rounded-3xl p-6 flex items-center gap-6 relative overflow-hidden group hover:border-brand-purple/30 transition-all">
-          <div className="absolute -right-4 -top-4 w-32 h-32 bg-brand-purple/20 rounded-full blur-2xl group-hover:bg-brand-neon/20 transition-colors"></div>
-          <div className="w-20 h-20 rounded-full border-4 border-brand-purple flex items-center justify-center shrink-0 shadow-inner bg-bg-base relative z-10 purple-glow">
-            <span className="text-2xl font-extrabold text-white">92%</span>
+      {/* Adherence & Stats - Equal cards equal padding */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="p-5 rounded-xl border border-zinc-800 bg-zinc-900 flex items-center gap-4">
+          <div className="w-12 h-12 rounded-lg bg-zinc-950 border border-zinc-800 text-sky-400 flex items-center justify-center font-semibold text-base shrink-0">
+            92%
           </div>
-          <div className="relative z-10">
-            <h3 className="text-xl font-bold text-white mb-1">Adherence</h3>
-            <p className="text-sm text-brand-neon font-bold">Great job! Keep it up.</p>
+          <div>
+            <h3 className="text-sm font-semibold text-zinc-100">Adherence</h3>
+            <p className="text-xs text-zinc-400 mt-0.5">Target met (+4% vs last week)</p>
           </div>
         </div>
         
-        <div className="glass-panel rounded-3xl p-6 flex items-center gap-6 group hover:border-status-warning/30 transition-all">
-          <div className="w-16 h-16 rounded-2xl bg-status-warning/10 text-status-warning flex items-center justify-center shrink-0 border border-status-warning/20 shadow-inner">
-            <TrendingUp size={28} />
+        <div className="p-5 rounded-xl border border-zinc-800 bg-zinc-900 flex items-center gap-4">
+          <div className="w-12 h-12 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-300 flex items-center justify-center shrink-0">
+            <TrendingUp size={20} />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-white mb-1">12 Day Streak</h3>
-            <p className="text-sm text-text-secondary font-medium">Perfect intake record.</p>
+            <h3 className="text-sm font-semibold text-zinc-100">12-day streak</h3>
+            <p className="text-xs text-zinc-400 mt-0.5">Continuous intake verified</p>
           </div>
         </div>
 
-        <div className="glass-panel rounded-3xl p-6 flex items-center gap-6 group hover:border-status-success/30 transition-all">
-          <div className="w-16 h-16 rounded-2xl bg-status-success/10 text-status-success flex items-center justify-center shrink-0 border border-status-success/20 shadow-inner">
-            <CheckCircle2 size={28} />
+        <div className="p-5 rounded-xl border border-zinc-800 bg-zinc-900 flex items-center gap-4">
+          <div className="w-12 h-12 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-300 flex items-center justify-center shrink-0">
+            <CheckCircle2 size={20} />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-white mb-1">{doctorMeds.length + selfMeds.length} Total</h3>
-            <p className="text-sm text-text-secondary font-medium">Medicines tracked today.</p>
+            <h3 className="text-sm font-semibold text-zinc-100">{doctorMeds.length + selfMeds.length} total</h3>
+            <p className="text-xs text-zinc-400 mt-0.5">Active prescriptions today</p>
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-4 mb-8">
-        <button onClick={() => setActiveTab('doctor')} className={`px-6 py-3 rounded-full font-bold transition-all shadow-sm border ${activeTab === 'doctor' ? 'bg-brand-purple/20 text-brand-neon border-brand-purple/50' : 'bg-bg-surface text-text-secondary border-border-subtle hover:text-white hover:bg-white/5'}`}>Clinical Prescriptions</button>
-        <button onClick={() => setActiveTab('self')} className={`px-6 py-3 rounded-full font-bold transition-all shadow-sm border ${activeTab === 'self' ? 'bg-brand-purple/20 text-brand-neon border-brand-purple/50' : 'bg-bg-surface text-text-secondary border-border-subtle hover:text-white hover:bg-white/5'}`}>Self Reminders</button>
+      <div className="flex gap-2 mb-6">
+        <button onClick={() => setActiveTab('doctor')} className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-colors border ${activeTab === 'doctor' ? 'bg-zinc-800 text-sky-400 border-zinc-700' : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-zinc-200'}`}>Clinical prescriptions</button>
+        <button onClick={() => setActiveTab('self')} className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-colors border ${activeTab === 'self' ? 'bg-zinc-800 text-sky-400 border-zinc-700' : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-zinc-200'}`}>Self reminders</button>
       </div>
 
       {/* Stacked Cards Area */}
