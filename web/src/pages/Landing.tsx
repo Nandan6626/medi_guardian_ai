@@ -5,9 +5,12 @@ export function Landing() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 py-16 text-center max-w-7xl mx-auto">
       <div className="max-w-3xl mb-12">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-zinc-100 mb-4">
-          MediGuardian AI
-        </h1>
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <img src="/logo.png" alt="MediGuardian" className="w-10 h-10 md:w-12 md:h-12 rounded-xl object-contain" />
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-zinc-100">
+            MediGuardian AI
+          </h1>
+        </div>
         
         <p className="max-w-2xl mx-auto mb-8 text-base md:text-lg text-zinc-400 font-normal leading-relaxed">
           Medication schedules, adherence telemetry, and clinical monitoring for doctors, patients, and families.

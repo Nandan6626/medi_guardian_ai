@@ -14,10 +14,8 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
       {/* Left Panel: Authentication Form */}
       <div className="flex flex-col justify-center flex-1 px-8 py-12 sm:px-16 lg:px-24">
         <div className="w-full max-w-md mx-auto">
-          <div className="flex items-center gap-2 mb-8">
-            <div className="flex items-center justify-center w-8 h-8 text-white rounded-lg bg-sky-700 font-semibold text-sm">
-              M
-            </div>
+          <div className="flex items-center gap-2.5 mb-8">
+            <img src="/logo.png" alt="MediGuardian Logo" className="w-8 h-8 rounded-lg object-contain shrink-0" />
             <span className="text-lg font-semibold tracking-tight text-zinc-100">MediGuardian</span>
           </div>
 

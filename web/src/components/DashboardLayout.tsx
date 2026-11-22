@@ -458,9 +458,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       {/* Mobile Top Header (Small Screens Only) */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-30 bg-zinc-950 border-b border-zinc-800 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="flex items-center justify-center w-7 h-7 text-white font-semibold text-xs rounded-md bg-sky-700">
-            M
-          </div>
+          <img src="/logo.png" alt="MediGuardian Logo" className="w-7 h-7 rounded-md object-contain shrink-0" />
           <span className="text-sm font-semibold text-zinc-100 tracking-tight">MediGuardian</span>
         </div>
         <button
@@ -492,9 +490,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
             >
               <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="flex items-center justify-center w-7 h-7 text-white font-semibold text-xs rounded-md bg-sky-700">
-                    M
-                  </div>
+                  <img src="/logo.png" alt="MediGuardian Logo" className="w-7 h-7 rounded-md object-contain shrink-0" />
                   <span className="text-sm font-semibold text-zinc-100">MediGuardian</span>
                 </div>
                 <button 
@@ -554,9 +550,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         {/* Brand Header */}
         <div className="p-4 lg:p-5 pb-3 border-b border-zinc-800 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-8 h-8 text-white font-semibold text-sm rounded-lg bg-sky-700 shrink-0">
-              M
-            </div>
+            <img src="/logo.png" alt="MediGuardian Logo" className="w-8 h-8 rounded-lg object-contain shrink-0" />
             <div>
               <span className="text-sm font-semibold tracking-tight text-zinc-100 block leading-tight">
                 MediGuardian
